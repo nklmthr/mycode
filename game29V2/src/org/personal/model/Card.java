@@ -140,7 +140,6 @@ public class Card implements Comparable<Card> {
 		return node;
 	}
 
-	@Override
 	public int compareTo(Card card) {
 		if (card.suit.compareTo(this.suit()) == 0) {
 			if (card.rank().compareTo(this.rank) > 0) {
