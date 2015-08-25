@@ -1,0 +1,48 @@
+@CHARSET "UTF-8";
+.ius-hosted-ui {
+    height: 80%;
+    width: 100%;
+}
+
+.ius-hosted-ui {
+    background: radial-gradient(ellipse at center center , #FFFFFF 0%, #E3F0F9 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    font-family: 'Helvetica Neue',Helvetica,Arial,san serif;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.ius-hosted-ui .container {
+	margin: auto;
+    width: 100%;
+    background-color: #FFFFFF;
+}
+
+.widget-container{
+	font-family: Arial, Helvetica, sans-serif;
+	margin: auto;
+    width: 85%;
+}
+
+.ius-hosted-ui .ius-hosted-ui-logo-container, .ius-hosted-ui .ius-hosted-ui-main-widget-container {
+	margin: auto;
+    width: 85%;
+}
+.ius-hosted-ui .ius-hosted-ui-main-widget-container {
+    margin-top: 60px;
+    float: right;
+	width: 50%
+}
+
+.ius-hosted-ui .ius-hosted-ui-main-header {
+	padding: 10px 0;
+    border-bottom: 2px solid #94B5E0;
+}
+.ius-hosted-ui .ius-hosted-ui-hide {
+    display: none;
+}
+.ius-hosted-ui .ius-hostedui-logo {
+    height: 40px;
+    width: 133px;
+}

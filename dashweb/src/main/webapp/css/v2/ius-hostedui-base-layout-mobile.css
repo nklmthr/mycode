@@ -1,0 +1,15 @@
+
+@media (max-width: 480px) {
+.ius-hosted-ui .ius-hosted-ui-main-widget-container .ius {
+    width: 90%;
+}
+.ius-hosted-ui .ius-hosted-ui-logo-container, .ius-hosted-ui .ius-hosted-ui-main-widget-container, .ius-hosted-ui .ius-hosted-ui-footer-container {
+    width: auto;
+}
+.ius-hosted-ui .ius-hosted-ui-main-widget-container {
+    margin-top: 20px;
+}
+.ius-hosted-ui .ius-hosted-ui-main-footer {
+    margin-top: 50px;
+}
+}

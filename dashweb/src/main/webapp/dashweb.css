@@ -1,0 +1,18 @@
+.headerFooterPanel {
+	background-color: #E8EEF7;
+	width: 100%;
+	height: 100%;
+}
+
+.navigationPanel {
+	border-right: 808080 solid 1px;
+	background-color: #E8EEF7;
+	width: 100%;
+	height: 100%;
+}
+
+.contentPanel {
+	width: 100%;
+	height: 100%;
+	background-color: #E8EEF7;
+}
