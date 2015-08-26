@@ -4,12 +4,10 @@
 	<inherits name='com.google.gwt.user.User' />
 	<inherits name="com.google.gwt.inject.Inject" />
 	<inherits name='net.customware.gwt.presenter.Presenter' />
-
 	<inherits name='com.google.gwt.user.theme.clean.Clean' />
 	<entry-point class='com.intuit.cto.fds.dash.web.client.UI' />
 
 	<source path='client' />
 	<source path='shared' />
-
 </module>
 

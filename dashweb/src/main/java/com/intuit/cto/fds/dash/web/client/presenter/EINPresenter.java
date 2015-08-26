@@ -4,8 +4,9 @@ import net.customware.gwt.presenter.client.EventBus;
 import net.customware.gwt.presenter.client.widget.WidgetDisplay;
 import net.customware.gwt.presenter.client.widget.WidgetPresenter;
 
-public class ContentPresenter extends WidgetPresenter<ContentPresenter.Display> {
-	public ContentPresenter(Display display, EventBus eventBus) {
+public class EINPresenter  extends WidgetPresenter<EINPresenter.Display>{
+
+	public EINPresenter(Display display, EventBus eventBus) {
 		super(display, eventBus);
 		bind();
 	}
@@ -31,7 +32,5 @@ public class ContentPresenter extends WidgetPresenter<ContentPresenter.Display> 
 		// TODO Auto-generated method stub
 		
 	}
-
-	
 
 }

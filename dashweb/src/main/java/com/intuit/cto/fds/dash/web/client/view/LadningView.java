@@ -2,12 +2,12 @@ package com.intuit.cto.fds.dash.web.client.view;
 
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Label;
-import com.intuit.cto.fds.dash.web.client.presenter.ContentPresenter;
+import com.intuit.cto.fds.dash.web.client.presenter.LandingPresenter;
 
-public class ContentView extends Composite implements ContentPresenter.Display {
+public class LadningView extends Composite implements LandingPresenter.Display {
 	private Label label = new Label();
 
-	public ContentView() {
+	public LadningView() {
 		initWidget(label);
 		label.setText("Content");
 	}

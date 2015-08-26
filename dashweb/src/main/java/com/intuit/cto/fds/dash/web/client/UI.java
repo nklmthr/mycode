@@ -6,16 +6,14 @@ import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.intuit.cto.fds.dash.web.client.presenter.ContentPresenter;
 import com.intuit.cto.fds.dash.web.client.presenter.FooterPresenter;
 import com.intuit.cto.fds.dash.web.client.presenter.HeaderPresenter;
+import com.intuit.cto.fds.dash.web.client.presenter.LandingPresenter;
 import com.intuit.cto.fds.dash.web.client.presenter.NavigationPresenter;
-import com.intuit.cto.fds.dash.web.client.presenter.ProviderPresenter;
-import com.intuit.cto.fds.dash.web.client.view.ContentView;
 import com.intuit.cto.fds.dash.web.client.view.FooterView;
 import com.intuit.cto.fds.dash.web.client.view.HeaderView;
+import com.intuit.cto.fds.dash.web.client.view.LadningView;
 import com.intuit.cto.fds.dash.web.client.view.NavigationView;
-import com.intuit.cto.fds.dash.web.client.view.ProviderView;
 
 import net.customware.gwt.presenter.client.DefaultEventBus;
 
@@ -50,7 +48,7 @@ public class UI implements EntryPoint {
 
 		navigationPanel.add(new NavigationPresenter(new NavigationView(), eventBus).getDisplay().asWidget());
 
-		contentPanel.add(new ContentPresenter(new ContentView(), eventBus).getDisplay().asWidget());
+		contentPanel.add(new LandingPresenter(new LadningView(), eventBus).getDisplay().asWidget());
 
 	}
 
