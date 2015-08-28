@@ -8,8 +8,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.StackLayoutPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.intuit.cto.fds.dash.web.client.service.ProviderService;
@@ -35,7 +35,7 @@ public class ProviderPresenter extends WidgetPresenter<ProviderPresenter.Display
 	public interface Display extends WidgetDisplay {
 		Button getSearchProviderButton();
 
-		VerticalPanel getCenterPanel();
+		DockLayoutPanel getContentPanel();
 
 		TextBox getTextInputLegacyId();
 
@@ -43,7 +43,9 @@ public class ProviderPresenter extends WidgetPresenter<ProviderPresenter.Display
 
 		void showProvider(ProviderDTO provider);
 
-		HorizontalPanel getProviderDetailPanel();
+		VerticalPanel getProviderDetailPanel();
+		
+		StackLayoutPanel getChannelDetailsPanel();
 	}
 
 	@Override
@@ -59,13 +61,14 @@ public class ProviderPresenter extends WidgetPresenter<ProviderPresenter.Display
 			public void onSelection(ProviderDetailsEvent event) {
 				DockLayoutPanel dlp = (DockLayoutPanel) RootLayoutPanel.get().getWidget(0);
 				dlp.remove(dlp.getWidget(3));
-				dlp.add(display.getCenterPanel().asWidget());
+				dlp.add(display.getContentPanel().asWidget());
 			}
 		});
 		display.getSearchProviderButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				display.getProviderDetailPanel().clear();
+				display.getChannelDetailsPanel().clear();
 				providerService.getProviderDetails(display.getTextInputProviderId().getValue(),
 						new AsyncCallback<ProviderDTO>() {
 

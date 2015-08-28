@@ -1,6 +1,10 @@
 package com.intuit.cto.fds.dash.web.shared.rpc.dto;
 
-public class Ofx2VO extends ChannelVO {
+import java.io.Serializable;
+
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class Ofx2VO extends ChannelVO implements IsSerializable, Serializable{
 
 	private static final long serialVersionUID = 1L;
 	protected String version;

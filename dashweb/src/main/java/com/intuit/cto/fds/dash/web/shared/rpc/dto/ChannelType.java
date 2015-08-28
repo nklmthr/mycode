@@ -1,6 +1,10 @@
 package com.intuit.cto.fds.dash.web.shared.rpc.dto;
 
-public enum ChannelType {
+import java.io.Serializable;
+
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public enum ChannelType implements IsSerializable, Serializable{
 
    
     OFX_2("ofx2"),

@@ -19,18 +19,18 @@ import net.customware.gwt.presenter.client.DefaultEventBus;
 
 public class UI implements EntryPoint {
 	protected static final String SUCCESS = "SUCCESS";
-	DockLayoutPanel mainPanel = new DockLayoutPanel(Unit.EM);
+	DockLayoutPanel mainPanel = new DockLayoutPanel(Unit.PCT);
 
 	public void onModuleLoad() {
 		final DefaultEventBus eventBus = new DefaultEventBus();
 		
 		HorizontalPanel headerPanel = new HorizontalPanel();
 		headerPanel.setStyleName("headerFooterPanel");
-		mainPanel.addNorth(headerPanel, 5);
+		mainPanel.addNorth(headerPanel, 10);
 
 		HorizontalPanel footerPanel = new HorizontalPanel();
 		footerPanel.setStyleName("headerFooterPanel");
-		mainPanel.addSouth(footerPanel, 5);
+		mainPanel.addSouth(footerPanel, 10);
 
 		VerticalPanel navigationPanel = new VerticalPanel();
 		navigationPanel.setStyleName("navigationPanel");

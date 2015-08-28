@@ -2,7 +2,9 @@ package com.intuit.cto.fds.dash.web.shared.rpc.dto;
 
 import java.io.Serializable;
 import java.util.List;
-public abstract class ChannelVO implements Serializable, Comparable<ChannelVO> {
+
+import com.google.gwt.user.client.rpc.IsSerializable;
+public abstract class ChannelVO implements Serializable,IsSerializable, Comparable<ChannelVO> {
 
 	private static final long serialVersionUID = 1L;
 
