@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "questions")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Questions {
+public class Questions extends BaseVO {
 
 	@XmlElementWrapper(name = "list")
 	private List<Question> questions;

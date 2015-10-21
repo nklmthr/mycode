@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 public class BaseVO {
 	private long start = 1;
 	private long limit = 20;
-	private SORT[] sorts = { SORT.rating };
+	private SortType[] sorts = { SortType.rating };
 
 	public long getStart() {
 		return start;
@@ -25,16 +25,12 @@ public class BaseVO {
 		this.limit = limit;
 	}
 
-	public SORT[] getSorts() {
+	public SortType[] getSorts() {
 		return sorts;
 	}
 
-	public void setSorts(SORT[] sorts) {
+	public void setSorts(SortType[] sorts) {
 		this.sorts = sorts;
 	}
 
-}
-
-enum SORT {
-	created, updated, rating, user
 }
