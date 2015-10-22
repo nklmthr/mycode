@@ -3,7 +3,9 @@ package com.twosides.social.restservices;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,6 +17,8 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.log4j.Logger;
 
 import com.twosides.social.model.Favors;
+import com.twosides.social.model.LinkedContent;
+import com.twosides.social.model.Question;
 import com.twosides.social.model.Questions;
 import com.twosides.social.model.Refutals;
 import com.twosides.social.model.SortType;
@@ -57,10 +61,12 @@ public class TwoSidesRestService {
 
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+			return Response.status(Status.INTERNAL_SERVER_ERROR).header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT").entity(e.getMessage()).build();
 		}
 		logger.info(questions);
-		return Response.ok(questions).build();
+		return Response.ok(questions).header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT").build();
 	}
 
 	@GET
@@ -73,9 +79,11 @@ public class TwoSidesRestService {
 		try {
 			favors = questionService.getQuestionFavors(questionId, start, limit, sort);
 		} catch (Exception e) {
-			Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+			Response.status(Status.INTERNAL_SERVER_ERROR).header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT").entity(e.getMessage()).build();
 		}
-		return Response.ok(favors).build();
+		return Response.ok(favors).header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT").build();
 	}
 
 	@GET
@@ -88,8 +96,40 @@ public class TwoSidesRestService {
 		try {
 			refutals = questionService.getQuestionRefutals(questionId, start, limit, sort);
 		} catch (Exception e) {
-			Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+			Response.status(Status.INTERNAL_SERVER_ERROR).header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT").entity(e.getMessage()).build();
 		}
-		return Response.ok(refutals).build();
+		return Response.ok(refutals).header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT").build();
+	}
+
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/questions")
+	public Response addQuestion(Question question) {
+		logger.info(question);
+		questionService.addQuestion(question);
+		return Response.status(Status.CREATED).header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT").build();
+	}
+
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/questions/{questionId}/favors")
+	public Response addFavor(@PathParam("questionId") String questionId, LinkedContent content) {
+		logger.info(content);
+		questionService.addFavor(questionId, content);
+		return Response.status(Status.CREATED).header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT").build();
+	}
+
+	@POST
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Path("/questions/{questionId}/refutals")
+	public Response addRefutal(@PathParam("questionId") String questionId, LinkedContent content) {
+		logger.info(content);
+		questionService.addRefutal(questionId, content);
+		return Response.status(Status.CREATED).header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT").build();
 	}
 }

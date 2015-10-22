@@ -9,5 +9,19 @@
 		http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	<bean id="healthCheck" class="com.twosides.social.service.impl.HealthServiceImpl" />
-	<bean id="questionService" class="com.twosides.social.service.impl.QuestionServiceImpl" />
+	<bean id="questionService" class="com.twosides.social.service.impl.QuestionServiceImpl">
+		<property name="questionDAO" ref="questionDAO" />
+	</bean>
+	<bean id="questionDAO" class="com.twosides.social.dao.impl.QuestionDAOImpl">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource"
+		destroy-method="close">
+		<property name="URL"
+			value="jdbc:oracle:thin:@twosides.cw8lgjf8o1tn.ap-southeast-1.rds.amazonaws.com:1521:ORCL" />
+		<property name="user" value="appuser" />
+		<property name="password" value="twosides" />
+		<property name="connectionCachingEnabled" value="true" />
+	</bean>
 </beans>

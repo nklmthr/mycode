@@ -9,10 +9,11 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonProperty;
+
 @XmlRootElement(name = "refutals")
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Refutals {
+public class Refutals extends BaseVO {
 	@XmlElementWrapper(name = "list")
 	@XmlElement(name = "refutal")
 	@JsonProperty("refutals")
@@ -25,6 +26,5 @@ public class Refutals {
 	public void setContents(List<LinkedContent> contents) {
 		this.contents = contents;
 	}
-	
-	
+
 }

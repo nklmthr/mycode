@@ -10,6 +10,7 @@ import org.codehaus.jackson.map.annotate.JsonRootName;
 public class LinkedContent {
 	private long contentId;
 	private String link;
+	private String text;
 	public long getContentId() {
 		return contentId;
 	}
@@ -21,6 +22,18 @@ public class LinkedContent {
 	}
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+	@Override
+	public String toString() {
+		return "LinkedContent [contentId=" + contentId + ", link=" + link + ", text=" + text + "]";
 	}
 	
 }
