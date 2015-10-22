@@ -10,27 +10,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-@XmlRootElement(name = "questions")
+@XmlRootElement(name = "favors")
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Questions extends BaseVO {
-
+public class Favors extends BaseVO {
 	@XmlElementWrapper(name = "list")
-	@XmlElement(name = "question")
-	@JsonProperty("questions")
-	private List<Question> questions;
+	@XmlElement(name = "favor")
+	@JsonProperty("favor")
+	private List<LinkedContent> contents;
 
-	public List<Question> getQuestions() {
-		return questions;
+	public List<LinkedContent> getContents() {
+		return contents;
 	}
 
-	public void setQuestions(List<Question> questions) {
-		this.questions = questions;
+	public void setContents(List<LinkedContent> contents) {
+		this.contents = contents;
 	}
-
-	@Override
-	public String toString() {
-		return "Questions [questions=" + questions + "]";
-	}
-
+	
 }
