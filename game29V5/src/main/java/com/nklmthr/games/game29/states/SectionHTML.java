@@ -35,14 +35,13 @@ public class SectionHTML {
 			int count = 0;
 			str.append("<p>");
 			for (Card card : cards) {
-
 				if (count % 4 == 0) {
 					str.append("</p><p>");
 				}
 				count++;
 				if (count > numCards)
 					break;
-				str.append(card.toString());
+				str.append("<img src='images/FlapCard.jpg'>");
 				str.append("&nbsp;&nbsp;&nbsp;");
 			}
 			str.append("</p><br>");
@@ -82,7 +81,7 @@ public class SectionHTML {
 				count++;
 				if (count > numCards)
 					break;
-				str.append(card.toString());
+				str.append("<img src='images/FlapCard.jpg'>");
 				str.append("&nbsp;&nbsp;&nbsp;");
 			}
 			str.append("</p><br>");
@@ -106,7 +105,7 @@ public class SectionHTML {
 				count++;
 				if (count > numCards)
 					break;
-				str.append(card.toString());
+				str.append("<img src='images/FlapCard.jpg'>");
 				str.append("&nbsp;&nbsp;&nbsp;");
 			}
 			str.append("</p><br>");
