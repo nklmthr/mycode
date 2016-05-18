@@ -1,9 +1,7 @@
 package com.nklmthr.games.game29.states;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -175,14 +173,30 @@ public class SectionHTML {
 		List<Card> playerCards = game.getMatch().getPlayerCards().get(player);
 		playerCards.remove(card);
 
-		TableCard tableCard = new TableCard();
-		tableCard.setPlayer(player);
-		tableCard.setCard(card);
+		TableCard tc = new TableCard();
+		tc.setPlayer(player);
+		tc.setCard(card);
 		List<Table> tables = game.getMatch().getTables();
 		Table currentTable = tables.get(tables.size() - 1);
-		currentTable.getTableCards().add(tableCard);
+		currentTable.getTableCards().add(tc);
 		if (currentTable.getTableCards().size() == 4) {
-			reCalculatePoints(currentTable);
+			Player bestPlayer = null;
+			Card bestCard = null;
+			int points = 0;
+			for (TableCard tableCard : currentTable.getTableCards()) {
+				points += tableCard.getCard().getRank().getValue();
+				if (bestCard == null) {
+					bestCard = tableCard.getCard();
+					bestPlayer = tableCard.getPlayer();
+				} else {
+					if (  tableCard.getCard().compareTo(bestCard) > 0) {
+						bestCard = tableCard.getCard();
+						bestPlayer = tableCard.getPlayer();
+					}
+				}
+			}
+			currentTable.setTableWinner(bestPlayer);
+			currentTable.setTablePoints(points);
 			if (currentTable.getTableWinner().getTeam() == 1) {
 				game.getMatch().setTeam1Points(game.getMatch().getTeam1Points() + currentTable.getTablePoints());
 			} else if (currentTable.getTableWinner().getTeam() == 2) {
@@ -193,24 +207,4 @@ public class SectionHTML {
 		}
 	}
 
-	private void reCalculatePoints(Table table) {
-		Player bestPlayer = null;
-		Card bestCard = null;
-		int points = 0;
-		for (TableCard tableCard : table.getTableCards()) {
-			points += tableCard.getCard().getRank().getValue();
-			if (bestCard == null) {
-				bestCard = tableCard.getCard();
-				bestPlayer = tableCard.getPlayer();
-			} else {
-				if (tableCard.getCard().compareTo(bestCard) > 0) {
-					bestCard = tableCard.getCard();
-					bestPlayer = tableCard.getPlayer();
-				}
-			}
-		}
-		table.setTableWinner(bestPlayer);
-		table.setTablePoints(points);
-
-	}
 }

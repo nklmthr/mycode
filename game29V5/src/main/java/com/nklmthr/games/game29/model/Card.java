@@ -58,10 +58,8 @@ public class Card implements Comparable<Card> {
 	}
 
 	public int compareTo(Card o) {
-		if (getRank().ordinal() >= o.getRank().ordinal()) {
-			if (getSuite().ordinal() >= o.getSuite().ordinal()) {
-				return 1;
-			}
+		if (getRank().equals(o.getRank()) && getRank().ordinal() > o.getRank().ordinal()) {
+			return 1;
 		}
 		return -1;
 	}
