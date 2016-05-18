@@ -1,10 +1,16 @@
 package com.nklmthr.games.game29.states;
 
+import java.util.List;
+
 import com.nklmthr.games.game29.events.MakeMoveEvent;
+import com.nklmthr.games.game29.model.Card;
 import com.nklmthr.games.game29.model.Event;
 import com.nklmthr.games.game29.model.FetchEvent;
 import com.nklmthr.games.game29.model.Game;
+import com.nklmthr.games.game29.model.Player;
 import com.nklmthr.games.game29.model.State;
+import com.nklmthr.games.game29.model.Suite;
+import com.nklmthr.games.game29.model.Table;
 import com.nklmthr.games.game29.model.TableCard;
 
 public class PlayWithTrumpShownStage extends SectionHTML implements State {
@@ -12,12 +18,61 @@ public class PlayWithTrumpShownStage extends SectionHTML implements State {
 	public State transition(Game game, Event event) {
 		if (event instanceof MakeMoveEvent) {
 			MakeMoveEvent makeMoveEvent = (MakeMoveEvent) event;
-			TableCard tableCard = new TableCard();
-			tableCard.setPlayer(makeMoveEvent.getPlayer());
-			tableCard.setCard(makeMoveEvent.getCard());
-			game.getMatch().getTables().get(game.getMatch().getTables().size() - 1).getTableCards().add(tableCard);
+			makeMove(game, makeMoveEvent.getPlayer(), makeMoveEvent.getCard());
+			return new PlayWithTrumpShownStage();
 		}
 		return null;
+	}
+
+	private void makeMove(Game game, Player player, Card card) {
+		List<Card> playerCards = game.getMatch().getPlayerCards().get(player);
+		playerCards.remove(card);
+
+		TableCard tc = new TableCard();
+		tc.setPlayer(player);
+		tc.setCard(card);
+		List<Table> tables = game.getMatch().getTables();
+		Table currentTable = tables.get(tables.size() - 1);
+		currentTable.getTableCards().add(tc);
+		if (currentTable.getTableCards().size() == 4) {
+			Player bestPlayer = null;
+			Card bestCard = null;
+			int points = 0;
+			for (TableCard tableCard : currentTable.getTableCards()) {
+				points += tableCard.getCard().getRank().getValue();
+				if (bestCard == null) {
+					bestCard = tableCard.getCard();
+					bestPlayer = tableCard.getPlayer();
+				} else {
+					Suite trump = game.getMatch().getChallengeTrumpSuite();
+					if (bestCard.getSuite().equals(trump) && tableCard.getCard().getSuite().equals(trump)) {
+						if (tableCard.getCard().compareTo(bestCard) > 0) {
+							bestCard = tableCard.getCard();
+							bestPlayer = tableCard.getPlayer();
+						}
+					} else if (!bestCard.getSuite().equals(trump) && tableCard.getCard().getSuite().equals(trump)) {
+						bestCard = tableCard.getCard();
+						bestPlayer = tableCard.getPlayer();
+					} else {
+						if (tableCard.getCard().compareTo(bestCard) > 0) {
+							bestCard = tableCard.getCard();
+							bestPlayer = tableCard.getPlayer();
+						}
+					}
+
+				}
+			}
+			currentTable.setTableWinner(bestPlayer);
+			currentTable.setTablePoints(points);
+			if (currentTable.getTableWinner().getTeam() == 1) {
+				game.getMatch().setTeam1Points(game.getMatch().getTeam1Points() + currentTable.getTablePoints());
+			} else if (currentTable.getTableWinner().getTeam() == 2) {
+				game.getMatch().setTeam2Points(game.getMatch().getTeam2Points() + currentTable.getTablePoints());
+			}
+			Table table = new Table();
+			tables.add(table);
+		}
+
 	}
 
 	public String getSection11(Game game, Event event) {
@@ -25,7 +80,7 @@ public class PlayWithTrumpShownStage extends SectionHTML implements State {
 	}
 
 	public String getSection12(Game game, Event event) {
-		return getSection32Generic(game, event, 8);
+		return getSection12Generic(game, event, 8);
 	}
 
 	public String getSection13(Game game, Event event) {
@@ -33,7 +88,7 @@ public class PlayWithTrumpShownStage extends SectionHTML implements State {
 	}
 
 	public String getSection21(Game game, Event event) {
-		return getSection32Generic(game, event, 8);
+		return getSection21Generic(game, event, 8);
 	}
 
 	public String getSection22(Game game, Event event) {
@@ -41,7 +96,7 @@ public class PlayWithTrumpShownStage extends SectionHTML implements State {
 	}
 
 	public String getSection23(Game game, Event event) {
-		return getSection32Generic(game, event, 8);
+		return getSection23Generic(game, event, 8);
 	}
 
 	public String getSection31(Game game, Event event) {

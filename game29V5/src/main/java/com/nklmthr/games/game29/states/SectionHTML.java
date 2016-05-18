@@ -144,67 +144,27 @@ public class SectionHTML {
 
 	public String getSection22GenericPlayArena(Game game, Event event) {
 		StringBuilder str = new StringBuilder();
-		Match match = game.getMatch();
-		if (match.getTables().size() > 1
-				&& match.getTables().get(match.getTables().size() - 1).getTableCards().size() == 0) {
-			Table prevTable = match.getTables().get(match.getTables().size() - 2);
+		// Match match = game.getMatch();
+		List<Table> tables = game.getMatch().getTables();
+		Table currentTable = tables.get(tables.size() - 1);
+		Table prevTable = tables.size() > 1 ? tables.get(tables.size() - 2) : null;
+		if (currentTable.getTableCards().size() == 0 && prevTable != null) {
 			for (TableCard tableCard : prevTable.getTableCards()) {
 				str.append(tableCard.getPlayer().getPlayerName());
 				str.append("&nbsp;&nbsp;&nbsp;&nbsp;");
 				str.append(tableCard.getCard().toString());
 				str.append("&nbsp;&nbsp;&nbsp;&nbsp;");
 			}
-		} else if (match.getTables().size() > 0) {
-			for (TableCard tableCard : match.getTables().get(match.getTables().size() - 1).getTableCards()) {
+		} else {
+			for (TableCard tableCard : currentTable.getTableCards()) {
 				str.append(tableCard.getPlayer().getPlayerName());
 				str.append("&nbsp;&nbsp;&nbsp;&nbsp;");
 				str.append(tableCard.getCard().toString());
 				str.append("&nbsp;&nbsp;&nbsp;&nbsp;");
 			}
-		} else {
-			str.append("<br>");
 		}
-
+		str.append("<br>");
 		return str.toString();
-	}
-
-	protected void makeMove(Game game, Player player, Card card) {
-
-		List<Card> playerCards = game.getMatch().getPlayerCards().get(player);
-		playerCards.remove(card);
-
-		TableCard tc = new TableCard();
-		tc.setPlayer(player);
-		tc.setCard(card);
-		List<Table> tables = game.getMatch().getTables();
-		Table currentTable = tables.get(tables.size() - 1);
-		currentTable.getTableCards().add(tc);
-		if (currentTable.getTableCards().size() == 4) {
-			Player bestPlayer = null;
-			Card bestCard = null;
-			int points = 0;
-			for (TableCard tableCard : currentTable.getTableCards()) {
-				points += tableCard.getCard().getRank().getValue();
-				if (bestCard == null) {
-					bestCard = tableCard.getCard();
-					bestPlayer = tableCard.getPlayer();
-				} else {
-					if (  tableCard.getCard().compareTo(bestCard) > 0) {
-						bestCard = tableCard.getCard();
-						bestPlayer = tableCard.getPlayer();
-					}
-				}
-			}
-			currentTable.setTableWinner(bestPlayer);
-			currentTable.setTablePoints(points);
-			if (currentTable.getTableWinner().getTeam() == 1) {
-				game.getMatch().setTeam1Points(game.getMatch().getTeam1Points() + currentTable.getTablePoints());
-			} else if (currentTable.getTableWinner().getTeam() == 2) {
-				game.getMatch().setTeam2Points(game.getMatch().getTeam2Points() + currentTable.getTablePoints());
-			}
-			Table table = new Table();
-			tables.add(table);
-		}
 	}
 
 }

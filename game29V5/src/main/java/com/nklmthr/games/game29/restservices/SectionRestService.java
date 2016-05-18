@@ -54,7 +54,7 @@ public class SectionRestService {
 			}
 			logger.info(playerId + ":" + sectionId + "=" + response);
 		} catch (Exception e) {
-			logger.info(playerId + ":" + sectionId + "=" + response);
+			logger.error("Error:"+playerId + ":" + sectionId + "=" + response);
 			e.printStackTrace();
 		}
 		return Response.ok(response).build();

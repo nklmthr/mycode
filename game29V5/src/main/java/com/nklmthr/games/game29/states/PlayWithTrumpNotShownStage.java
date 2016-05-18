@@ -10,6 +10,7 @@ import com.nklmthr.games.game29.model.Card;
 import com.nklmthr.games.game29.model.Event;
 import com.nklmthr.games.game29.model.FetchEvent;
 import com.nklmthr.games.game29.model.Game;
+import com.nklmthr.games.game29.model.Player;
 import com.nklmthr.games.game29.model.State;
 import com.nklmthr.games.game29.model.Table;
 import com.nklmthr.games.game29.model.TableCard;
@@ -75,6 +76,45 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 	public String getSection33(Game game, Event event) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	protected void makeMove(Game game, Player player, Card card) {
+
+		List<Card> playerCards = game.getMatch().getPlayerCards().get(player);
+		playerCards.remove(card);
+
+		TableCard tc = new TableCard();
+		tc.setPlayer(player);
+		tc.setCard(card);
+		List<Table> tables = game.getMatch().getTables();
+		Table currentTable = tables.get(tables.size() - 1);
+		currentTable.getTableCards().add(tc);
+		if (currentTable.getTableCards().size() == 4) {
+			Player bestPlayer = null;
+			Card bestCard = null;
+			int points = 0;
+			for (TableCard tableCard : currentTable.getTableCards()) {
+				points += tableCard.getCard().getRank().getValue();
+				if (bestCard == null) {
+					bestCard = tableCard.getCard();
+					bestPlayer = tableCard.getPlayer();
+				} else {
+					if (tableCard.getCard().compareTo(bestCard) > 0) {
+						bestCard = tableCard.getCard();
+						bestPlayer = tableCard.getPlayer();
+					}
+				}
+			}
+			currentTable.setTableWinner(bestPlayer);
+			currentTable.setTablePoints(points);
+			if (currentTable.getTableWinner().getTeam() == 1) {
+				game.getMatch().setTeam1Points(game.getMatch().getTeam1Points() + currentTable.getTablePoints());
+			} else if (currentTable.getTableWinner().getTeam() == 2) {
+				game.getMatch().setTeam2Points(game.getMatch().getTeam2Points() + currentTable.getTablePoints());
+			}
+			Table table = new Table();
+			tables.add(table);
+		}
 	}
 
 }
