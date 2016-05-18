@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.nklmthr.games.game29.model.Match;
 import com.nklmthr.games.game29.model.Player;
 import com.nklmthr.games.game29.model.Rank;
 import com.nklmthr.games.game29.model.Suite;
+import com.nklmthr.games.game29.model.Table;
 import com.nklmthr.games.game29.states.ChallengeDoubleState;
 
 public class Game29Service {
@@ -93,11 +95,16 @@ public class Game29Service {
 		match.getChallenge()
 				.setChallengeSecondaryPlayer(playerService.getTeamMate(match.getDealPlayer().getPlayerId()));
 		match.getChallenge().setChallengePoints(16);
+
+		Table table = new Table();
+		match.getTables().add(table);
 		
 		List<Card> cards = getSchuffledDeck();
 		Map<Player, List<Card>> playerCards = new HashMap<Player, List<Card>>();
 		for (int i = 0; i < 4; i++) {
-			playerCards.put(playerService.get(i + 1), cards.subList(i * 8, (i * 8) + 8));
+			CopyOnWriteArrayList<Card> cardList = new CopyOnWriteArrayList<Card>();
+			cardList.addAll(cards.subList(i * 8, (i * 8) + 8));
+			playerCards.put(playerService.get(i + 1), cardList);
 		}
 		match.setPlayerCards(playerCards);
 		game.setMatch(match);
@@ -135,7 +142,7 @@ public class Game29Service {
 		event.setPlayer(playerService.get(playerId));
 		return game.getMatch().getState().getSection31(game, event);
 	}
-	
+
 	public String getSection22(int playerId) {
 		FetchEvent event = new FetchEvent();
 		event.setPlayer(playerService.get(playerId));
@@ -169,7 +176,8 @@ public class Game29Service {
 	public Object makeMove(int playerId, int suite, int rank) {
 		MakeMoveEvent makeMoveEvent = new MakeMoveEvent();
 		makeMoveEvent.setPlayer(playerService.get(playerId));
-		makeMoveEvent.setCard(new Card(Suite.values()[suite], Rank.values()[rank]));
+		Card card = new Card(Suite.values()[suite], Rank.values()[rank]);
+		makeMoveEvent.setCard(card);
 		game.getMatch().setState(game.getMatch().getState().transition(game, makeMoveEvent));
 		return "Move Succees";
 	}

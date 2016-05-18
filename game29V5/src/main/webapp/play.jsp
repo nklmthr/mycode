@@ -145,6 +145,7 @@
 				"suite": suite,
 				"rank":rank
 			};
+			
 			result = doGet("rest/game/makeMove", queryParams);
 			alert(result);
 	}

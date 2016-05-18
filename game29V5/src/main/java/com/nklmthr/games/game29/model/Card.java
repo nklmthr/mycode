@@ -1,6 +1,8 @@
 package com.nklmthr.games.game29.model;
 
-public class Card {
+import java.util.Comparator;
+
+public class Card implements Comparable<Card> {
 	private Suite suite;
 	private Rank rank;
 
@@ -27,7 +29,41 @@ public class Card {
 
 	@Override
 	public String toString() {
-		return "<img src='images/" + (suite.ordinal() + 1) + "_" + (rank.ordinal() + 7) + ".jpg'>";
+		return "<img src='images/" + suite.ordinal() + "_" + rank.ordinal() + ".jpg'>";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((rank == null) ? 0 : rank.hashCode());
+		result = prime * result + ((suite == null) ? 0 : suite.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Card other = (Card) obj;
+		if (rank != other.rank)
+			return false;
+		if (suite != other.suite)
+			return false;
+		return true;
+	}
+
+	public int compareTo(Card o) {
+		if (getRank().ordinal() >= o.getRank().ordinal()) {
+			if (getSuite().ordinal() >= o.getSuite().ordinal()) {
+				return 1;
+			}
+		}
+		return -1;
 	}
 
 }

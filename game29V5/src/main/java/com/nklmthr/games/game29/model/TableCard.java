@@ -1,15 +1,12 @@
 package com.nklmthr.games.game29.model;
 
-import java.util.Comparator;
-
-public class TableCard implements Comparator<TableCard> {
+public class TableCard implements Comparable<TableCard> {
 
 	private Player player;
 	private Card card;
 
-	public int compare(TableCard o1, TableCard o2) {
-
-		return 0;
+	public int compareTo(TableCard o) {
+		return getCard().compareTo(o.getCard());
 	}
 
 	public Player getPlayer() {
@@ -27,4 +24,5 @@ public class TableCard implements Comparator<TableCard> {
 	public void setCard(Card card) {
 		this.card = card;
 	}
+
 }

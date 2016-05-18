@@ -1,7 +1,12 @@
 package com.nklmthr.games.game29.states;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.nklmthr.games.game29.events.MakeMoveEvent;
 import com.nklmthr.games.game29.events.TrumpShowEvent;
+import com.nklmthr.games.game29.model.Card;
 import com.nklmthr.games.game29.model.Event;
 import com.nklmthr.games.game29.model.FetchEvent;
 import com.nklmthr.games.game29.model.Game;
@@ -18,14 +23,7 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 			return new PlayWithTrumpShownStage();
 		} else if (event instanceof MakeMoveEvent) {
 			MakeMoveEvent makeMoveEvent = (MakeMoveEvent) event;
-			TableCard tableCard = new TableCard();
-			tableCard.setPlayer(makeMoveEvent.getPlayer());
-			tableCard.setCard(makeMoveEvent.getCard());
-			if (game.getMatch().getTables().size() == 0) {
-				Table table = new Table();
-				game.getMatch().getTables().add(table);
-			}
-			game.getMatch().getTables().get(game.getMatch().getTables().size() - 1).getTableCards().add(tableCard);
+			makeMove(game, makeMoveEvent.getPlayer(), makeMoveEvent.getCard());
 			return new PlayWithTrumpNotShownStage();
 		}
 		return null;
