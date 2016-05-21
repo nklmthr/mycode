@@ -148,6 +148,14 @@ public class Match {
 		}
 	}
 
+	public void setPoints(int team, int score) {
+		if (team % 2 == 0) {
+			setTeam2Points(score);
+		} else {
+			setTeam1Points(score);
+		}
+	}
+
 	public void setTeam1Points(int team1Points) {
 		this.team1Points = team1Points;
 	}

@@ -148,8 +148,11 @@ public class SectionHTML {
 
 	public void calculateOnMatchEnd(Game game) {
 		if (game.getMatch().getTables().size() == 8) {
+
 			if (game.getMatch().getPoints(game.getMatch().getChallenge().getChallengePlayer().getTeam()) >= game
 					.getMatch().getChallenge().getChallengePoints()) {
+				game.getMatch().setPoints(game.getMatch().getChallenge().getChallengePlayer().getTeam(),
+						game.getMatch().getPoints(game.getMatch().getChallenge().getChallengePlayer().getTeam()) + 1);
 				if (game.getMatch().isChallengeRedoubled()) {
 					game.setTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam(),
 							game.getTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam()) + 4);
