@@ -1,10 +1,15 @@
 package com.nklmthr.games.game29.states;
 
+import java.util.List;
+import java.util.Map;
+
 import com.nklmthr.games.game29.events.ChallengeEvent;
+import com.nklmthr.games.game29.model.Card;
 import com.nklmthr.games.game29.model.Event;
 import com.nklmthr.games.game29.model.FetchEvent;
 import com.nklmthr.games.game29.model.Game;
 import com.nklmthr.games.game29.model.Match;
+import com.nklmthr.games.game29.model.Player;
 import com.nklmthr.games.game29.model.State;
 
 public class ChallengeDoubleState extends SectionHTML implements State {
@@ -13,7 +18,7 @@ public class ChallengeDoubleState extends SectionHTML implements State {
 			ChallengeEvent challenge = (ChallengeEvent) event;
 			// If player passes
 			if (challenge.isPass()) {
-				//if the player is the last player to pass
+				// if the player is the last player to pass
 				// or challenge completed
 				// move to next state
 				if (challenge.getPlayer().equals(game.getMatch().getDealPlayer()) || game.getMatch().getChallenge()
@@ -25,14 +30,14 @@ public class ChallengeDoubleState extends SectionHTML implements State {
 						return new TrumSetState();
 					}
 				}
-				//if the player passing is primary player
+				// if the player passing is primary player
 				else if (challenge.getPlayer().equals(game.getMatch().getChallenge().getChallengePrimaryPlayer())) {
 					game.getMatch().getChallenge()
 							.setChallengePrimaryPlayer(game.getMatch().getChallenge().getChallengeSecondaryPlayer());
 					game.getMatch().getChallenge().setChallengeSecondaryPlayer(playerService
 							.getOppositionFirstPlayer(game.getMatch().getChallenge().getChallengeSecondaryPlayer()));
 				}
-				//if the player passing is not primary player
+				// if the player passing is not primary player
 				else {
 					game.getMatch().getChallenge()
 							.setChallengeSecondaryPlayer(playerService.getOppositionFirstPlayer(challenge.getPlayer()));
@@ -62,8 +67,7 @@ public class ChallengeDoubleState extends SectionHTML implements State {
 	}
 
 	public String getSection11(Game game, Event event) {
-		// TODO Auto-generated method stub
-		return null;
+		return getSection11Generic(game, event);
 	}
 
 	public String getSection12(Game game, Event event) {
@@ -87,22 +91,23 @@ public class ChallengeDoubleState extends SectionHTML implements State {
 		if (event instanceof FetchEvent) {
 			FetchEvent fetch = (FetchEvent) event;
 			Match match = game.getMatch();
-
+			str.append("<br>");
 			int challengePoints = match.getChallenge().getChallengePoints();
 			if (match.getChallenge().getChallengePrimaryPlayer().equals(fetch.getPlayer())) {
-				for (int i = 16; i < 30; i++) {
-					if (i == 23) {
+				for (int i = 16; i < 28; i++) {
+					if (i == 22) {
 						str.append("<br><br><br>");
 					}
 					if (i < challengePoints) {
-						str.append("<a href=\"#\" class=\"buttonNA\"/>" + i + "</a>&nbsp;&nbsp; ");
+						str.append("<a href=\"#\" class=\"buttonNA\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;");
 					} else if (i == challengePoints
 							&& match.getChallenge().getChallengePlayer().equals(fetch.getPlayer())) {
 						str.append("<a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + i
-								+ ",false,false)\" class=\"buttonNO\"/>" + i + "</a>&nbsp;&nbsp; ");
+								+ ",false,false)\" class=\"buttonNO\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;");
 					} else {
 						str.append("<a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + i
-								+ ",false,false)\" class=\"buttonA\"/>" + i + "</a>&nbsp;&nbsp; ");
+								+ ",false,false)\" class=\"buttonA\"/>" + i
+								+ "</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ");
 					}
 				}
 
@@ -114,22 +119,22 @@ public class ChallengeDoubleState extends SectionHTML implements State {
 				}
 
 			} else if (match.getChallenge().getChallengeSecondaryPlayer().equals(fetch.getPlayer())) {
-				for (int i = 16; i < 30; i++) {
-					if (i == 23) {
+				for (int i = 16; i < 28; i++) {
+					if (i == 22) {
 						str.append("<br><br><br>");
 					}
 					if (i < challengePoints) {
-						str.append("<a href=\"#\" class=\"buttonNA\"/>" + i + "</a>&nbsp;&nbsp; ");
+						str.append("<a href=\"#\" class=\"buttonNA\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;");
 					} else if (i == challengePoints
 							&& match.getChallenge().getChallengePlayer().equals(fetch.getPlayer())) {
 						str.append("<a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + i
-								+ ",false,false)\" class=\"buttonNO\"/>" + i + "</a>&nbsp;&nbsp; ");
+								+ ",false,false)\" class=\"buttonNO\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;");
 					} else if (i == challengePoints
 							&& !match.getChallenge().getChallengePlayer().equals(fetch.getPlayer())) {
-						str.append("<a href=\"#\" class=\"buttonNA\"/>" + i + "</a>&nbsp;&nbsp; ");
+						str.append("<a href=\"#\" class=\"buttonNA\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;");
 					} else {
 						str.append("<a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + i
-								+ ",false,false)\" class=\"buttonA\"/>" + i + "</a>&nbsp;&nbsp; ");
+								+ ",false,false)\" class=\"buttonA\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;");
 					}
 				}
 				if (!match.getChallenge().getChallengePlayer().equals(fetch.getPlayer())) {
@@ -139,16 +144,16 @@ public class ChallengeDoubleState extends SectionHTML implements State {
 							+ ",false,true)\" class=\"buttonNO\"/>DOUBLE</a>&nbsp;&nbsp;");
 				}
 			} else {
-				for (int i = 16; i < 30; i++) {
-					if (i == 23) {
+				for (int i = 16; i < 28; i++) {
+					if (i == 22) {
 						str.append("<br><br><br>");
 					}
 					if (i < challengePoints) {
-						str.append("<a href=\"#\" class=\"buttonNA\"/>" + i + "</a>&nbsp;&nbsp; ");
+						str.append("<a href=\"#\" class=\"buttonNA\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp; ");
 					} else if (i == challengePoints) {
-						str.append("<a href=\"#\" class=\"buttonA\"/>" + i + "</a>&nbsp;&nbsp; ");
+						str.append("<a href=\"#\" class=\"buttonA\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp; ");
 					} else {
-						str.append("<a href=\"#\" class=\"buttonDB\"/>" + i + "</a>&nbsp;&nbsp; ");
+						str.append("<a href=\"#\" class=\"buttonDB\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp; ");
 					}
 				}
 			}
@@ -157,7 +162,27 @@ public class ChallengeDoubleState extends SectionHTML implements State {
 	}
 
 	public String getSection32(Game game, Event event) {
-		return getSection32Generic(game, event, 4);
+		StringBuilder str = new StringBuilder();
+		if (event instanceof FetchEvent) {
+			FetchEvent fetch = (FetchEvent) event;
+			Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
+			List<Card> cards = playerCards.get(fetch.getPlayer());
+			int count = 0;
+			str.append("<p>");
+			for (Card card : cards) {
+
+				if (count % 4 == 0) {
+					str.append("</p><p>");
+				}
+				count++;
+				if (count > 4)
+					break;
+				str.append(card.toString());
+				str.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+			}
+			str.append("</p><br>");
+		}
+		return str.toString();
 	}
 
 	public String getSection33(Game game, Event event) {

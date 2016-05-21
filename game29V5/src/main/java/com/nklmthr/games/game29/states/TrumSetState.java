@@ -1,9 +1,14 @@
 package com.nklmthr.games.game29.states;
 
+import java.util.List;
+import java.util.Map;
+
 import com.nklmthr.games.game29.events.TrumpSetEvent;
+import com.nklmthr.games.game29.model.Card;
 import com.nklmthr.games.game29.model.Event;
 import com.nklmthr.games.game29.model.FetchEvent;
 import com.nklmthr.games.game29.model.Game;
+import com.nklmthr.games.game29.model.Player;
 import com.nklmthr.games.game29.model.State;
 import com.nklmthr.games.game29.model.Suite;
 
@@ -64,7 +69,27 @@ public class TrumSetState extends SectionHTML implements State {
 	}
 
 	public String getSection32(Game game, Event event) {
-		return getSection12Generic(game, event, 4);
+		StringBuilder str = new StringBuilder();
+		if (event instanceof FetchEvent) {
+			FetchEvent fetch = (FetchEvent) event;
+			Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
+			List<Card> cards = playerCards.get(fetch.getPlayer());
+			int count = 0;
+			str.append("<p>");
+			for (Card card : cards) {
+
+				if (count % 4 == 0) {
+					str.append("</p><p>");
+				}
+				count++;
+				if (count > 4)
+					break;
+				str.append(card.toString());
+				str.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+			}
+			str.append("</p><br>");
+		}
+		return str.toString();
 	}
 
 	public String getSection33(Game game, Event event) {

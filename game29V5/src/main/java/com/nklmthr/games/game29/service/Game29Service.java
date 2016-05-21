@@ -112,8 +112,9 @@ public class Game29Service {
 	}
 
 	public String getSection11(int playerId) {
-		String str = "Team 1: " + game.getTeam1score() + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Team 2:" + game.getTeam2score();
-		return str;
+		FetchEvent event = new FetchEvent();
+		event.setPlayer(playerService.get(playerId));
+		return game.getMatch().getState().getSection11(game, event);
 	}
 
 	public String getSection13(int playerId) {

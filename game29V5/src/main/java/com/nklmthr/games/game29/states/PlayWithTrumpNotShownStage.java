@@ -1,8 +1,7 @@
 package com.nklmthr.games.game29.states;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import com.nklmthr.games.game29.events.MakeMoveEvent;
 import com.nklmthr.games.game29.events.TrumpShowEvent;
@@ -39,7 +38,25 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 	}
 
 	public String getSection13(Game game, Event event) {
-		return getSection13Generic(game, event);
+		StringBuilder str = new StringBuilder();
+		if (event instanceof FetchEvent) {
+			FetchEvent fetch = (FetchEvent) event;
+			str.append("I am Player" + fetch.getPlayer().getPlayerName());
+			str.append("<br>");
+			str.append("Trump Set Player " + game.getMatch().getChallenge().getChallengePlayer().getPlayerName());
+			str.append("<br><br>");
+			str.append("Team 1:->" + game.getMatch().getTeam1Points());
+			str.append("<br>");
+			str.append("Team 2:->");
+			str.append(game.getMatch().getTeam2Points());
+			str.append("<br>");
+			str.append("Points Remaining:->");
+			str.append((29 - (game.getMatch().getTeam1Points() + game.getMatch().getTeam2Points())));
+			str.append("<br>");
+			str.append("Deal Player" + game.getMatch().getDealPlayer().getPlayerName());
+
+		}
+		return str.toString();
 	}
 
 	public String getSection21(Game game, Event event) {
@@ -58,19 +75,63 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 		StringBuilder str = new StringBuilder();
 		if (event instanceof FetchEvent) {
 			FetchEvent fetch = (FetchEvent) event;
+			str.append("<br>");
+			str.append(
+					"Open Trump:&nbsp;&nbsp;<a href=\"javascript:openTrump();\"><img src='images/deck.jpeg' border=\"1\"/></a>");
 			if (fetch.getPlayer().equals(game.getMatch().getTrumpSetPlayer())) {
+				str.append("<br><br>");
 				str.append("Trump:&nbsp;&nbsp;<img src='images/" + game.getMatch().getChallengeTrumpSuite()
 						+ ".jpg' border=\"1\"/>");
-			} else {
-				str.append(
-						"Open Trump:&nbsp;&nbsp;<a href=\"javascript:openTrump();\"><img src='images/deck.jpeg' border=\"1\"/></a>");
 			}
+
 		}
 		return str.toString();
 	}
 
 	public String getSection32(Game game, Event event) {
-		return getSection32Generic(game, event, 8);
+		StringBuilder str = new StringBuilder();
+		if (event instanceof FetchEvent) {
+			FetchEvent fetch = (FetchEvent) event;
+			Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
+			List<Card> cards = playerCards.get(fetch.getPlayer());
+			int count = 0;
+			str.append("<p>");
+			for (Card card : cards) {
+				if (count % 4 == 0) {
+					str.append("</p><p>");
+				}
+				count++;
+				List<Table> tables = game.getMatch().getTables();
+				Table currentTable = tables.get(tables.size() - 1);
+				TableCard lastTableCard = null;
+				if (currentTable.getTableCards().size() > 0) {
+					lastTableCard = currentTable.getTableCards().get(currentTable.getTableCards().size() - 1);
+				}
+				boolean check1 = lastTableCard != null
+						&& fetch.getPlayer().equals(playerService.getOppositionFirstPlayer(lastTableCard.getPlayer()));
+				boolean check2 = false;
+				if (game.getMatch().getTables().size() > 1) {
+					check2 = lastTableCard == null && game.getMatch().getTables()
+							.get(game.getMatch().getTables().size() - 2).getTableWinner().equals(fetch.getPlayer());
+				} else {
+					check2 = game.getMatch().getChallenge().getChallengePlayer().equals(fetch.getPlayer())
+							&& currentTable.getTableCards().size() == 0;
+				}
+				if (check1 || check2) {
+					str.append("<a href=\"javascript:makeMove(" + (card.getSuite().ordinal()) + ","
+							+ (card.getRank().ordinal()) + ");\">");
+					str.append(card.toString());
+					str.append("</a>");
+					str.append("&nbsp;&nbsp;&nbsp;");
+				} else {
+					str.append(card.toString());
+					str.append("&nbsp;&nbsp;&nbsp;");
+				}
+
+			}
+			str.append("</p><br>");
+		}
+		return str.toString();
 	}
 
 	public String getSection33(Game game, Event event) {
@@ -79,15 +140,12 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 	}
 
 	protected void makeMove(Game game, Player player, Card card) {
-
-		List<Card> playerCards = game.getMatch().getPlayerCards().get(player);
-		playerCards.remove(card);
+		List<Table> tables = game.getMatch().getTables();
+		Table currentTable = tables.get(tables.size() - 1);
 
 		TableCard tc = new TableCard();
 		tc.setPlayer(player);
 		tc.setCard(card);
-		List<Table> tables = game.getMatch().getTables();
-		Table currentTable = tables.get(tables.size() - 1);
 		currentTable.getTableCards().add(tc);
 		if (currentTable.getTableCards().size() == 4) {
 			Player bestPlayer = null;
@@ -115,6 +173,9 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 			Table table = new Table();
 			tables.add(table);
 		}
+		
+		List<Card> playerCards = game.getMatch().getPlayerCards().get(player);
+		playerCards.remove(card);
 	}
 
 }

@@ -15,7 +15,7 @@
 .buttonDB {
 	text-decoration: none;
 	text-align: center;
-	padding: 5px 5px;
+	padding: 8px 8px;
 	border: solid 1px #004F72;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -39,7 +39,7 @@
 .buttonNA {
 	text-decoration: none;
 	text-align: center;
-	padding: 5px 5px;
+	padding: 8px 8px;
 	border: solid 1px #004F72;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -63,7 +63,7 @@
 .buttonA {
 	text-decoration: none;
 	text-align: center;
-	padding: 5px 5px;
+	padding: 8px 8px;
 	border: solid 1px #004F72;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -87,7 +87,7 @@
 .buttonNO {
 	text-decoration: none;
 	text-align: center;
-	padding: 5px 5px;
+	padding: 8px 8px;
 	border: solid 1px #004F72;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
@@ -227,7 +227,35 @@
 	};
 
 	function timeout(time) {
-		//console.log("Start timeout()");
+		/*setInterval(function() {
+			$$("get11TemplateId").setHTML(doGet("rest/game/sections/11", {}));
+		}, 0);*/
+		setInterval(function() {
+			$$("get12TemplateId").setHTML(doGet("rest/game/sections/12", {}));
+		}, 13000);
+		setInterval(function() {
+			$$("get13TemplateId").setHTML(doGet("rest/game/sections/13", {}));
+		}, 23000);
+		setInterval(function() {
+			$$("get21TemplateId").setHTML(doGet("rest/game/sections/21", {}));
+		}, 29000);
+		setInterval(function() {
+			$$("get22TemplateId").setHTML(doGet("rest/game/sections/22", {}));
+		}, 17000);
+		setInterval(function() {
+			$$("get23TemplateId").setHTML(doGet("rest/game/sections/23", {}));
+		}, 31000);
+
+		setInterval(function() {
+			$$("get31TemplateId").setHTML(doGet("rest/game/sections/31", {}));
+		}, 13000);
+		setInterval(function() {
+			$$("get32TemplateId").setHTML(doGet("rest/game/sections/32", {}));
+		}, 19000);
+		//setInterval(function() {
+			//$$("get33TemplateId").setHTML(doGet("rest/game/sections/33", {}));
+		//}, 11000);
+
 		setInterval(getTemplateF, time);
 	};
 </script>
@@ -238,15 +266,8 @@
 	<script type="text/javascript">
 		webix.ui({
 			rows : [ {
-				view : "toolbar",
-				elements : [ {
-					view : "label",
-					label : "nklmthr World"
-				} ]
-			}, {
 				view : "accordion",
 				header : "headertop",
-
 				multi : "mixed",
 				cols : [ {
 					header : "Game Score",
@@ -271,6 +292,8 @@
 
 				} ]
 			}, {
+				view : "resizer"
+			}, {
 				view : "accordion",
 				header : "headermiddle",
 				multi : "mixed",
@@ -294,6 +317,8 @@
 					}
 
 				} ]
+			}, {
+				view : "resizer"
 			}, {
 				view : "accordion",
 				header : "headerbottom",

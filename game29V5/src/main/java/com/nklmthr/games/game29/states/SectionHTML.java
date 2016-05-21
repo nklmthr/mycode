@@ -22,8 +22,14 @@ public class SectionHTML {
 	private Logger logger = Logger.getLogger(SectionHTML.class);
 
 	public String getSection11Generic(Game game, Event event) {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder str = new StringBuilder();
+		if (event instanceof FetchEvent) {
+			FetchEvent fetch = (FetchEvent) event;
+			str.append("I am player <b>" + fetch.getPlayer().getPlayerName() + "</b>");
+			str.append("<br>Challenger: " + game.getMatch().getChallenge().getChallengePlayer().getPlayerName());
+			str.append("<br>Challenge Points: " + game.getMatch().getChallenge().getChallengePoints());
+		}
+		return str.toString();
 	}
 
 	public String getSection12Generic(Game game, Event event, int numCards) {
@@ -53,8 +59,6 @@ public class SectionHTML {
 		StringBuilder str = new StringBuilder();
 		if (event instanceof FetchEvent) {
 			FetchEvent fetch = (FetchEvent) event;
-			str.append("I am " + fetch.getPlayer().getPlayerName());
-			str.append("<br><br>Challenger " + game.getMatch().getChallenge().getChallengePlayer().getPlayerName());
 			str.append("<br><br>Team 1:->" + game.getMatch().getTeam1Points());
 			str.append("<br>Team 2:->");
 			str.append(game.getMatch().getTeam2Points());

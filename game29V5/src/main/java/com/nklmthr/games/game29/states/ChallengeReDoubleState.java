@@ -1,12 +1,17 @@
 package com.nklmthr.games.game29.states;
 
+import java.util.List;
+import java.util.Map;
+
 import com.nklmthr.games.game29.context.SpringApplicationContext;
 import com.nklmthr.games.game29.events.ChallengeDoubleEvent;
 import com.nklmthr.games.game29.events.ChallengeEvent;
+import com.nklmthr.games.game29.model.Card;
 import com.nklmthr.games.game29.model.Event;
 import com.nklmthr.games.game29.model.FetchEvent;
 import com.nklmthr.games.game29.model.Game;
 import com.nklmthr.games.game29.model.Match;
+import com.nklmthr.games.game29.model.Player;
 import com.nklmthr.games.game29.model.State;
 import com.nklmthr.games.game29.service.PlayerService;
 
@@ -32,8 +37,7 @@ public class ChallengeReDoubleState extends SectionHTML implements State {
 	}
 
 	public String getSection11(Game game, Event event) {
-		// TODO Auto-generated method stub
-		return null;
+		return getSection11Generic(game, event);
 	}
 
 	public String getSection12(Game game, Event event) {
@@ -75,7 +79,7 @@ public class ChallengeReDoubleState extends SectionHTML implements State {
 				str.append(
 						"<br><br><a href=\"javascript:void(0);\" onclick=\"throwReDoubleChallenge(true,false)\" class=\"buttonNO\"/>PASS</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 				str.append(
-						"<a href=\"javascript:void(0);\" onclick=\"throwReDoubleChallenge(false,true)\" class=\"buttonNO\"/>RE DOUBLE</a>&nbsp;&nbsp;");
+						"<a href=\"javascript:void(0);\" onclick=\"throwReDoubleChallenge(false,true)\" class=\"buttonNO\"/>RE DOUBLE</a>");
 			}
 
 		}
@@ -84,7 +88,27 @@ public class ChallengeReDoubleState extends SectionHTML implements State {
 	}
 
 	public String getSection32(Game game, Event event) {
-		return getSection32Generic(game, event, 4);
+		StringBuilder str = new StringBuilder();
+		if (event instanceof FetchEvent) {
+			FetchEvent fetch = (FetchEvent) event;
+			Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
+			List<Card> cards = playerCards.get(fetch.getPlayer());
+			int count = 0;
+			str.append("<p>");
+			for (Card card : cards) {
+
+				if (count % 4 == 0) {
+					str.append("</p><p>");
+				}
+				count++;
+				if (count > 4)
+					break;
+				str.append(card.toString());
+				str.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+			}
+			str.append("</p><br>");
+		}
+		return str.toString();
 	}
 
 	public String getSection33(Game game, Event event) {
