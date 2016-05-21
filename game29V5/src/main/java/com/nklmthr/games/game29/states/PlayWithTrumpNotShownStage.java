@@ -45,19 +45,19 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 		StringBuilder str = new StringBuilder();
 		if (event instanceof FetchEvent) {
 			FetchEvent fetch = (FetchEvent) event;
-			str.append("I am Player" + fetch.getPlayer().getPlayerName());
-			str.append("<br>");
-			str.append("Trump Set Player " + game.getMatch().getChallenge().getChallengePlayer().getPlayerName());
-			str.append("<br><br>");
-			str.append("Team 1:->" + game.getMatch().getTeam1Points());
-			str.append("<br>");
-			str.append("Team 2:->");
-			str.append(game.getMatch().getTeam2Points());
-			str.append("<br>");
-			str.append("Points Remaining:->");
-			str.append((29 - (game.getMatch().getTeam1Points() + game.getMatch().getTeam2Points())));
-			str.append("<br>");
-			str.append("Deal Player" + game.getMatch().getDealPlayer().getPlayerName());
+
+			str.append("<table border=\"1\" width=\"100%\" height=\"100%\" >");
+			str.append("<tr> <td> I am Player:&nbsp;" + fetch.getPlayer().getPlayerName() + "</td> <td>");
+			str.append("Deal Player:&nbsp;" + game.getMatch().getDealPlayer().getPlayerName() + "</td> </tr>");
+			str.append(" <tr> <td>Team1&nbsp;:&nbsp;" + game.getMatch().getTeam1Points());
+			str.append("<br>Team2&nbsp;:&nbsp;" + game.getMatch().getTeam2Points() + "</td>");
+			str.append(" <td>Points Remaining:&nbsp;"
+					+ (29 - (game.getMatch().getTeam1Points() + game.getMatch().getTeam2Points())) + "</td></tr>");
+			str.append("<tr> <td>Challenge Player:&nbsp;" + game.getMatch().getDealPlayer().getPlayerName()
+					+ "</td> <td>Challenge Points:&nbsp;" + game.getMatch().getChallenge().getChallengePoints()
+					+ "</td> </tr>");
+			str.append("</table>");
+			str.append("");
 
 		}
 		return str.toString();

@@ -4,9 +4,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.nklmthr.games.game29.context.SpringApplicationContext;
 import com.nklmthr.games.game29.events.ChallengeDoubleEvent;
-import com.nklmthr.games.game29.events.ChallengeEvent;
 import com.nklmthr.games.game29.model.Card;
 import com.nklmthr.games.game29.model.Event;
 import com.nklmthr.games.game29.model.FetchEvent;
@@ -18,6 +19,7 @@ import com.nklmthr.games.game29.service.PlayerService;
 
 public class ChallengeReDoubleState extends SectionHTML implements State {
 	PlayerService playerService = SpringApplicationContext.getSpringContext().getBean(PlayerService.class);
+	Logger logger = Logger.getLogger(ChallengeReDoubleState.class);
 
 	public synchronized State transition(Game game, Event event) {
 		if (event instanceof ChallengeDoubleEvent) {
@@ -64,26 +66,41 @@ public class ChallengeReDoubleState extends SectionHTML implements State {
 			Match match = game.getMatch();
 
 			int challengePoints = match.getChallenge().getChallengePoints();
+			str.append("<table border=\"0\" width=\"100%\" height=\"100%\" >");
+			str.append("<tr>");
 			for (int i = 16; i < 30; i++) {
 				if (i == 23) {
-					str.append("<br><br><br>");
+					str.append("</td></tr><tr><td align=\"center\" valign=\"center\">");
+				} else {
+					str.append("<td align=\"center\" valign=\"center\">");
 				}
 				if (i < challengePoints) {
-					str.append("<a href=\"#\" class=\"buttonNA\"/>" + i + "</a>&nbsp;&nbsp; ");
+					str.append("<a href=\"#\" class=\"buttonRed\"/>" + i + "</a>");
 				} else if (i == challengePoints) {
-					str.append("<a href=\"#\" class=\"buttonA\"/>" + i + "</a>&nbsp;&nbsp; ");
+					str.append("<a href=\"#\" class=\"buttonGreen\"/>" + i + "</a>");
 				} else {
-					str.append("<a href=\"#\" class=\"buttonDB\"/>" + i + "</a>&nbsp;&nbsp; ");
+					str.append("<a href=\"#\" class=\"buttonBlack\"/>" + i + "</a>");
 				}
+				str.append("</td>");
 			}
-			if (match.isChallengeDoubled() && match.getChallenge().getChallengePlayer().equals(fetch.getPlayer())) {
-				str.append(
-						"<br><br><a href=\"javascript:void(0);\" onclick=\"throwReDoubleChallenge(true,false)\" class=\"buttonNO\"/>PASS</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-				str.append(
-						"<a href=\"javascript:void(0);\" onclick=\"throwReDoubleChallenge(false,true)\" class=\"buttonNO\"/>RE DOUBLE</a>");
-			}
+			str.append("</tr>");
 
+			if (match.isChallengeDoubled() && match.getChallenge().getChallengePlayer().equals(fetch.getPlayer())) {
+				str.append("<tr>");
+				str.append("<td colspan=\"3\" align=\"center\" valign=\"center\">");
+				str.append(
+						"<a href=\"javascript:throwReDoubleChallenge(false,true)\" class=\"buttonGreen\"/>RE DOUBLE</a>");
+
+				str.append("</td>");
+				str.append("<td colspan=\"4\" align=\"center\" valign=\"center\">");
+				str.append("<a href=\"javascript:throwReDoubleChallenge(true,false)\" class=\"buttonGreen\"/>PASS</a>");
+				str.append("</td>");
+				str.append("</tr>");
+			}
+			str.append("</table");
+			logger.error(fetch.getPlayer().getPlayerName() + ",str=" + str.toString());
 		}
+
 		return str.toString();
 
 	}

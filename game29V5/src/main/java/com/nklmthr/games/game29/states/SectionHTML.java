@@ -25,32 +25,24 @@ public class SectionHTML {
 		StringBuilder str = new StringBuilder();
 		if (event instanceof FetchEvent) {
 			FetchEvent fetch = (FetchEvent) event;
+			str.append("<table border=\"0\" width=\"100%\" height=\"100%\" >");
+			str.append("<tr><td>");
 			str.append("<img src='images/score/score_team1_" + game.getTeam1score() + ".jpg'/>");
+			str.append("</td><td>");
 			str.append("<img src='images/score/score_team2_" + game.getTeam2score() + ".jpg'/>");
+			str.append("</td>");
+			str.append("</tr>");
+
 		}
 		return str.toString();
 	}
 
 	public String getSection12Generic(Game game, Event event, int numCards) {
 		StringBuilder str = new StringBuilder();
-		if (event instanceof FetchEvent) {
-			FetchEvent fetch = (FetchEvent) event;
-			Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
-			List<Card> cards = playerCards.get(playerService.getTeamMate(fetch.getPlayer()));
-			int count = 0;
-			str.append("<p>");
-			for (Card card : cards) {
-				if (count % 4 == 0) {
-					str.append("</p><p>");
-				}
-				count++;
-				if (count > numCards)
-					break;
-				str.append("<img src='images/FlapCard.jpg'>");
-				str.append("&nbsp;&nbsp;&nbsp;");
-			}
-			str.append("</p><br>");
-		}
+		str.append("<img src='images/FlapCard.jpg'>");
+		str.append("&nbsp;&nbsp;&nbsp;");
+		str.append("<img src='images/FlapCard.jpg'>");
+		str.append("&nbsp;&nbsp;&nbsp;");
 		return str.toString();
 	}
 
@@ -69,6 +61,13 @@ public class SectionHTML {
 			str.append("<tr> <td>Challenge Player:&nbsp;" + game.getMatch().getDealPlayer().getPlayerName()
 					+ "</td> <td>Challenge Points:&nbsp;" + game.getMatch().getChallenge().getChallengePoints()
 					+ "</td> </tr>");
+			str.append("<tr><td>");
+			str.append("Challenge Doubled:");
+			str.append(game.getMatch().isChallengeDoubled());
+			str.append("</td><td>");
+			str.append("Challenge Doubled:");
+			str.append(game.getMatch().isChallengeDoubled());
+			str.append("</td></tr>");
 			str.append("</table>");
 			str.append("");
 
@@ -78,48 +77,19 @@ public class SectionHTML {
 
 	public String getSection21Generic(Game game, Event event, int numCards) {
 		StringBuilder str = new StringBuilder();
-		if (event instanceof FetchEvent) {
-			FetchEvent fetch = (FetchEvent) event;
-			Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
-			List<Card> cards = playerCards.get(playerService.getOppositionFirstPlayer(fetch.getPlayer()));
-			int count = 0;
-			str.append("<p>");
-			for (Card card : cards) {
-				if (count % 4 == 0) {
-					str.append("</p><p>");
-				}
-				count++;
-				if (count > numCards)
-					break;
-				str.append("<img src='images/FlapCard.jpg'>");
-				str.append("&nbsp;&nbsp;&nbsp;");
-			}
-			str.append("</p><br>");
-		}
+		str.append("<img src='images/FlapCard.jpg'>");
+		str.append("&nbsp;&nbsp;&nbsp;");
+		str.append("<img src='images/FlapCard.jpg'>");
+		str.append("&nbsp;&nbsp;&nbsp;");
 		return str.toString();
 	}
 
 	public String getSection23Generic(Game game, Event event, int numCards) {
 		StringBuilder str = new StringBuilder();
-		if (event instanceof FetchEvent) {
-			FetchEvent fetch = (FetchEvent) event;
-			Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
-			List<Card> cards = playerCards.get(playerService.getOppositionSecondPlayer(fetch.getPlayer()));
-			int count = 0;
-			str.append("<p>");
-			for (Card card : cards) {
-
-				if (count % 4 == 0) {
-					str.append("</p><p>");
-				}
-				count++;
-				if (count > numCards)
-					break;
-				str.append("<img src='images/FlapCard.jpg'>");
-				str.append("&nbsp;&nbsp;&nbsp;");
-			}
-			str.append("</p><br>");
-		}
+		str.append("<img src='images/FlapCard.jpg'>");
+		str.append("&nbsp;&nbsp;&nbsp;");
+		str.append("<img src='images/FlapCard.jpg'>");
+		str.append("&nbsp;&nbsp;&nbsp;");
 		return str.toString();
 	}
 

@@ -92,71 +92,104 @@ public class ChallengeDoubleState extends SectionHTML implements State {
 		if (event instanceof FetchEvent) {
 			FetchEvent fetch = (FetchEvent) event;
 			Match match = game.getMatch();
-			str.append("<br>");
+			// str.append("<br>");
 			int challengePoints = match.getChallenge().getChallengePoints();
 			if (match.getChallenge().getChallengePrimaryPlayer().equals(fetch.getPlayer())) {
-				for (int i = 16; i < 28; i++) {
-					if (i == 22) {
-						str.append("<br><br><br>");
+				str.append("<table border=\"0\" width=\"100%\" height=\"100%\" cellpadding=\"2\">");
+				str.append("<tr>");
+				for (int i = 16; i < 30; i++) {
+					if (i == 23) {
+						str.append("</td></tr><tr><td align=\"center\" valign=\"center\">");
+					} else {
+						str.append("<td align=\"center\" valign=\"center\">");
 					}
 					if (i < challengePoints) {
-						str.append("<a href=\"#\" class=\"buttonNA\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;");
+						str.append("<a href=\"#\" class=\"buttonRed\"/>" + i + "</a>");
 					} else if (i == challengePoints
 							&& match.getChallenge().getChallengePlayer().equals(fetch.getPlayer())) {
-						str.append("<a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + i
-								+ ",false,false)\" class=\"buttonNO\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;");
+						str.append("<a href=\"javascript:throwChallenge(" + i
+								+ ",false,false);\" class=\"buttonGreen\"/>" + i + "</a>");
 					} else {
-						str.append("<a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + i
-								+ ",false,false)\" class=\"buttonA\"/>" + i
-								+ "</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ");
+						str.append("<a href=\"javascript:throwChallenge(" + i
+								+ ",false,false);\" class=\"buttonBlue\"/>" + i + "</a>");
 					}
+					str.append("</td>");
 				}
+				str.append("</tr>");
 
 				if (!match.getChallenge().getChallengePlayer().equals(fetch.getPlayer())) {
-					str.append("<br><br><a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + challengePoints
-							+ ",true,false)\" class=\"buttonNO\"/>PASS</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+					str.append("<tr>");
+					str.append("<td colspan=\"3\" align=\"left\" valign=\"center\">");
 					str.append("<a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + challengePoints
-							+ ",false,true)\" class=\"buttonNO\"/>DOUBLE</a>&nbsp;&nbsp;");
+							+ ",false,true)\" class=\"buttonGreen\"/>DOUBLE</a>");
+					str.append("</td>");
+					str.append("<td colspan=\"4\" align=\"right\" valign=\"center\">");
+					str.append("<a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + challengePoints
+							+ ",true,false)\" class=\"buttonGreen\"/>PASS</a>");
+					str.append("</td></tr>");
 				}
+				str.append("</table>");
 
 			} else if (match.getChallenge().getChallengeSecondaryPlayer().equals(fetch.getPlayer())) {
-				for (int i = 16; i < 28; i++) {
-					if (i == 22) {
-						str.append("<br><br><br>");
+				str.append("<table border=\"0\" width=\"100%\" height=\"100%\" cellpadding=\"2\">");
+				str.append("<tr>");
+				for (int i = 16; i < 30; i++) {
+					if (i == 23) {
+						str.append("</td></tr><tr><td align=\"center\" valign=\"center\">");
+					} else {
+						str.append("<td align=\"center\" valign=\"center\">");
 					}
 					if (i < challengePoints) {
-						str.append("<a href=\"#\" class=\"buttonNA\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;");
-					} else if (i == challengePoints
-							&& match.getChallenge().getChallengePlayer().equals(fetch.getPlayer())) {
-						str.append("<a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + i
-								+ ",false,false)\" class=\"buttonNO\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;");
+						str.append("<a href=\"#\" class=\"buttonRed\"/>" + i + "</a>");
 					} else if (i == challengePoints
 							&& !match.getChallenge().getChallengePlayer().equals(fetch.getPlayer())) {
-						str.append("<a href=\"#\" class=\"buttonNA\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;");
+						str.append("<a href=\"javascript:throwChallenge(" + i + ",false,false);\" class=\"buttonRed\"/>"
+								+ i + "</a>");
+					} else if (i == challengePoints
+							&& match.getChallenge().getChallengePlayer().equals(fetch.getPlayer())) {
+						str.append("<a href=\"javascript:throwChallenge(" + i
+								+ ",false,false);\" class=\"buttonGreen\"/>" + i + "</a>");
 					} else {
-						str.append("<a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + i
-								+ ",false,false)\" class=\"buttonA\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp;");
+						str.append("<a href=\"javascript:throwChallenge(" + i
+								+ ",false,false);\" class=\"buttonBlue\"/>" + i + "</a>");
 					}
+					str.append("</td>");
 				}
+				str.append("</tr>");
 				if (!match.getChallenge().getChallengePlayer().equals(fetch.getPlayer())) {
-					str.append("<br><br><a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + challengePoints
-							+ ",true,false)\" class=\"buttonNO\"/>PASS</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+					str.append("<tr>");
+					str.append("<td colspan=\"3\" align=\"left\" valign=\"center\">");
 					str.append("<a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + challengePoints
-							+ ",false,true)\" class=\"buttonNO\"/>DOUBLE</a>&nbsp;&nbsp;");
+							+ ",false,true)\" class=\"buttonGreen\"/>DOUBLE</a>");
+					str.append("</td>");
+					str.append("<td colspan=\"4\" align=\"right\" valign=\"center\">");
+					str.append("<a href=\"javascript:void(0);\" onclick=\"throwChallenge(" + challengePoints
+							+ ",true,false)\" class=\"buttonGreen\"/>PASS</a>");
+
+					str.append("</td></tr>");
 				}
+				str.append("</table>");
+
 			} else {
-				for (int i = 16; i < 28; i++) {
-					if (i == 22) {
-						str.append("<br><br><br>");
+				str.append("<table border=\"0\" width=\"100%\" height=\"100%\" cellpadding=\"2\">");
+				str.append("<tr>");
+				for (int i = 16; i < 30; i++) {
+					if (i == 23) {
+						str.append("</td></tr><tr><td align=\"center\" valign=\"center\">");
+					} else {
+						str.append("<td align=\"center\" valign=\"center\">");
 					}
 					if (i < challengePoints) {
-						str.append("<a href=\"#\" class=\"buttonNA\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp; ");
+						str.append("<a href=\"#\" class=\"buttonRed\"/>" + i + "</a>");
 					} else if (i == challengePoints) {
-						str.append("<a href=\"#\" class=\"buttonA\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp; ");
+						str.append("<a href=\"#\" class=\"buttonBlue\"/>" + i + "</a>");
 					} else {
-						str.append("<a href=\"#\" class=\"buttonDB\"/>" + i + "</a>&nbsp;&nbsp;&nbsp;&nbsp; ");
+						str.append("<a href=\"#\" class=\"buttonBlack\"/>" + i + "</a>");
 					}
+					str.append("</td>");
 				}
+				str.append("</tr>");
+				str.append("</table>");
 			}
 		}
 		return str.toString();

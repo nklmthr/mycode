@@ -1,9 +1,8 @@
-
 <%@page import="org.apache.commons.lang3.StringUtils"%>
-<%@page import="org.personal.controller.ActionConstants"%>
+
 <html>
 <%
-	String playerId = (String) request.getParameter(ActionConstants.PARAM_PLAYER_ID_STR);
+	String playerId = (String) request.getParameter("PLAYER_ID_STR");
 	//System.out.println("playerId" + playerId);
 	if (StringUtils.isBlank(playerId)) {
 		response.sendRedirect("login.jsp");
@@ -12,7 +11,7 @@
 
 <head>
 <style type="text/css">
-.buttonDB {
+.buttonBlack {
 	text-decoration: none;
 	text-align: center;
 	padding: 8px 8px;
@@ -36,7 +35,7 @@
 	box-shadow: 0px 0px 2px #bababa, inset 0px 0px 1px #ffffff;
 }
 
-.buttonNA {
+.buttonRed {
 	text-decoration: none;
 	text-align: center;
 	padding: 8px 8px;
@@ -60,7 +59,7 @@
 	box-shadow: 0px 0px 2px #bababa, inset 0px 0px 1px #ffffff;
 }
 
-.buttonA {
+.buttonBlue {
 	text-decoration: none;
 	text-align: center;
 	padding: 8px 8px;
@@ -84,7 +83,7 @@
 	box-shadow: 0px 0px 2px #bababa, inset 0px 0px 1px #ffffff;
 }
 
-.buttonNO {
+.buttonGreen {
 	text-decoration: none;
 	text-align: center;
 	padding: 8px 8px;
@@ -147,20 +146,20 @@
 			};
 			
 			result = doGet("rest/game/makeMove", queryParams);
-			alert(result);
+			webix.message(result);
 	}
 
 	function openTrump(){
 		var queryParams ={};
 		result = doGet("rest/game/openTrump", queryParams);
-		alert(result);
+		webix.message(result);
 	}
 	function setTrump(trump){
 		var queryParams ={
 			"trump": trump
 		};
 		result = doGet("rest/game/setTrump", queryParams);
-		alert(result);
+		webix.message(result);
 	}
 	function throwReDoubleChallenge(isPass, isReDouble){
 		var queryParams = {
@@ -168,7 +167,7 @@
 				"isReDouble" : isReDouble
 			} ;
 		result = doGet("rest/game/reDoublechallenge", queryParams);
-		alert(result);
+		webix.message(result);
 	}
 
 	function throwChallenge(points, isPass, isDouble) {
@@ -179,7 +178,7 @@
 			"isDouble" : isDouble
 		} ;
 		result = doGet("rest/game/challenge", queryParams);
-		alert(result);
+		webix.message(result);
 	}
 
 	function doGet(path, queryParams) {
@@ -212,56 +211,56 @@
 		});
 	};
 
-	function getTemplateF() {
+	/*function getTemplateF() {
 		//console.log("Start get11Template()");
 		$$("get11TemplateId").setHTML(doGet("rest/game/sections/11", {}));
-		$$("get12TemplateId").setHTML(doGet("rest/game/sections/12", {}));
+		//$$("get12TemplateId").setHTML(doGet("rest/game/sections/12", {}));
 		$$("get13TemplateId").setHTML(doGet("rest/game/sections/13", {}));
-		$$("get21TemplateId").setHTML(doGet("rest/game/sections/21", {}));
+		//$$("get21TemplateId").setHTML(doGet("rest/game/sections/21", {}));
 		$$("get22TemplateId").setHTML(doGet("rest/game/sections/22", {}));
-		$$("get23TemplateId").setHTML(doGet("rest/game/sections/23", {}));
+		//$$("get23TemplateId").setHTML(doGet("rest/game/sections/23", {}));
 		$$("get31TemplateId").setHTML(doGet("rest/game/sections/31", {}));
 		$$("get32TemplateId").setHTML(doGet("rest/game/sections/32", {}));
 
 		//console.log("end get11Template()");
-	};
+	};*/
 
-	function timeout(time) {
-		/*setInterval(function() {
-			$$("get11TemplateId").setHTML(doGet("rest/game/sections/11", {}));
-		}, 0);*/
+	function timeout() {
 		setInterval(function() {
+			$$("get11TemplateId").setHTML(doGet("rest/game/sections/11", {}));
+		}, 5000);
+		/*setInterval(function() {
 			$$("get12TemplateId").setHTML(doGet("rest/game/sections/12", {}));
-		}, 13000);
+		}, 13000);*/
 		setInterval(function() {
 			$$("get13TemplateId").setHTML(doGet("rest/game/sections/13", {}));
-		}, 23000);
-		setInterval(function() {
+		}, 2000);
+		/*setInterval(function() {
 			$$("get21TemplateId").setHTML(doGet("rest/game/sections/21", {}));
-		}, 29000);
+		}, 29000);*/
 		setInterval(function() {
 			$$("get22TemplateId").setHTML(doGet("rest/game/sections/22", {}));
-		}, 17000);
-		setInterval(function() {
+		}, 2100);
+		/*setInterval(function() {
 			$$("get23TemplateId").setHTML(doGet("rest/game/sections/23", {}));
-		}, 31000);
+		}, 31000);*/
 
 		setInterval(function() {
 			$$("get31TemplateId").setHTML(doGet("rest/game/sections/31", {}));
-		}, 13000);
+		}, 2200);
 		setInterval(function() {
 			$$("get32TemplateId").setHTML(doGet("rest/game/sections/32", {}));
-		}, 19000);
+		}, 2300);
 		//setInterval(function() {
 			//$$("get33TemplateId").setHTML(doGet("rest/game/sections/33", {}));
 		//}, 11000);
 
-		setInterval(getTemplateF, time);
+		//setInterval(getTemplateF, time);
 	};
 </script>
 </head>
 
-<body onLoad="timeout(1500);">
+<body onLoad="timeout();">
 
 	<script type="text/javascript">
 		webix.ui({
