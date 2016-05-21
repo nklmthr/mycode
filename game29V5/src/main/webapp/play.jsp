@@ -211,19 +211,6 @@
 		});
 	};
 
-	/*function getTemplateF() {
-		//console.log("Start get11Template()");
-		$$("get11TemplateId").setHTML(doGet("rest/game/sections/11", {}));
-		//$$("get12TemplateId").setHTML(doGet("rest/game/sections/12", {}));
-		$$("get13TemplateId").setHTML(doGet("rest/game/sections/13", {}));
-		//$$("get21TemplateId").setHTML(doGet("rest/game/sections/21", {}));
-		$$("get22TemplateId").setHTML(doGet("rest/game/sections/22", {}));
-		//$$("get23TemplateId").setHTML(doGet("rest/game/sections/23", {}));
-		$$("get31TemplateId").setHTML(doGet("rest/game/sections/31", {}));
-		$$("get32TemplateId").setHTML(doGet("rest/game/sections/32", {}));
-
-		//console.log("end get11Template()");
-	};*/
 
 	function timeout() {
 		setInterval(function() {
@@ -240,17 +227,17 @@
 		}, 29000);*/
 		setInterval(function() {
 			$$("get22TemplateId").setHTML(doGet("rest/game/sections/22", {}));
-		}, 2100);
+		}, 1900);
 		/*setInterval(function() {
 			$$("get23TemplateId").setHTML(doGet("rest/game/sections/23", {}));
 		}, 31000);*/
 
 		setInterval(function() {
 			$$("get31TemplateId").setHTML(doGet("rest/game/sections/31", {}));
-		}, 2200);
+		}, 1700);
 		setInterval(function() {
 			$$("get32TemplateId").setHTML(doGet("rest/game/sections/32", {}));
-		}, 2300);
+		}, 1300);
 		//setInterval(function() {
 			//$$("get33TemplateId").setHTML(doGet("rest/game/sections/33", {}));
 		//}, 11000);
