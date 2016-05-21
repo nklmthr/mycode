@@ -140,6 +140,14 @@ public class Match {
 		return team1Points;
 	}
 
+	public int getPoints(int team) {
+		if (team % 2 == 0) {
+			return team2Points;
+		} else {
+			return team1Points;
+		}
+	}
+
 	public void setTeam1Points(int team1Points) {
 		this.team1Points = team1Points;
 	}

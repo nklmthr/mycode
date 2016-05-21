@@ -21,7 +21,7 @@
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<!-- <param name="ConversionPattern" value="%d %-5p: [%c:%L] %m%n" /> -->
-			<param name="ConversionPattern" value="%d level=%p app_class=%c app_method=%M:%L : %m%n" />
+			<param name="ConversionPattern" value="%d level=%p %c:%M:%L: %m%n" />
 			<!-- value="%d level=%p app_name=%X{app_name} intuit_tid=%X{intuit_tid} 
 				app_class=%c app_method=%M:%L : %m%n" -->
 		</layout>
@@ -29,7 +29,7 @@
 
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d level=%p app_class=%c app_method=%M:%L : %m%n" />
+			<param name="ConversionPattern" value="%d level=%p %c:%M:%L: %m%n" />
 			<!-- value="%d level=%p app_name=%X{app_name} intuit_tid=%X{intuit_tid} 
 				app_class=%c app_method=%M:%L : %m%n" /> -->
 		</layout>

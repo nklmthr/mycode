@@ -1,7 +1,10 @@
 package com.nklmthr.games.game29.states;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import com.nklmthr.games.game29.events.MakeMoveEvent;
 import com.nklmthr.games.game29.events.TrumpShowEvent;
@@ -15,8 +18,9 @@ import com.nklmthr.games.game29.model.Table;
 import com.nklmthr.games.game29.model.TableCard;
 
 public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
+	private Logger logger = Logger.getLogger(PlayWithTrumpNotShownStage.class);
 
-	public State transition(Game game, Event event) {
+	public synchronized State transition(Game game, Event event) {
 		if (event instanceof TrumpShowEvent) {
 			TrumpShowEvent trumpShowEvent = (TrumpShowEvent) event;
 			game.getMatch().setTrumpShowPlayer(trumpShowEvent.getPlayer());
@@ -94,9 +98,12 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 			FetchEvent fetch = (FetchEvent) event;
 			Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
 			List<Card> cards = playerCards.get(fetch.getPlayer());
+			Collections.sort(cards);
+
 			int count = 0;
 			str.append("<p>");
 			for (Card card : cards) {
+				logger.debug(fetch.getPlayer() + "=" + card.getSuite() + "," + card.getRank());
 				if (count % 4 == 0) {
 					str.append("</p><p>");
 				}
@@ -143,6 +150,11 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 		List<Table> tables = game.getMatch().getTables();
 		Table currentTable = tables.get(tables.size() - 1);
 
+		for (TableCard tableCard : currentTable.getTableCards()) {
+			if (tableCard.getPlayer().equals(player) && tableCard.getCard().equals(card)) {
+				return;
+			}
+		}
 		TableCard tc = new TableCard();
 		tc.setPlayer(player);
 		tc.setCard(card);
@@ -157,7 +169,8 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 					bestCard = tableCard.getCard();
 					bestPlayer = tableCard.getPlayer();
 				} else {
-					if (tableCard.getCard().compareTo(bestCard) > 0) {
+					if (tableCard.getCard().getSuite().equals(bestCard.getSuite())
+							&& bestCard.compareTo(tableCard.getCard()) > 0) {
 						bestCard = tableCard.getCard();
 						bestPlayer = tableCard.getPlayer();
 					}
@@ -165,6 +178,7 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 			}
 			currentTable.setTableWinner(bestPlayer);
 			currentTable.setTablePoints(points);
+			logger.error("makeMove: bestplayer=" + bestPlayer.getPlayerName() + ", points=" + points);
 			if (currentTable.getTableWinner().getTeam() == 1) {
 				game.getMatch().setTeam1Points(game.getMatch().getTeam1Points() + currentTable.getTablePoints());
 			} else if (currentTable.getTableWinner().getTeam() == 2) {
@@ -173,7 +187,7 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 			Table table = new Table();
 			tables.add(table);
 		}
-		
+
 		List<Card> playerCards = game.getMatch().getPlayerCards().get(player);
 		playerCards.remove(card);
 	}

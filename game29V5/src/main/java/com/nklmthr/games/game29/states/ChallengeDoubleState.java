@@ -1,5 +1,6 @@
 package com.nklmthr.games.game29.states;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ import com.nklmthr.games.game29.model.Player;
 import com.nklmthr.games.game29.model.State;
 
 public class ChallengeDoubleState extends SectionHTML implements State {
-	public State transition(Game game, Event event) {
+	public synchronized State transition(Game game, Event event) {
 		if (event instanceof ChallengeEvent) {
 			ChallengeEvent challenge = (ChallengeEvent) event;
 			// If player passes
@@ -167,10 +168,10 @@ public class ChallengeDoubleState extends SectionHTML implements State {
 			FetchEvent fetch = (FetchEvent) event;
 			Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
 			List<Card> cards = playerCards.get(fetch.getPlayer());
+			Collections.sort(cards);
 			int count = 0;
 			str.append("<p>");
 			for (Card card : cards) {
-
 				if (count % 4 == 0) {
 					str.append("</p><p>");
 				}

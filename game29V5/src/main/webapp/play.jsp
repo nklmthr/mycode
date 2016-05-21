@@ -4,7 +4,7 @@
 <html>
 <%
 	String playerId = (String) request.getParameter(ActionConstants.PARAM_PLAYER_ID_STR);
-	System.out.println("playerId" + playerId);
+	//System.out.println("playerId" + playerId);
 	if (StringUtils.isBlank(playerId)) {
 		response.sendRedirect("login.jsp");
 	}

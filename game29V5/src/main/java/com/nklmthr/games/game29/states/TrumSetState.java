@@ -1,5 +1,6 @@
 package com.nklmthr.games.game29.states;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import com.nklmthr.games.game29.model.Suite;
 
 public class TrumSetState extends SectionHTML implements State {
 
-	public State transition(Game game, Event event) {
+	public synchronized State transition(Game game, Event event) {
 		if (event instanceof TrumpSetEvent) {
 			TrumpSetEvent trumpSetEvent = (TrumpSetEvent) event;
 			game.getMatch().setChallengeTrumpSuite(Suite.values()[trumpSetEvent.getTrump()]);
@@ -74,6 +75,7 @@ public class TrumSetState extends SectionHTML implements State {
 			FetchEvent fetch = (FetchEvent) event;
 			Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
 			List<Card> cards = playerCards.get(fetch.getPlayer());
+			Collections.sort(cards);
 			int count = 0;
 			str.append("<p>");
 			for (Card card : cards) {

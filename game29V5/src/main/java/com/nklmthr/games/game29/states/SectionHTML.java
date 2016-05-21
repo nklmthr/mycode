@@ -25,9 +25,8 @@ public class SectionHTML {
 		StringBuilder str = new StringBuilder();
 		if (event instanceof FetchEvent) {
 			FetchEvent fetch = (FetchEvent) event;
-			str.append("I am player <b>" + fetch.getPlayer().getPlayerName() + "</b>");
-			str.append("<br>Challenger: " + game.getMatch().getChallenge().getChallengePlayer().getPlayerName());
-			str.append("<br>Challenge Points: " + game.getMatch().getChallenge().getChallengePoints());
+			str.append("<img src='images/score/score_team1_" + game.getTeam1score() + ".jpg'/>");
+			str.append("<img src='images/score/score_team2_" + game.getTeam2score() + ".jpg'/>");
 		}
 		return str.toString();
 	}
@@ -59,13 +58,20 @@ public class SectionHTML {
 		StringBuilder str = new StringBuilder();
 		if (event instanceof FetchEvent) {
 			FetchEvent fetch = (FetchEvent) event;
-			str.append("<br><br>Team 1:->" + game.getMatch().getTeam1Points());
-			str.append("<br>Team 2:->");
-			str.append(game.getMatch().getTeam2Points());
-			str.append("<br>Points Remaining:->");
-			str.append((29 - (game.getMatch().getTeam1Points() + game.getMatch().getTeam2Points())));
-			str.append("<br>");
-			str.append("Deal Player" + game.getMatch().getDealPlayer().getPlayerName());
+
+			str.append("<table border=\"1\" width=\"100%\" height=\"100%\" >");
+			str.append("<tr> <td> I am Player:&nbsp;" + fetch.getPlayer().getPlayerName() + "</td> <td>");
+			str.append("Deal Player:&nbsp;" + game.getMatch().getDealPlayer().getPlayerName() + "</td> </tr>");
+			str.append(" <tr> <td>Team1&nbsp;:&nbsp;" + game.getMatch().getTeam1Points());
+			str.append("<br>Team2&nbsp;:&nbsp;" + game.getMatch().getTeam2Points() + "</td>");
+			str.append(" <td>Points Remaining:&nbsp;"
+					+ (29 - (game.getMatch().getTeam1Points() + game.getMatch().getTeam2Points())) + "</td></tr>");
+			str.append("<tr> <td>Challenge Player:&nbsp;" + game.getMatch().getDealPlayer().getPlayerName()
+					+ "</td> <td>Challenge Points:&nbsp;" + game.getMatch().getChallenge().getChallengePoints()
+					+ "</td> </tr>");
+			str.append("</table>");
+			str.append("");
+
 		}
 		return str.toString();
 	}
@@ -168,6 +174,36 @@ public class SectionHTML {
 		}
 		str.append("<br>");
 		return str.toString();
+	}
+
+	public void calculateOnMatchEnd(Game game) {
+		if (game.getMatch().getTables().size() == 8) {
+			if (game.getMatch().getPoints(game.getMatch().getChallenge().getChallengePlayer().getTeam()) >= game
+					.getMatch().getChallenge().getChallengePoints()) {
+				if (game.getMatch().isChallengeRedoubled()) {
+					game.setTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam(),
+							game.getTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam()) + 4);
+				} else if (game.getMatch().isChallengeDoubled()) {
+					game.setTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam(),
+							game.getTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam()) + 2);
+				} else {
+					game.setTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam(),
+							game.getTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam()) + 1);
+				}
+			} else {
+				if (game.getMatch().isChallengeRedoubled()) {
+					game.setTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam(),
+							game.getTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam()) - 4);
+				} else if (game.getMatch().isChallengeDoubled()) {
+					game.setTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam(),
+							game.getTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam()) - 2);
+				} else {
+					game.setTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam(),
+							game.getTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam()) - 1);
+				}
+			}
+		}
+
 	}
 
 }

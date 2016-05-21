@@ -50,18 +50,19 @@ public class Card implements Comparable<Card> {
 		if (getClass() != obj.getClass())
 			return false;
 		Card other = (Card) obj;
-		if (rank != other.rank)
-			return false;
 		if (suite != other.suite)
+			return false;
+		if (rank != other.rank)
 			return false;
 		return true;
 	}
 
 	public int compareTo(Card o) {
-		if (getSuite().equals(o.getSuite()) && getRank().ordinal() > o.getRank().ordinal()) {
-			return 1;
+		if (getSuite().equals(o.getSuite())) {
+			return o.getRank().ordinal() - getRank().ordinal();
+		} else {
+			return o.getSuite().ordinal() - getSuite().ordinal();
 		}
-		return -1;
 	}
 
 }

@@ -13,16 +13,32 @@ public class Game {
 		this.match = match;
 	}
 
+	public void setTeamScore(int team, int score) {
+		if ((team % 2) == 0) {
+			setTeam2score(score);
+		} else {
+			setTeam1score(score);
+		}
+	}
+
+	public int getTeamScore(int team) {
+		if ((team % 2) == 0) {
+			return getTeam2score();
+		} else {
+			return getTeam1score();
+		}
+	}
+
 	public void setTeam1score(int team1score) {
 		this.team1score = team1score;
 	}
 
-	public String getTeam2score() {
-		return "<img src='images/score/score_team2_" + team2score + ".jpg'>";
+	public int getTeam1score() {
+		return team1score;
 	}
 
-	public String getTeam1score() {
-		return "<img src='images/score/score_team1_" + team1score + ".jpg'>";
+	public int getTeam2score() {
+		return team2score;
 	}
 
 	public void setTeam2score(int team2score) {

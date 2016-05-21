@@ -1,5 +1,6 @@
 package com.nklmthr.games.game29.states;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import com.nklmthr.games.game29.service.PlayerService;
 public class ChallengeReDoubleState extends SectionHTML implements State {
 	PlayerService playerService = SpringApplicationContext.getSpringContext().getBean(PlayerService.class);
 
-	public State transition(Game game, Event event) {
+	public synchronized State transition(Game game, Event event) {
 		if (event instanceof ChallengeDoubleEvent) {
 			ChallengeDoubleEvent challenge = (ChallengeDoubleEvent) event;
 			if (challenge.isPass()) {
@@ -93,6 +94,7 @@ public class ChallengeReDoubleState extends SectionHTML implements State {
 			FetchEvent fetch = (FetchEvent) event;
 			Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
 			List<Card> cards = playerCards.get(fetch.getPlayer());
+			Collections.sort(cards);
 			int count = 0;
 			str.append("<p>");
 			for (Card card : cards) {
