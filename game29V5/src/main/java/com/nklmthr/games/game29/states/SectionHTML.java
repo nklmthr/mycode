@@ -134,6 +134,8 @@ public class SectionHTML {
 				str.append(tableCard.getCard().toString());
 				str.append("&nbsp;&nbsp;&nbsp;&nbsp;");
 			}
+			str.append("<br>Waiting for&nbsp;"
+					+ prevTable.getTableWinner().getPlayerName()+" to make move");
 		} else {
 			for (TableCard tableCard : currentTable.getTableCards()) {
 				str.append(tableCard.getPlayer().getPlayerName());
@@ -143,16 +145,21 @@ public class SectionHTML {
 			}
 		}
 		str.append("<br>");
+
 		return str.toString();
 	}
 
 	public void calculateOnMatchEnd(Game game) {
 		if (game.getMatch().getTables().size() == 8) {
-
+			game.getMatch()
+					.setPoints(game.getMatch().getTables().get(game.getMatch().getTables().size() - 1).getTableWinner()
+							.getTeam(), game
+									.getMatch().getPoints(game.getMatch().getTables()
+											.get(game.getMatch().getTables().size() - 1).getTableWinner().getTeam())
+									+ 1);
 			if (game.getMatch().getPoints(game.getMatch().getChallenge().getChallengePlayer().getTeam()) >= game
 					.getMatch().getChallenge().getChallengePoints()) {
-				game.getMatch().setPoints(game.getMatch().getChallenge().getChallengePlayer().getTeam(),
-						game.getMatch().getPoints(game.getMatch().getChallenge().getChallengePlayer().getTeam()) + 1);
+
 				if (game.getMatch().isChallengeRedoubled()) {
 					game.setTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam(),
 							game.getTeamScore(game.getMatch().getChallenge().getChallengePlayer().getTeam()) + 4);

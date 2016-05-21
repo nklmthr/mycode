@@ -56,21 +56,23 @@ public class PlayWithTrumpShownStage extends SectionHTML implements State {
 					bestPlayer = tableCard.getPlayer();
 				} else {
 					Suite trump = game.getMatch().getChallengeTrumpSuite();
-					if (bestCard.getSuite().equals(trump) && tableCard.getCard().getSuite().equals(trump)
-							&& tableCard.getCard().compareTo(bestCard) > 0) {
-						bestCard = tableCard.getCard();
-						bestPlayer = tableCard.getPlayer();
+					if (bestCard.getSuite().equals(trump)) {
+						if (tableCard.getCard().getSuite().equals(trump)) {
+							if (bestCard.compareTo(tableCard.getCard()) > 0) {
+								bestCard = tableCard.getCard();
+								bestPlayer = tableCard.getPlayer();
+							}
+						}
+					} else {
+						if (tableCard.getCard().getSuite().equals(trump)) {
+							bestCard = tableCard.getCard();
+							bestPlayer = tableCard.getPlayer();
+						} else if (bestCard.compareTo(tableCard.getCard()) > 0) {
+							bestCard = tableCard.getCard();
+							bestPlayer = tableCard.getPlayer();
 
-					} else if (!bestCard.getSuite().equals(trump) && tableCard.getCard().getSuite().equals(trump)
-							&& bestCard.compareTo(tableCard.getCard()) > 0) {
-						bestCard = tableCard.getCard();
-						bestPlayer = tableCard.getPlayer();
-					} else if (bestCard.compareTo(tableCard.getCard()) > 0) {
-						bestCard = tableCard.getCard();
-						bestPlayer = tableCard.getPlayer();
-
+						}
 					}
-
 				}
 			}
 			currentTable.setTableWinner(bestPlayer);

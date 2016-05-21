@@ -1,7 +1,7 @@
 package com.nklmthr.games.game29.model;
 
 public class Game {
-	private Match match = new Match();
+	private Match match;
 	private int team1score;
 	private int team2score;
 

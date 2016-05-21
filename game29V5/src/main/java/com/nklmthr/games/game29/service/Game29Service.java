@@ -86,9 +86,17 @@ public class Game29Service {
 	}
 
 	public String newDeal() {
-		Match match = new Match();
+		Match match = null;
+		Player dealPlayer = null;
+		if (game.getMatch() != null) {
+			match = game.getMatch();
+			dealPlayer = playerService.getOppositionFirstPlayer(match.getDealPlayer());
+		}
+		match = new Match();
+		dealPlayer = playerService.get(1);
+		match.setDealPlayer(dealPlayer);
 		match.setState(new ChallengeDoubleState());
-		match.setDealPlayer(playerService.get(1));
+
 		match.getChallenge().setChallengePlayer(playerService.getOppositionFirstPlayer(match.getDealPlayer()));
 		match.getChallenge()
 				.setChallengePrimaryPlayer(playerService.getOppositionFirstPlayer(match.getDealPlayer().getPlayerId()));
@@ -98,7 +106,7 @@ public class Game29Service {
 
 		Table table = new Table();
 		match.getTables().add(table);
-		
+
 		List<Card> cards = getSchuffledDeck();
 		Map<Player, List<Card>> playerCards = new HashMap<Player, List<Card>>();
 		for (int i = 0; i < 4; i++) {
