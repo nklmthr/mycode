@@ -213,7 +213,7 @@
 	function timeout() {
 		setInterval(function() {
 			$$("get11TemplateId").setHTML(doGet("rest/game/sections/11", {}));
-		}, 5000);
+		}, 3000);
 		setInterval(function() {
 			$$("get12TemplateId").setHTML(doGet("rest/game/sections/12", {}));
 		}, 3000);

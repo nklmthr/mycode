@@ -212,6 +212,7 @@ public class Game29Service {
 	}
 
 	public boolean updateUser(String payLoad) {
+		initialize();
 		JSONObject object = new JSONObject(payLoad);
 		String playerId = object.getString("playerId");
 		String playerName = object.getString("playerName");

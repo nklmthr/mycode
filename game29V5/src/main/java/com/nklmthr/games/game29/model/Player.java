@@ -1,19 +1,20 @@
 package com.nklmthr.games.game29.model;
 
+import java.util.Date;
+
 public class Player {
 	private int playerId;
 	private String playerName;
 	private String playerPassword;
 	private boolean registered;
 	private int team;
+	private Date lastSeen;
 
 	public Player(int playerId, String playerName, String playerPassword) {
 		setPlayerId(playerId);
 		setPlayerName(playerName);
 		setPlayerPassword(playerPassword);
 	}
-	
-	
 
 	public int getPlayerId() {
 		return playerId;
@@ -44,13 +45,9 @@ public class Player {
 		return registered;
 	}
 
-
-
 	public void setRegistered(boolean registered) {
 		this.registered = registered;
 	}
-
-
 
 	public void setPlayerPassword(String playerPassword) {
 		this.playerPassword = playerPassword;
@@ -85,6 +82,14 @@ public class Player {
 		if (playerId != other.playerId)
 			return false;
 		return true;
+	}
+
+	public Date getLastSeen() {
+		return lastSeen;
+	}
+
+	public void setLastSeen(Date lastSeen) {
+		this.lastSeen = lastSeen;
 	}
 
 }

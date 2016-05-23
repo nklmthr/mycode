@@ -33,6 +33,29 @@ public class SectionHTML {
 			str.append("</td>");
 			str.append("</tr>");
 
+			List<Player> players = playerService.getPlayers();
+			for (Player player : players) {
+				str.append("<tr>");
+				str.append("<td>");
+				str.append(player.getPlayerName());
+				str.append("</td>");
+				str.append("<td>");
+				if (player.getLastSeen() == null) {
+					str.append("NA");
+				} else {
+					long time = System.currentTimeMillis() - player.getLastSeen().getTime();
+					if (time < 60000) {
+						str.append((time / 1000) + " sec ago");
+					} else {
+						str.append((time / 60000) + " min ago");
+					}
+				}
+				str.append("</td>");
+				str.append("<tr>");
+			}
+
+			str.append("</table");
+
 		}
 		return str.toString();
 	}
@@ -112,8 +135,7 @@ public class SectionHTML {
 				str.append("<tr><td colspan=2>");
 				str.append("Trump Opened by Player<a href=\"#\" class=\"buttonRed\"/>"
 						+ game.getMatch().getTrumpShowPlayer().getPlayerName() + "</a>");
-				str.append("</td>");
-				str.append("<tr><td>");
+				str.append("</td><td>");
 				String kqPlayer = game.getMatch().getKQShowPlayer() != null
 						? game.getMatch().getKQShowPlayer().getPlayerName() : "NA";
 				str.append("KQ show Player<a href=\"#\" class=\"buttonRed\"/>" + kqPlayer + "</a>");

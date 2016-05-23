@@ -1,5 +1,7 @@
 package com.nklmthr.games.game29.restservices;
 
+import java.util.Date;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -15,10 +17,13 @@ import org.apache.log4j.Logger;
 
 import com.nklmthr.games.game29.context.SpringApplicationContext;
 import com.nklmthr.games.game29.service.Game29Service;
+import com.nklmthr.games.game29.service.PlayerService;
 
 @Path("/game")
 public class SectionRestService {
 	private Logger logger = Logger.getLogger(SectionRestService.class);
+
+	private PlayerService playerService = SpringApplicationContext.getSpringContext().getBean(PlayerService.class);
 
 	@GET
 	@Path("sections/{sectionId}")
@@ -28,7 +33,7 @@ public class SectionRestService {
 		try {
 			Game29Service service = SpringApplicationContext.getSpringContext().getBean(Game29Service.class);
 			service.initialize();
-
+			playerService.get(playerId).setLastSeen(new Date());
 			switch (sectionId) {
 			case 11:
 				response = service.getSection11(playerId);

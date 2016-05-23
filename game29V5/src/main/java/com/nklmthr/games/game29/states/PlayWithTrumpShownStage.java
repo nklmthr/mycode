@@ -143,7 +143,7 @@ public class PlayWithTrumpShownStage extends SectionHTML implements State {
 		if (event instanceof FetchEvent) {
 			FetchEvent fetch = (FetchEvent) event;
 			str.append("Trump Opened By:&nbsp;");
-			str.append(game.getMatch().getTrumpShowPlayer());
+			str.append(game.getMatch().getTrumpShowPlayer().getPlayerName());
 			str.append("<br><br><img src='images/" + game.getMatch().getChallengeTrumpSuite() + ".jpg' border=\"1\"/>");
 		}
 		return str.toString();

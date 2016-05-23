@@ -15,6 +15,7 @@ public class PlayerService {
 		players.add(new Player(4, "Four", "Nikhil"));
 	}
 
+
 	public Player get(int index) {
 		return players.get(index - 1);
 	}
@@ -49,6 +50,14 @@ public class PlayerService {
 		int oppositionFirstId = (player.getPlayerId() + 1) < 5 ? (player.getPlayerId() + 1)
 				: (player.getPlayerId() + 1) % 4;// 1-2,2-3,3-4,4-1
 		return players.get(oppositionFirstId - 1);
+	}
+
+	public List<Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(List<Player> players) {
+		this.players = players;
 	}
 
 }
