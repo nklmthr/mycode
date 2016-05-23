@@ -1,6 +1,5 @@
 package com.nklmthr.games.game29.states;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +14,7 @@ import com.nklmthr.games.game29.model.FetchEvent;
 import com.nklmthr.games.game29.model.Game;
 import com.nklmthr.games.game29.model.Player;
 import com.nklmthr.games.game29.model.State;
+import com.nklmthr.games.game29.model.Suite;
 import com.nklmthr.games.game29.model.Table;
 import com.nklmthr.games.game29.model.TableCard;
 
@@ -64,8 +64,33 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 		if (event instanceof FetchEvent) {
 			FetchEvent fetch = (FetchEvent) event;
 			str.append("<br>");
-			str.append(
-					"Open Trump:&nbsp;&nbsp;<a href=\"javascript:openTrump();\"><img src='images/deck.jpeg' border=\"1\"/></a>");
+			if (game.getMatch().getTables().size() > 0 && game.getMatch().getTables()
+					.get(game.getMatch().getTables().size() - 1).getTableCards().size() > 0) {
+				Suite base = game.getMatch().getTables().get(game.getMatch().getTables().size() - 1).getTableCards()
+						.get(0).getCard().getSuite();
+				Player playerLastPlayed = game.getMatch()
+						.getTables().get(game.getMatch().getTables().size() - 1).getTableCards().get(game.getMatch()
+								.getTables().get(game.getMatch().getTables().size() - 1).getTableCards().size() - 1)
+						.getPlayer();
+				boolean trumpOpenNotAllowed = false;
+				if (fetch.getPlayer().equals(playerService.getOppositionFirstPlayer(playerLastPlayed))) {
+					List<Card> playerCards = game.getMatch().getPlayerCards().get(fetch.getPlayer());
+					for (Card card : playerCards) {
+						if (card.getSuite().equals(base)) {
+							trumpOpenNotAllowed = true;
+							break;
+						}
+					}
+				}
+				if (trumpOpenNotAllowed) {
+					str.append("<a href=\"#\"><img src='images/deck.jpeg' border=\"1\"/></a>");
+				} else {
+					str.append(
+							"Open Trump:&nbsp;&nbsp;<a href=\"javascript:openTrump();\"><img src='images/deck.jpeg' border=\"1\"/></a>");
+				}
+
+			}
+
 			if (fetch.getPlayer().equals(game.getMatch().getTrumpSetPlayer())) {
 				str.append("<br><br>");
 				str.append("Trump:&nbsp;&nbsp;<img src='images/" + game.getMatch().getChallengeTrumpSuite()
@@ -134,10 +159,9 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 		List<Table> tables = game.getMatch().getTables();
 		Table currentTable = tables.get(tables.size() - 1);
 
-		for (TableCard tableCard : currentTable.getTableCards()) {
-			if (tableCard.getPlayer().equals(player) && tableCard.getCard().equals(card)) {
-				return;
-			}
+		boolean check = checkValidMove(game, player, card);
+		if (!check) {
+			return;
 		}
 		TableCard tc = new TableCard();
 		tc.setPlayer(player);

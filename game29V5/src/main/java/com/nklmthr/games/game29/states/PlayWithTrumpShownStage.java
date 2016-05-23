@@ -33,15 +33,16 @@ public class PlayWithTrumpShownStage extends SectionHTML implements State {
 	}
 
 	private void makeMove(Game game, Player player, Card card) {
+		
+		boolean check = checkValidMove(game, player, card);
+		if(!check){
+			return;
+		}
 		List<Card> movePlayerCards = game.getMatch().getPlayerCards().get(player);
 		movePlayerCards.remove(card);
 		List<Table> tables = game.getMatch().getTables();
 		Table currentTable = tables.get(tables.size() - 1);
-		for (TableCard tableCard : currentTable.getTableCards()) {
-			if (tableCard.getPlayer().equals(player) && tableCard.getCard().equals(card)) {
-				return;
-			}
-		}
+		
 		TableCard tc = new TableCard();
 		tc.setPlayer(player);
 		tc.setCard(card);

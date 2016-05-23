@@ -230,6 +230,8 @@ public class Game29Service {
 			player.setPlayerPassword(playerPassword);
 			player.setRegistered(true);
 			return true;
+		} else if (player.getPlayerName().equals(playerName) && player.getPlayerPassword().equals(playerPassword)) {
+			return true;
 		} else {
 			return false;
 		}

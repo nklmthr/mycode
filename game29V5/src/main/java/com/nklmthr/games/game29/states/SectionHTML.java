@@ -10,8 +10,8 @@ import com.nklmthr.games.game29.model.Card;
 import com.nklmthr.games.game29.model.Event;
 import com.nklmthr.games.game29.model.FetchEvent;
 import com.nklmthr.games.game29.model.Game;
-import com.nklmthr.games.game29.model.Match;
 import com.nklmthr.games.game29.model.Player;
+import com.nklmthr.games.game29.model.Suite;
 import com.nklmthr.games.game29.model.Table;
 import com.nklmthr.games.game29.model.TableCard;
 import com.nklmthr.games.game29.service.PlayerService;
@@ -20,6 +20,27 @@ public class SectionHTML {
 
 	PlayerService playerService = SpringApplicationContext.getSpringContext().getBean(PlayerService.class);
 	private Logger logger = Logger.getLogger(SectionHTML.class);
+
+	protected boolean checkValidMove(Game game, Player player, Card card) {
+		List<Table> tables = game.getMatch().getTables();
+		Table currentTable = tables.get(tables.size() - 1);
+		for (TableCard tableCard : currentTable.getTableCards()) {
+			if (tableCard.getPlayer().equals(player) && tableCard.getCard().equals(card)) {
+				return false;
+			}
+		}
+		if (currentTable.getTableCards().size() > 0) {
+			Suite base = currentTable.getTableCards().get(0).getCard().getSuite();
+			List<Card> cards = game.getMatch().getPlayerCards().get(player);
+			for(Card playerCard: cards){
+				if(playerCard.getSuite().equals(base) && !card.getSuite().equals(base)){
+					return false;
+				}
+			}
+		}
+		return true;
+
+	}
 
 	public String getSection11Generic(Game game, Event event) {
 		StringBuilder str = new StringBuilder();
@@ -46,8 +67,10 @@ public class SectionHTML {
 					long time = System.currentTimeMillis() - player.getLastSeen().getTime();
 					if (time < 60000) {
 						str.append((time / 1000) + " sec ago");
-					} else {
+					} else if (time < 3600000) {
 						str.append((time / 60000) + " min ago");
+					} else {
+						str.append("Long Time No see");
 					}
 				}
 				str.append("</td>");
