@@ -1,5 +1,6 @@
 package com.nklmthr.games.game29.states;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 		} else if (event instanceof MakeMoveEvent) {
 			MakeMoveEvent makeMoveEvent = (MakeMoveEvent) event;
 			makeMove(game, makeMoveEvent.getPlayer(), makeMoveEvent.getCard());
+
 			return new PlayWithTrumpNotShownStage();
 		}
 		return null;
@@ -42,25 +44,7 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 	}
 
 	public String getSection13(Game game, Event event) {
-		StringBuilder str = new StringBuilder();
-		if (event instanceof FetchEvent) {
-			FetchEvent fetch = (FetchEvent) event;
-
-			str.append("<table border=\"1\" width=\"100%\" height=\"100%\" >");
-			str.append("<tr> <td> I am Player:&nbsp;" + fetch.getPlayer().getPlayerName() + "</td> <td>");
-			str.append("Deal Player:&nbsp;" + game.getMatch().getDealPlayer().getPlayerName() + "</td> </tr>");
-			str.append(" <tr> <td>Team1&nbsp;:&nbsp;" + game.getMatch().getTeam1Points());
-			str.append("<br>Team2&nbsp;:&nbsp;" + game.getMatch().getTeam2Points() + "</td>");
-			str.append(" <td>Points Remaining:&nbsp;"
-					+ (29 - (game.getMatch().getTeam1Points() + game.getMatch().getTeam2Points())) + "</td></tr>");
-			str.append("<tr> <td>Challenge Player:&nbsp;" + game.getMatch().getDealPlayer().getPlayerName()
-					+ "</td> <td>Challenge Points:&nbsp;" + game.getMatch().getChallenge().getChallengePoints()
-					+ "</td> </tr>");
-			str.append("</table>");
-			str.append("");
-
-		}
-		return str.toString();
+		return getSection13Generic(game, event);
 	}
 
 	public String getSection21(Game game, Event event) {
@@ -170,7 +154,7 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 					bestPlayer = tableCard.getPlayer();
 				} else {
 					if (tableCard.getCard().getSuite().equals(bestCard.getSuite())
-							&& bestCard.compareTo(tableCard.getCard()) > 0) {
+							&& bestCard.getRank().ordinal() < tableCard.getCard().getRank().ordinal()) {
 						bestCard = tableCard.getCard();
 						bestPlayer = tableCard.getPlayer();
 					}

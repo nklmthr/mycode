@@ -1,5 +1,6 @@
 package com.nklmthr.games.game29.states;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import com.nklmthr.games.game29.model.Event;
 import com.nklmthr.games.game29.model.FetchEvent;
 import com.nklmthr.games.game29.model.Game;
 import com.nklmthr.games.game29.model.Player;
+import com.nklmthr.games.game29.model.Rank;
 import com.nklmthr.games.game29.model.State;
 import com.nklmthr.games.game29.model.Suite;
 
@@ -20,6 +22,35 @@ public class TrumSetState extends SectionHTML implements State {
 			TrumpSetEvent trumpSetEvent = (TrumpSetEvent) event;
 			game.getMatch().setChallengeTrumpSuite(Suite.values()[trumpSetEvent.getTrump()]);
 			game.getMatch().setTrumpSetPlayer(trumpSetEvent.getPlayer());
+			Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
+			List<Card> team1Cards = new ArrayList<Card>();
+			List<Card> team2Cards = new ArrayList<Card>();
+
+			for (Player player : playerCards.keySet()) {
+				List<Card> cards = playerCards.get(player);
+				cards.clear();
+				cards.addAll(game.getMatch().getCards().subList((player.getPlayerId() - 1) * 8,
+						((player.getPlayerId() - 1) * 8) + 8));
+				if (player.getTeam() % 2 == 0) {
+					team2Cards.addAll(cards);
+				} else {
+					team1Cards.addAll(cards);
+				}
+			}
+
+			if (!(team1Cards.contains(new Card(Suite.SPADES, Rank.JACK))
+					|| team1Cards.contains(new Card(Suite.HEARTS, Rank.JACK))
+					|| team1Cards.contains(new Card(Suite.DIAMONDS, Rank.JACK))
+					|| team1Cards.contains(new Card(Suite.CLUBS, Rank.JACK)))) {
+				game.getMatch().setJackLessGame(true);
+			}
+			if (!(team2Cards.contains(new Card(Suite.SPADES, Rank.JACK))
+					|| team2Cards.contains(new Card(Suite.HEARTS, Rank.JACK))
+					|| team2Cards.contains(new Card(Suite.DIAMONDS, Rank.JACK))
+					|| team2Cards.contains(new Card(Suite.CLUBS, Rank.JACK)))) {
+				game.getMatch().setJackLessGame(true);
+			}
+
 			return new PlayWithTrumpNotShownStage();
 		}
 		return null;

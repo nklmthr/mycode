@@ -12,6 +12,7 @@ import com.nklmthr.games.game29.model.Event;
 import com.nklmthr.games.game29.model.FetchEvent;
 import com.nklmthr.games.game29.model.Game;
 import com.nklmthr.games.game29.model.Player;
+import com.nklmthr.games.game29.model.Rank;
 import com.nklmthr.games.game29.model.State;
 import com.nklmthr.games.game29.model.Suite;
 import com.nklmthr.games.game29.model.Table;
@@ -25,14 +26,15 @@ public class PlayWithTrumpShownStage extends SectionHTML implements State {
 		if (event instanceof MakeMoveEvent) {
 			MakeMoveEvent makeMoveEvent = (MakeMoveEvent) event;
 			makeMove(game, makeMoveEvent.getPlayer(), makeMoveEvent.getCard());
+
 			return new PlayWithTrumpShownStage();
 		}
 		return null;
 	}
 
 	private void makeMove(Game game, Player player, Card card) {
-		List<Card> playerCards = game.getMatch().getPlayerCards().get(player);
-		playerCards.remove(card);
+		List<Card> movePlayerCards = game.getMatch().getPlayerCards().get(player);
+		movePlayerCards.remove(card);
 		List<Table> tables = game.getMatch().getTables();
 		Table currentTable = tables.get(tables.size() - 1);
 		for (TableCard tableCard : currentTable.getTableCards()) {
@@ -58,7 +60,7 @@ public class PlayWithTrumpShownStage extends SectionHTML implements State {
 					Suite trump = game.getMatch().getChallengeTrumpSuite();
 					if (bestCard.getSuite().equals(trump)) {
 						if (tableCard.getCard().getSuite().equals(trump)) {
-							if (bestCard.compareTo(tableCard.getCard()) > 0) {
+							if (bestCard.getRank().ordinal() < tableCard.getCard().getRank().ordinal()) {
 								bestCard = tableCard.getCard();
 								bestPlayer = tableCard.getPlayer();
 							}
@@ -67,7 +69,7 @@ public class PlayWithTrumpShownStage extends SectionHTML implements State {
 						if (tableCard.getCard().getSuite().equals(trump)) {
 							bestCard = tableCard.getCard();
 							bestPlayer = tableCard.getPlayer();
-						} else if (bestCard.compareTo(tableCard.getCard()) > 0) {
+						} else if (bestCard.getRank().ordinal() < tableCard.getCard().getRank().ordinal()) {
 							bestCard = tableCard.getCard();
 							bestPlayer = tableCard.getPlayer();
 
@@ -78,7 +80,24 @@ public class PlayWithTrumpShownStage extends SectionHTML implements State {
 			currentTable.setTableWinner(bestPlayer);
 			currentTable.setTablePoints(points);
 			logger.error("makeMove: bestplayer=" + bestPlayer.getPlayerName() + ", points=" + points);
-
+			if (game.getMatch().getTables().get(game.getMatch().getTables().size() - 1).getTableCards().size() == 4) {
+				Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
+				for (Player p : playerCards.keySet()) {
+					List<Card> cards = playerCards.get(p);
+					if (cards.contains(new Card(game.getMatch().getChallengeTrumpSuite(), Rank.KING))
+							&& cards.contains(new Card(game.getMatch().getChallengeTrumpSuite(), Rank.QUEEN))) {
+						game.getMatch().setKQshown(true);
+						game.getMatch().setKQShowPlayer(p);
+						if (p.getTeam() == game.getMatch().getChallenge().getChallengePlayer().getTeam()) {
+							int challengePoints = game.getMatch().getChallenge().getChallengePoints();
+							challengePoints = (challengePoints - 4) < 16 ? 16 : (challengePoints - 4);
+						} else {
+							int challengePoints = game.getMatch().getChallenge().getChallengePoints();
+							challengePoints = (challengePoints + 4) > 29 ? 29 : (challengePoints + 4);
+						}
+					}
+				}
+			}
 			if (currentTable.getTableWinner().getTeam() == 1) {
 				game.getMatch().setTeam1Points(game.getMatch().getTeam1Points() + currentTable.getTablePoints());
 			} else if (currentTable.getTableWinner().getTeam() == 2) {
@@ -104,27 +123,7 @@ public class PlayWithTrumpShownStage extends SectionHTML implements State {
 	}
 
 	public String getSection13(Game game, Event event) {
-		StringBuilder str = new StringBuilder();
-		if (event instanceof FetchEvent) {
-			FetchEvent fetch = (FetchEvent) event;
-
-			str.append("<table border=\"1\" width=\"100%\" height=\"100%\" >");
-			str.append("<tr> <td> I am Player:&nbsp;" + fetch.getPlayer().getPlayerName() + "</td> <td>");
-			str.append("Deal Player:&nbsp;" + game.getMatch().getDealPlayer().getPlayerName() + "</td> </tr>");
-			str.append(" <tr> <td>Team1&nbsp;:&nbsp;" + game.getMatch().getTeam1Points());
-			str.append("<br>Team2&nbsp;:&nbsp;" + game.getMatch().getTeam2Points() + "</td>");
-			str.append(" <td>Points Remaining:&nbsp;"
-					+ (29 - (game.getMatch().getTeam1Points() + game.getMatch().getTeam2Points())) + "</td></tr>");
-			str.append("<tr> <td>Challenge Player:&nbsp;" + game.getMatch().getDealPlayer().getPlayerName()
-					+ "</td> <td>Challenge Points:&nbsp;" + game.getMatch().getChallenge().getChallengePoints()
-					+ "</td> </tr>");
-			str.append("<tr><td>Trump shown Player:&nbsp;" + game.getMatch().getTrumpShowPlayer().getPlayerName()
-					+ "</td><td></td></tr>");
-			str.append("</table>");
-			str.append("");
-
-		}
-		return str.toString();
+		return getSection13Generic(game, event);
 	}
 
 	public String getSection21(Game game, Event event) {

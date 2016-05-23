@@ -2,8 +2,7 @@
 
 <html>
 <%
-	String playerId = (String) request.getParameter("PLAYER_ID_STR");
-	//System.out.println("playerId" + playerId);
+	String playerId = (String) request.getParameter("playerId");
 	if (StringUtils.isBlank(playerId)) {
 		response.sendRedirect("login.jsp");
 	}
@@ -211,35 +210,34 @@
 		});
 	};
 
-
 	function timeout() {
 		setInterval(function() {
 			$$("get11TemplateId").setHTML(doGet("rest/game/sections/11", {}));
 		}, 5000);
-		/*setInterval(function() {
+		setInterval(function() {
 			$$("get12TemplateId").setHTML(doGet("rest/game/sections/12", {}));
-		}, 13000);*/
+		}, 3000);
 		setInterval(function() {
 			$$("get13TemplateId").setHTML(doGet("rest/game/sections/13", {}));
 		}, 2000);
-		/*setInterval(function() {
+		setInterval(function() {
 			$$("get21TemplateId").setHTML(doGet("rest/game/sections/21", {}));
-		}, 29000);*/
+		}, 3000);
 		setInterval(function() {
 			$$("get22TemplateId").setHTML(doGet("rest/game/sections/22", {}));
-		}, 1900);
-		/*setInterval(function() {
+		}, 1300);
+		setInterval(function() {
 			$$("get23TemplateId").setHTML(doGet("rest/game/sections/23", {}));
-		}, 31000);*/
+		}, 3000);
 
 		setInterval(function() {
 			$$("get31TemplateId").setHTML(doGet("rest/game/sections/31", {}));
 		}, 1700);
 		setInterval(function() {
 			$$("get32TemplateId").setHTML(doGet("rest/game/sections/32", {}));
-		}, 1300);
+		}, 1900);
 		//setInterval(function() {
-			//$$("get33TemplateId").setHTML(doGet("rest/game/sections/33", {}));
+		//$$("get33TemplateId").setHTML(doGet("rest/game/sections/33", {}));
 		//}, 11000);
 
 		//setInterval(getTemplateF, time);
@@ -332,9 +330,7 @@
 							view : "button",
 							label : "New Deal",
 							click : function() {
-								alert(doGet("rest/game/deal", {
-
-								}));
+								webix.message(doGet("rest/game/deal", {}));
 							}
 						}, {
 							id : "get44TemplateId",

@@ -7,9 +7,21 @@ import java.util.Set;
 
 public class Match {
 	private State state;
+	private List<Card> cards;
+	public List<Card> getCards() {
+		return cards;
+	}
+
+	public void setCards(List<Card> cards) {
+		this.cards = cards;
+	}
 
 	private Player dealPlayer;
 	private Player nextMovePlayer;
+
+	private boolean pointLessGame;
+	private boolean jackLessGame;
+	private boolean trumpLessGame;
 
 	private List<Table> tables = new ArrayList<Table>();
 
@@ -174,6 +186,30 @@ public class Match {
 
 	public void setState(State state) {
 		this.state = state;
+	}
+
+	public boolean isPointLessGame() {
+		return pointLessGame;
+	}
+
+	public void setPointLessGame(boolean pointLessGame) {
+		this.pointLessGame = pointLessGame;
+	}
+
+	public boolean isJackLessGame() {
+		return jackLessGame;
+	}
+
+	public void setJackLessGame(boolean jackLessGame) {
+		this.jackLessGame = jackLessGame;
+	}
+
+	public boolean isTrumpLessGame() {
+		return trumpLessGame;
+	}
+
+	public void setTrumpLessGame(boolean trumpLessGame) {
+		this.trumpLessGame = trumpLessGame;
 	}
 
 }

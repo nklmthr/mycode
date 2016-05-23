@@ -4,6 +4,7 @@ public class Player {
 	private int playerId;
 	private String playerName;
 	private String playerPassword;
+	private boolean registered;
 	private int team;
 
 	public Player(int playerId, String playerName, String playerPassword) {
@@ -38,6 +39,18 @@ public class Player {
 	public String getPlayerPassword() {
 		return playerPassword;
 	}
+
+	public boolean isRegistered() {
+		return registered;
+	}
+
+
+
+	public void setRegistered(boolean registered) {
+		this.registered = registered;
+	}
+
+
 
 	public void setPlayerPassword(String playerPassword) {
 		this.playerPassword = playerPassword;

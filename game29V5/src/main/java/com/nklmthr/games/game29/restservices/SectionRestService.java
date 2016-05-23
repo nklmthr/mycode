@@ -1,12 +1,15 @@
 package com.nklmthr.games.game29.restservices;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
 
@@ -54,7 +57,7 @@ public class SectionRestService {
 			}
 			logger.info(playerId + ":" + sectionId + "=" + response);
 		} catch (Exception e) {
-			logger.error("Error:"+playerId + ":" + sectionId + "=" + response);
+			logger.error("Error:" + playerId + ":" + sectionId + "=" + response);
 			e.printStackTrace();
 		}
 		return Response.ok(response).build();
@@ -124,4 +127,18 @@ public class SectionRestService {
 		return Response.ok(service.makeMove(playerId, suite, rank)).build();
 	}
 
+	@PUT
+	@Path("/users")
+	@Consumes({ MediaType.TEXT_PLAIN })
+	@Produces({ MediaType.TEXT_PLAIN })
+	public Response updateUser(String payLoad) {
+		Game29Service service = SpringApplicationContext.getSpringContext().getBean(Game29Service.class);
+		boolean isUpdated = service.updateUser(payLoad);
+		if (isUpdated) {
+			return Response.ok("Registered").build();
+		} else {
+			return Response.status(Status.FORBIDDEN).build();
+		}
+
+	}
 }

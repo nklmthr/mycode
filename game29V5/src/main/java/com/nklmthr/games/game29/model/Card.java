@@ -1,7 +1,5 @@
 package com.nklmthr.games.game29.model;
 
-import java.util.Comparator;
-
 public class Card implements Comparable<Card> {
 	private Suite suite;
 	private Rank rank;

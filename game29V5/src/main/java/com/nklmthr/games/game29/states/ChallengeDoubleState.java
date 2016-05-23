@@ -17,6 +17,9 @@ public class ChallengeDoubleState extends SectionHTML implements State {
 	public synchronized State transition(Game game, Event event) {
 		if (event instanceof ChallengeEvent) {
 			ChallengeEvent challenge = (ChallengeEvent) event;
+			if (challenge.getPlayer().equals(game.getMatch().getChallenge().getChallengePlayer())) {
+				return new ChallengeDoubleState();
+			}
 			// If player passes
 			if (challenge.isPass()) {
 				// if the player is the last player to pass
