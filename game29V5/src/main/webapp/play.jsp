@@ -3,6 +3,8 @@
 <html>
 <%
 	String playerId = (String) request.getParameter("playerId");
+	String playerName = (String) request.getParameter("playerName");
+	String playerPassword = (String) request.getParameter("playerPassword");
 	if (StringUtils.isBlank(playerId)) {
 		response.sendRedirect("login.jsp");
 	}
@@ -10,6 +12,77 @@
 
 <head>
 <style type="text/css">
+.tg {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.tg td {
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	padding: 10px 5px;
+	border-style: solid;
+	border-width: 1px;
+	overflow: hidden;
+	word-break: normal;
+}
+
+.tg th {
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+	padding: 10px 5px;
+	border-style: solid;
+	border-width: 1px;
+	overflow: hidden;
+	word-break: normal;
+}
+
+.tg .tg-b44r {
+	background-color: #F1B9AC;
+	vertical-align: top
+}
+
+.tg .tg-72gw {
+	background-color: #AFF9EB;
+	vertical-align: top
+}
+
+.tg .tg-vv23 {
+	background-color: #A4AFAD;
+	vertical-align: top
+}
+
+.tg .tg-3smg {
+	background-color: #DFCAEC;
+	vertical-align: top
+}
+
+.tg .tg-mtwr {
+	background-color: #F3CCD0;
+	vertical-align: top
+}
+
+.tg .tg-6c3r {
+	background-color: #CCF3CF;
+	vertical-align: top
+}
+
+.tg .tg-3b15 {
+	background-color: #E5F3CC;
+	vertical-align: top
+}
+
+.tg .tg-6c2r {
+	background-color: #FBDAF5;
+	vertical-align: top
+}
+
+.tg .tg-3c15 {
+	background-color: #D8D8DE;
+	vertical-align: top
+}
+
 .buttonBlack {
 	text-decoration: none;
 	text-align: center;
@@ -204,6 +277,19 @@
 		}
 	}
 
+	function doPut(path, payLoad) {
+		var count = 0;
+		var xhr = webix.ajax().sync().header({
+			'Content-Type' : 'text/plain'
+		}).put(path, JSON.stringify(payLoad));
+		if (xhr.status == 200) {
+			//alert(xhr.responseText);
+			return xhr.responseText;
+		} else {
+			webix
+					.alert("You are not allowed with the credentials provided. Either chose a different player or enter correct credentials...")
+		}
+	}
 	function getData(section) {
 		return doGet("rest/game/sections/" + section, {
 
@@ -211,6 +297,20 @@
 	};
 
 	function timeout() {
+		var payLoad = {
+			"playerId" : "<%=playerId%>",
+			"playerName" :"<%=playerName%>",
+			"playerPassword" : "<%=playerPassword%>",
+			"claimUser" : 0
+		};
+		//alert(JSON.stringify(payLoad));
+		String
+		response = doPut("rest/game/users", payLoad);
+		if (response !== "Registered") {
+			window.location = "login.jsp";
+		}
+		;
+
 		setInterval(function() {
 			$$("get11TemplateId").setHTML(doGet("rest/game/sections/11", {}));
 		}, 3000);

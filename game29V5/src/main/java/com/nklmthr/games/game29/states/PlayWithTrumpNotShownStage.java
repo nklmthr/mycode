@@ -13,6 +13,7 @@ import com.nklmthr.games.game29.model.Event;
 import com.nklmthr.games.game29.model.FetchEvent;
 import com.nklmthr.games.game29.model.Game;
 import com.nklmthr.games.game29.model.Player;
+import com.nklmthr.games.game29.model.Rank;
 import com.nklmthr.games.game29.model.State;
 import com.nklmthr.games.game29.model.Suite;
 import com.nklmthr.games.game29.model.Table;
@@ -63,40 +64,63 @@ public class PlayWithTrumpNotShownStage extends SectionHTML implements State {
 		StringBuilder str = new StringBuilder();
 		if (event instanceof FetchEvent) {
 			FetchEvent fetch = (FetchEvent) event;
-			str.append("<br>");
-			if (game.getMatch().getTables().size() > 0 && game.getMatch().getTables()
-					.get(game.getMatch().getTables().size() - 1).getTableCards().size() > 0) {
-				Suite base = game.getMatch().getTables().get(game.getMatch().getTables().size() - 1).getTableCards()
-						.get(0).getCard().getSuite();
-				Player playerLastPlayed = game.getMatch()
-						.getTables().get(game.getMatch().getTables().size() - 1).getTableCards().get(game.getMatch()
-								.getTables().get(game.getMatch().getTables().size() - 1).getTableCards().size() - 1)
-						.getPlayer();
-				boolean trumpOpenNotAllowed = false;
-				if (fetch.getPlayer().equals(playerService.getOppositionFirstPlayer(playerLastPlayed))) {
-					List<Card> playerCards = game.getMatch().getPlayerCards().get(fetch.getPlayer());
-					for (Card card : playerCards) {
-						if (card.getSuite().equals(base)) {
-							trumpOpenNotAllowed = true;
-							break;
-						}
-					}
-				}
-				if (trumpOpenNotAllowed) {
-					str.append("<a href=\"#\"><img src='images/deck.jpeg' border=\"1\"/></a>");
-				} else {
-					str.append(
-							"Open Trump:&nbsp;&nbsp;<a href=\"javascript:openTrump();\"><img src='images/deck.jpeg' border=\"1\"/></a>");
-				}
+			str.append("<table width=\"100%\" height=\"100%\">");
+			boolean canOpenTrump = canPlayerWithTurnOpenTrump(game, fetch.getPlayer());
 
+			if (canOpenTrump) {
+				str.append("<tr>");
+				str.append("<td>");
+				str.append("Open Trum: ");
+				str.append("</td>");
+				str.append("<td>");
+				str.append("<a href=\"javascript:openTrump();\"><img src='images/deck.jpeg' border=\"1\"/></a>");
+				str.append("</td>");
+				str.append("</tr>");
+			} else {
+				str.append("<tr>");
+				str.append("<td>");
+				str.append("Open Trum: NA ");
+				str.append("</td>");
+				str.append("<td>");
+				str.append("<a href=\"#\"><img src='images/deck.jpeg' border=\"1\"/></a>");
+				str.append("</td>");
+				str.append("</tr>");
 			}
 
 			if (fetch.getPlayer().equals(game.getMatch().getTrumpSetPlayer())) {
-				str.append("<br><br>");
-				str.append("Trump:&nbsp;&nbsp;<img src='images/" + game.getMatch().getChallengeTrumpSuite()
-						+ ".jpg' border=\"1\"/>");
+				str.append("<tr>");
+				str.append("<td>");
+				str.append("Trump Set by You: ");
+				str.append("</td>");
+				str.append("<td>");
+				str.append("<img src='images/" + game.getMatch().getChallengeTrumpSuite() + ".jpg' border=\"1\"/>");
+				str.append("</td>");
+				str.append("</tr>");
 			}
-
+			str.append("<tr>");
+			str.append("<td>");
+			str.append("Player with NO JACK:");
+			str.append("</td>");
+			str.append("<td>");
+			Map<Player, List<Card>> playerCards = game.getMatch().getPlayerCards();
+			for (Player player : playerCards.keySet()) {
+				boolean hasJack = false;
+				List<Card> cards = playerCards.get(player);
+				if (cards.contains(new Card(Suite.CLUBS, Rank.JACK))
+						|| cards.contains(new Card(Suite.SPADES, Rank.JACK))
+						|| cards.contains(new Card(Suite.DIAMONDS, Rank.JACK))
+						|| cards.contains(new Card(Suite.HEARTS, Rank.JACK))) {
+					hasJack = true;
+				}
+				if (!hasJack) {
+					str.append(player.getPlayerName());
+				}
+				str.append("&nbsp;");
+			}
+			str.append("&nbsp;");
+			str.append("</td>");
+			str.append("</tr>");
+			str.append("</table>");
 		}
 		return str.toString();
 	}

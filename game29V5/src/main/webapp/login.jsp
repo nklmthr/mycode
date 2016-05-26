@@ -12,7 +12,7 @@
 <script src="webix/codebase/webix.js" type="text/javascript"
 	charset="utf-8"></script>
 <script type="text/javascript">
-	function doGet(path, payLoad) {
+	function doPut(path, payLoad) {
 		var count = 0;
 		var xhr = webix.ajax().sync().header({
 			'Content-Type' : 'text/plain'
@@ -82,7 +82,7 @@
 										.alert("Please enter password to continue...");
 								return;
 							}
-				
+
 							var payLoad = {
 								"playerId" : $$("playerIdPicker").getValue(),
 								"playerName" : $$("playerNamePicker")
@@ -93,10 +93,12 @@
 										.getValue()
 							};
 							String
-							response = doGet("rest/game/users", payLoad);
+							response = doPut("rest/game/users", payLoad);
 							if (response == "Registered") {
 								window.location = "play.jsp?playerId="
-										+ payLoad.playerId;
+										+ payLoad.playerId
+										+ "&playerName="+payLoad.playerName+"&playerPassword="
+										+ payLoad.playerPassword;
 							}
 
 						}

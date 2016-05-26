@@ -32,8 +32,8 @@ public class SectionHTML {
 		if (currentTable.getTableCards().size() > 0) {
 			Suite base = currentTable.getTableCards().get(0).getCard().getSuite();
 			List<Card> cards = game.getMatch().getPlayerCards().get(player);
-			for(Card playerCard: cards){
-				if(playerCard.getSuite().equals(base) && !card.getSuite().equals(base)){
+			for (Card playerCard : cards) {
+				if (playerCard.getSuite().equals(base) && !card.getSuite().equals(base)) {
 					return false;
 				}
 			}
@@ -117,56 +117,26 @@ public class SectionHTML {
 		if (event instanceof FetchEvent) {
 			FetchEvent fetch = (FetchEvent) event;
 
-			str.append("<table border=\"1\" width=\"100%\" height=\"100%\" >");
-			str.append("<tr> <td><a href=\"#\" class=\"buttonBlack\"/>" + fetch.getPlayer().getPlayerName().substring(0,
-					fetch.getPlayer().getPlayerName().length() > 6 ? 6 : fetch.getPlayer().getPlayerName().length())
-					+ "</a></td>");
-			str.append(
-					" <td>Deal:<a href=\"#\" class=\"buttonBlue\"/>"
-							+ game.getMatch().getDealPlayer().getPlayerName()
-									.substring(0,
-											game.getMatch().getDealPlayer().getPlayerName().length() > 6 ? 6
-													: game.getMatch().getDealPlayer().getPlayerName().length())
-							+ "</a></td>");
-			str.append("<td>Challenger<a href=\"#\" class=\"buttonRed\"/>"
-					+ game.getMatch().getChallenge().getChallengePlayer().getPlayerName().substring(0,
-							game.getMatch().getChallenge().getChallengePlayer().getPlayerName().length() > 6 ? 6
-									: game.getMatch().getChallenge().getChallengePlayer().getPlayerName().length())
-					+ "</a></td>");
-			str.append("</tr>");
-			str.append(" <tr> <td>Team 1:<a href=\"#\" class=\"buttonGreen\"/>" + game.getMatch().getTeam1Points()
-					+ "</a></td>");
-			str.append("<td>Team 2:<a href=\"#\" class=\"buttonGreen\"/>" + game.getMatch().getTeam2Points()
-					+ "</a></td>");
-			str.append("<td>Points Remaining:<a href=\"#\" class=\"buttonBlack\"/>"
-					+ (29 - (game.getMatch().getTeam1Points() + game.getMatch().getTeam2Points())) + "</a></td></tr>");
-			str.append("<tr> <td colspan=3>Challenge Points:<a href=\"#\" class=\"buttonGreen\"/>"
-					+ game.getMatch().getChallenge().getChallengePoints() + "</a></td> </tr>");
-
-			if (game.getMatch().isChallengeDoubled() || game.getMatch().isChallengeRedoubled()) {
-				str.append("<tr><td>");
-				if (game.getMatch().isChallengeDoubled()) {
-					str.append("<a href=\"#\" class=\"buttonGreen\"/>Doubled</a>");
-				}
-				str.append("</td><td colspan=2>");
-				if (game.getMatch().isChallengeRedoubled()) {
-					str.append("<a href=\"#\" class=\"buttonRed\"/>Re-Doubled</a>");
-				}
-				str.append("</td></tr>");
-			}
-			if (game.getMatch().getTrumpShowPlayer() != null) {
-				str.append("<tr><td colspan=2>");
-				str.append("Trump Opened by Player<a href=\"#\" class=\"buttonRed\"/>"
-						+ game.getMatch().getTrumpShowPlayer().getPlayerName() + "</a>");
-				str.append("</td><td>");
-				String kqPlayer = game.getMatch().getKQShowPlayer() != null
-						? game.getMatch().getKQShowPlayer().getPlayerName() : "NA";
-				str.append("KQ show Player<a href=\"#\" class=\"buttonRed\"/>" + kqPlayer + "</a>");
-				str.append("</td>");
-				str.append("</tr>");
-			}
-			str.append("</table>");
+			str.append("<table class=\"tg\" width=\"100%\" height=\"100%\">");
+			str.append("<tr><th class=\"tg-b44r\" colspan=\"2\"> I am: " + fetch.getPlayer().getPlayerName()
+					+ "</th></tr>");
+			str.append("<tr><td class=\"tg-72gw\">Deal Player: " + game.getMatch().getDealPlayer().getPlayerName()
+					+ "</td><td class=\"tg-3smg\">Trump Show: ");
+			str.append(game.getMatch().getTrumpShowPlayer() != null
+					? game.getMatch().getTrumpShowPlayer().getPlayerName() : "");
+			str.append("</td></tr>");
+			str.append("<tr><td class=\"tg-vv23\">Team 1: " + game.getMatch().getTeam1Points()
+					+ "</td><td class=\"tg-mtwr\">Team 2: " + game.getMatch().getTeam2Points() + "</td></tr>");
+			str.append("<tr><td class=\"tg-6c3r\">Challenge Points: "
+					+ game.getMatch().getChallenge().getChallengePoints());
+			str.append("</td><td class=\"tg-3b15\">Challenge Player: ");
+			str.append(game.getMatch().getChallenge().getChallengePlayer().getPlayerName());
+			str.append("</td></tr>");
+			str.append("<tr><td class=\"tg-6c2r\">KQ Show: "
+					+ (game.getMatch().isKQshown() ? game.getMatch().getKQShowPlayer().getPlayerName() : "NA")
+					+ "</td><td class=\"tg-3c15\"></td></tr>");
 			str.append("");
+			str.append("</table");
 
 		}
 		return str.toString();
@@ -320,6 +290,31 @@ public class SectionHTML {
 			}
 		}
 
+	}
+
+	protected boolean canPlayerWithTurnOpenTrump(Game game, Player playerWithTurn) {
+		if (game.getMatch().getTables().size() > 0
+				&& game.getMatch().getTables().get(game.getMatch().getTables().size() - 1).getTableCards().size() > 0) {
+			Suite base = game.getMatch().getTables().get(game.getMatch().getTables().size() - 1).getTableCards().get(0)
+					.getCard().getSuite();
+			Player playerLastPlayed = game.getMatch().getTables().get(game.getMatch().getTables().size() - 1)
+					.getTableCards()
+					.get(game.getMatch().getTables().get(game.getMatch().getTables().size() - 1).getTableCards().size()
+							- 1)
+					.getPlayer();
+
+			if (playerWithTurn.equals(playerService.getOppositionFirstPlayer(playerLastPlayed))) {
+				List<Card> playerCards = game.getMatch().getPlayerCards().get(playerWithTurn);
+				for (Card card : playerCards) {
+					if (card.getSuite().equals(base)) {
+						return false;
+					}
+				}
+			}
+		} else {
+			return false;
+		}
+		return true;
 	}
 
 }
