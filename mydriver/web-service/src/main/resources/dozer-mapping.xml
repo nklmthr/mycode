@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozer.sourceforge.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://dozer.sourceforge.net
+          http://dozer.sourceforge.net/schema/beanmapping.xsd">
+
+	<mapping map-null="false">
+		<class-a>org.personal.myapp.mydriver.dto.DriverDTO</class-a>
+		<class-b>org.personal.myapp.mydriver.model.Driver</class-b>
+	</mapping>
+	<mapping map-null="false">
+		<class-a>org.personal.myapp.mydriver.dto.DriverLocationDTO</class-a>
+		<class-b>org.personal.myapp.mydriver.model.DriverLocation</class-b>
+		<field>
+			<a>lattitude</a>
+			<b>location.lattitude</b>
+		</field>
+		<field>
+			<a>longitude</a>
+			<b>location.longitude</b>
+		</field>
+	</mapping>
+</mappings>

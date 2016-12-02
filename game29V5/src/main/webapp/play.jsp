@@ -316,26 +316,26 @@
 		}, 3000);
 		setInterval(function() {
 			$$("get12TemplateId").setHTML(doGet("rest/game/sections/12", {}));
-		}, 3000);
+		}, 9000);
 		setInterval(function() {
 			$$("get13TemplateId").setHTML(doGet("rest/game/sections/13", {}));
 		}, 2000);
 		setInterval(function() {
 			$$("get21TemplateId").setHTML(doGet("rest/game/sections/21", {}));
-		}, 3000);
+		}, 9100);
 		setInterval(function() {
 			$$("get22TemplateId").setHTML(doGet("rest/game/sections/22", {}));
 		}, 1300);
 		setInterval(function() {
 			$$("get23TemplateId").setHTML(doGet("rest/game/sections/23", {}));
-		}, 3000);
+		}, 9200);
 
 		setInterval(function() {
 			$$("get31TemplateId").setHTML(doGet("rest/game/sections/31", {}));
 		}, 1700);
 		setInterval(function() {
 			$$("get32TemplateId").setHTML(doGet("rest/game/sections/32", {}));
-		}, 1900);
+		}, 11000);
 		//setInterval(function() {
 		//$$("get33TemplateId").setHTML(doGet("rest/game/sections/33", {}));
 		//}, 11000);
