@@ -2,7 +2,15 @@
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
-
+target/
+/.mvn/
+/.settings/
+/.classpath
+/.DS_Store
+.project
+/mvnw
+/mvnw.cmd
+/logs/
 # Package Files #
 *.jar
 *.war
