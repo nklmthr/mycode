@@ -18,9 +18,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import org.springframework.orm.jpa.JpaDialect;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -86,10 +88,10 @@ public class SpringApplicationConfig {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(dataSource());
 		em.setPackagesToScan(new String[] { "org.personal.myapp.mydriver.dto" });
-
-		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		HibernateJpaVendorAdapter hVendorAdapter = new HibernateJpaVendorAdapter();
+		hVendorAdapter.setDatabase(Database.ORACLE);
+		JpaVendorAdapter vendorAdapter = hVendorAdapter;
 		em.setJpaVendorAdapter(vendorAdapter);
-
 		return em;
 	}
 
@@ -116,8 +118,6 @@ public class SpringApplicationConfig {
 		dataSource.setValidationQuery(validationQuery);
 		dataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
 		dataSource.setTestWhileIdle(testWhileIdle);
-		
-
 		return dataSource;
 
 	}
@@ -130,15 +130,13 @@ public class SpringApplicationConfig {
 		return dozerBean;
 	}
 
-
 	@Bean
 	public Docket newsApi() {
 		return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).select().paths(regex("/mydriver/.*")).build();
 	}
 
 	private ApiInfo apiInfo() {
-		return new ApiInfoBuilder().title("Ticketing Service").description("FDPTools Ticketing Service ").version("2.0")
-				.build();
+		return new ApiInfoBuilder().title("MyDriver Service").description("My Driver Service ").version("2.0").build();
 	}
 
 	@Bean
