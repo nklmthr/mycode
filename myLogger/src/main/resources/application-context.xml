@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:annotation-config />
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<value>file:config.properties</value>
+		</property>
+	</bean>
+
+	<bean id="BrandingFIDirProcessor"
+		class="com.intuit.cto.fds.dash.ccom.branding.fidir.BrandingFIDirProcessor">
+		<property name="urlString" value="${brandingFiDirUrl}" />
+		<property name="proxyHost" value="${brandingFiDirProxyHost}" />
+		<property name="proxyPort" value="${brandingFiDirProxyPort}" />
+		<property name="brandingFiDirReadFromFilePath" value="${brandingFiDirReadFromFilePath}" />
+
+	</bean>
+
+	<bean id="BrandingServerFIBRequestProcessor"
+		class="com.intuit.cto.fds.dash.ccom.branding.fib.BrandingServerFIBRequestProcessor">
+		<property name="proxyHost" value="${proxyHostBrandingFibCall}" />
+		<property name="proxyPort" value="${proxyPortBrandingFibCall}" />
+		<property name="brandingServerFIBUrl" value="${brandingServerFIBUrl}" />
+	</bean>
+
+	<bean id="FIRequestResponseProcessor"
+		class="com.intuit.cto.fds.dash.ccom.fi.FIRequestResponseProcessor">
+		<property name="proxyHost" value="${proxyHostForFIRequest}" />
+		<property name="proxyPort" value="${proxyPortForFIRequest}" />
+	</bean>
+
+	<bean id="dashUpdateDAO"
+		class="com.intuit.cto.fds.dash.ccom.dash.dbchanges.DASHUpdateDAO">
+		<property name="dataUser" value="${dash.dbupdate.user}" />
+	</bean>
+	
+	<bean id="Report" class="com.intuit.cto.fds.dash.ccom.util.Report"/>
+
+
+</beans>
