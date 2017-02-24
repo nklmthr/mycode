@@ -7,12 +7,12 @@ public class MinStepsWithNegativeAndPositiveMovements {
 	}
 	
 	static int steps(int source, int step, int dest) {
-
+		System.out.println("source=" + source + " step=" + step + " dest=" + dest);
 		if (Math.abs(source) > dest) {
 			return Integer.MAX_VALUE;
 		}
 		if (source == dest) {
-			System.out.println("source=" + source + " step=" + step + " dest=" + dest);
+			
 			return step;
 		}
 		int pos = steps(source + step + 1, step + 1, dest);

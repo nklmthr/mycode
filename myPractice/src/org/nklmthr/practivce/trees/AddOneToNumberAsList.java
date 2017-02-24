@@ -10,7 +10,7 @@ public class AddOneToNumberAsList {
 		nums.add(2);
 		nums.add(3);
 
-		plusOne(nums);
+		System.out.println(plusOne(nums));
 
 	}
 
