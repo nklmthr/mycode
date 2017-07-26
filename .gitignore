@@ -1,7 +1,4 @@
 */.project
-*/.classpath
-*/.settings
+**/.classpath
+**/.settings
 */target
-
-
-mydriver/web-service/.springBeans
