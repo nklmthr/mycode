@@ -25,11 +25,11 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
+		<!-- <dependency>
 			<groupId>oracle</groupId>
 			<artifactId>ojdbc6</artifactId>
 			<version>11.2.0.1.0</version>
-		</dependency>
+		</dependency> -->
 		<!-- Production ready features to help you monitor and manage your application -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
