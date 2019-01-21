@@ -3,10 +3,6 @@ package com.nklmthr.practice.phase1;
 import java.util.HashMap;
 import java.util.Map;
 
-/*
- * http://collabedit.com/q62rc
- * 
- */
 public class RetainBestCache<K, T extends Rankable> {
 
 	/* Constructor with a data source (assumed to be slow) and a cache size */

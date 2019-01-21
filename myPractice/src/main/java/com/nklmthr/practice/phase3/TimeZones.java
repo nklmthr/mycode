@@ -18,8 +18,8 @@ public class TimeZones {
 		
 		LocalDateTime ldt = LocalDateTime.now();
 		System.out.println(ldt);
-		String timezones = Arrays.asList(TimeZone.getAvailableIDs()).stream().reduce("", (s1,s2)->s1+","+s2);
-		System.out.println(timezones);
+		//String timezones = Arrays.asList(TimeZone.getAvailableIDs()).stream().reduce("", (s1,s2)->s1+","+s2);
+		//System.out.println(timezones);
 		//LocalDateTime ldt = LocalDateTime.ofInstant(c.toInstant(), ZoneId.of("PST"));
 		ZonedDateTime zonedDateTime = ZonedDateTime.of(ldt, ZoneId.systemDefault());
 		System.out.println(zonedDateTime);

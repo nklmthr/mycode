@@ -1,5 +1,6 @@
 package com.nklmthr.practice.linkedlist;
 
+import java.io.LineNumberReader;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -91,12 +92,25 @@ public class LinkList<T> implements List<T> {
 	}
 
 	public Iterator<T> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Iterator() {
+
+			@Override
+			public boolean hasNext() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public Object next() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+		};
 	}
 
 	public Object[] toArray() {
-		// TODO Auto-generated method stub
+		LineNumberReader l;
 		return null;
 	}
 

@@ -9,12 +9,12 @@ import org.w3c.dom.Document;
 
 import com.nklmthr.an.utils.dto.Order;
 
-public class POManager extends SupplierDomainManager{
+public class POManager extends BuyerDomainManager {
 	private static Logger logger = Logger.getLogger(POManager.class);
+
 	public static void main(String[] args) {
 		/*
-		 * Dont use this main method for more then this.
-		 * This is for testing
+		 * Dont use this main method for more then this. This is for testing
 		 */
 		try {
 			createOrders(1);
@@ -30,26 +30,24 @@ public class POManager extends SupplierDomainManager{
 		return orders;
 	}
 
-	private static List<Order> postOrdersToBuyerForSupplier(String file, int count)
-			throws Exception {
-		
-		Document doc = DomainManager.convertStringToDocument(getResource(file));	
+	private static List<Order> postOrdersToBuyerForSupplier(String file, int count) throws Exception {
+		Document doc = DomainManager.convertStringToDocument(getResource(file));
 		List<Order> orders = new ArrayList<Order>();
 		for (int i = 0; i < count; i++) {
 			Order order = new Order();
 			order.setPayloadId("OrderPL" + LocalDateTime.now().toString());
-			order.setOrderId("Order" + LocalDateTime.now().format(formatter));
+			order.setOrderId("Order" + LocalDateTime.now().format(formatter_dttm));
 			changeOrderDocument(doc, order);
 			logger.debug(convertDocumentToString(doc));
-			postCXML(doc, BuyerDomainManager.getBuyerANCXMLDispatcherURL());
+			postCXML(doc, getBuyerANCXMLDispatcherURL());
 			orders.add(order);
 		}
 		return orders;
 	}
-	
+
 	private static void changeOrderDocument(Document doc, Order order) throws Exception {
-		changeNodeAttributeValue(doc, "cXML", "payloadID", order.getPayloadId());
-		changeNodeAttributeValue(doc, "OrderRequestHeader", "orderID", order.getOrderId());
+		changeNodeAttributeValue(doc, "/cXML", "cXML", "payloadID", order.getPayloadId());
+		changeNodeAttributeValue(doc, "cXML/Request/OrderRequest/OrderRequestHeader", "OrderRequestHeader", "orderID", order.getOrderId());
 
 	}
 

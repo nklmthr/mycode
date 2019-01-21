@@ -1,14 +1,21 @@
 package com.nklmthr.practice.test;
 
-import com.itextpdf.text.log.SysoCounter;
+
 
 public class Test {
 
 	public static void main(String[] args) {
-		Test t = new Test();
-		t.isBalanced(null);
+//		Test t = new Test();
+//		t.isBalanced(null);
+		
+		boolean check = Boolean.valueOf("Hello ");
+		System.out.println(check);
+		
+		
 
 	}
+	
+
 
 	public boolean isBalanced(Node n)
 	{

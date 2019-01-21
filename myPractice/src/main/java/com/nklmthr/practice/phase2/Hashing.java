@@ -13,9 +13,10 @@ public class Hashing {
 		Employee e5 = new Employee("five");
 		Employee e6 = new Employee("six");
 		
-		Set<Employee> set = new HashSet<Employee>(3);
+		Set<Employee> set = new HashSet<Employee>();
 		set.add(e1);
 		set.add(e2);
+		System.out.println(set.contains(e3));
 		set.add(e3);
 		set.add(e4);
 		set.add(e5);
@@ -63,7 +64,6 @@ class Employee{
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
-		//return true;
 	}
 
 	

@@ -17,6 +17,9 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -29,29 +32,40 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
-import org.apache.xml.security.Init;
-import org.apache.xml.security.c14n.Canonicalizer;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class DomainManager {
 	private static Logger logger = Logger.getLogger(DomainManager.class);
-	public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH-mm-ss");
+	public static DateTimeFormatter formatter_dttm = DateTimeFormatter.ofPattern("yy-MM-dd HH-mm-ss");
+	public static DateTimeFormatter formatter_tm = DateTimeFormatter.ofPattern("HH-mm-ss");
+	
 
-	public static void changeNodeAttributeValue(Document doc, String nodeName, String attributeName, String newValue)
-			throws Exception {
-		NodeList nodeList = doc.getElementsByTagName(nodeName);
-		logger.info("node:" + nodeName + ", attributeName:" + attributeName + ", new value=" + newValue);
-		Stream<Node> nodeStream = IntStream.range(0, nodeList.getLength()).mapToObj(nodeList::item);
-		Optional<Node> node = nodeStream.filter(s -> s.getNodeType() == Node.ELEMENT_NODE).findFirst();
-		if (node.isPresent()) {
-			node.get().getAttributes().getNamedItem(attributeName).setNodeValue(newValue);
-		} else {
-			throw new Exception("Node note found with name:" + nodeName);
+	public static void changeNodeAttributeValue(Document doc, String xpath, String nodeName, String attributeName,
+			String newValue) throws Exception {
+		XPath xPathInstance = XPathFactory.newInstance().newXPath();
+		NodeList nodes = (NodeList) xPathInstance.evaluate(xpath, doc, XPathConstants.NODESET);
+		Node node = null;
+		for (int i = 0; i < nodes.getLength(); i++) {
+			if(nodes.item(i).getNodeName().equals(nodeName)){
+				node=nodes.item(i);
+			}
 		}
+		node.getAttributes().getNamedItem(attributeName).setNodeValue(newValue);
+//		NodeList nodeList = nodes.getElementsByTagName(nodeName);
+//		logger.info("node:" + nodeName + ", attributeName:" + attributeName + ", new value=" + newValue);
+//		Stream<Node> nodeStream = IntStream.range(0, nodeList.getLength()).mapToObj(nodeList::item);
+//		Optional<Node> node = nodeStream.filter(s -> s.getNodeType() == Node.ELEMENT_NODE).findFirst();
+//		if (node.isPresent()) {
+//			node.get().getAttributes().getNamedItem(attributeName).setNodeValue(newValue);
+//		} else {
+//			throw new Exception("Node note found with name:" + nodeName);
+//		}
 	}
 
 	public static void postCXML(Document doc, String url) throws Exception {
@@ -88,6 +102,7 @@ public class DomainManager {
 		Transformer transformer;
 		try {
 			transformer = tf.newTransformer();
+
 			// below code to remove XML declaration
 			// transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
 			// "yes");
@@ -100,10 +115,11 @@ public class DomainManager {
 			StringWriter writer = new StringWriter();
 			transformer.transform(new DOMSource(doc), new StreamResult(writer));
 			String output = writer.getBuffer().toString();
-			Init.init();
-			Canonicalizer canon = Canonicalizer.getInstance(Canonicalizer.ALGO_ID_C14N_OMIT_COMMENTS);
-			byte canonXmlBytes[] = canon.canonicalize(output.getBytes());
-			String canonXmlString = new String(canonXmlBytes);
+			// Init.init();
+			// Canonicalizer canon =
+			// Canonicalizer.getInstance(Canonicalizer.ALGO_ID_C14N11_OMIT_COMMENTS);
+			// byte canonXmlBytes[] = canon.canonicalize(output.getBytes());
+			// String canonXmlString = new String(canonXmlBytes);
 			logger.debug("document to string:" + output);
 			return output;
 		} catch (TransformerException e) {
@@ -115,11 +131,22 @@ public class DomainManager {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder;
 		try {
+			factory.setValidating(false);
 			builder = factory.newDocumentBuilder();
+			builder.setEntityResolver(new EntityResolver() {
+				@Override
+				public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+					if (systemId.equals("cXML.dtd")) {
+						return new InputSource(new StringReader(""));
+					} else {
+						return null;
+					}
+				}
+			});
 			Document doc = builder.parse(new InputSource(new StringReader(xmlStr)));
 			return doc;
 		} catch (Exception e) {
-			throw new Exception("Unable to convert to string to document");
+			throw new Exception("Unable to convert from String to document");
 		}
 	}
 

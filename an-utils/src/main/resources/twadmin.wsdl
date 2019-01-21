@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.trustweaver.com/tsswitch" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://www.trustweaver.com/tsswitch" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Signature switch</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.trustweaver.com/tsswitch">
+      <s:element name="GetServiceInfoResult" type="tns:ServiceInfoResult" />
+      <s:complexType name="ServiceInfoResult">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Major" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Minor" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Build" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ProductEdition" type="tns:ProdEdType" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ProdEdType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Enterprise" />
+          <s:enumeration value="Center" />
+        </s:restriction>
+      </s:simpleType>
+      <s:element name="SignRequest" type="tns:SignRequest" />
+      <s:complexType name="SignRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="InputType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="JobType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OutputType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Document" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="SenderTag" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReceiverTag" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NrOfItems" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="SignerIdentifier" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AgreementIdentifier" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ClientData" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SignResult" type="tns:SignResponse" />
+      <s:complexType name="SignResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Result" type="tns:Result" />
+          <s:element minOccurs="0" maxOccurs="1" name="SignedDocument" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="Archive" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="Details" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Result">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Code" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Desc" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ValidateRequest" type="tns:ValidateRequest" />
+      <s:complexType name="ValidateRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="InputType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="JobType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OutputType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Document" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="SignedDocument" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="SenderTag" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReceiverTag" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AgreementIdentifier" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ClientData" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ExcludeOriginalDocument" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ValidateResult" type="tns:ValidateResponse" />
+      <s:complexType name="ValidateResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Result" type="tns:Result" />
+          <s:element minOccurs="0" maxOccurs="1" name="Document" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="ValidationResult" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Archive" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="Details" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ValidateArchiveRequest" type="tns:ValidateArchiveRequest" />
+      <s:complexType name="ValidateArchiveRequest">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="InputType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="JobType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OutputType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SignedDocument" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="Archive" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="ValidationResult" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ValidateArchiveResult" type="tns:ValidateArchiveResponse" />
+      <s:complexType name="ValidateArchiveResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Result" type="tns:Result" />
+          <s:element minOccurs="0" maxOccurs="1" name="Document" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="Details" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetServiceInfoSoapIn" />
+  <wsdl:message name="GetServiceInfoSoapOut">
+    <wsdl:part name="GetServiceInfoResult" element="tns:GetServiceInfoResult" />
+  </wsdl:message>
+  <wsdl:message name="SignSoapIn">
+    <wsdl:part name="request" element="tns:SignRequest" />
+  </wsdl:message>
+  <wsdl:message name="SignSoapOut">
+    <wsdl:part name="SignResult" element="tns:SignResult" />
+  </wsdl:message>
+  <wsdl:message name="ValidateSoapIn">
+    <wsdl:part name="request" element="tns:ValidateRequest" />
+  </wsdl:message>
+  <wsdl:message name="ValidateSoapOut">
+    <wsdl:part name="ValidateResult" element="tns:ValidateResult" />
+  </wsdl:message>
+  <wsdl:message name="ValidateArchiveSoapIn">
+    <wsdl:part name="request" element="tns:ValidateArchiveRequest" />
+  </wsdl:message>
+  <wsdl:message name="ValidateArchiveSoapOut">
+    <wsdl:part name="ValidateArchiveResult" element="tns:ValidateArchiveResult" />
+  </wsdl:message>
+  <wsdl:portType name="SwitchServiceSoap">
+    <wsdl:operation name="GetServiceInfo">
+      <wsdl:input message="tns:GetServiceInfoSoapIn" />
+      <wsdl:output message="tns:GetServiceInfoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Sign">
+      <wsdl:input message="tns:SignSoapIn" />
+      <wsdl:output message="tns:SignSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Validate">
+      <wsdl:input message="tns:ValidateSoapIn" />
+      <wsdl:output message="tns:ValidateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateArchive">
+      <wsdl:input message="tns:ValidateArchiveSoapIn" />
+      <wsdl:output message="tns:ValidateArchiveSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SwitchServiceSoap" type="tns:SwitchServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetServiceInfo">
+      <soap:operation soapAction="http://www.trustweaver.com/tsswitch#GetServiceInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Sign">
+      <soap:operation soapAction="http://www.trustweaver.com/tsswitch#Sign" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Validate">
+      <soap:operation soapAction="http://www.trustweaver.com/tsswitch#Validate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateArchive">
+      <soap:operation soapAction="http://www.trustweaver.com/tsswitch#ValidateArchive" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SwitchServiceSoap12" type="tns:SwitchServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetServiceInfo">
+      <soap12:operation soapAction="http://www.trustweaver.com/tsswitch#GetServiceInfo" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Sign">
+      <soap12:operation soapAction="http://www.trustweaver.com/tsswitch#Sign" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Validate">
+      <soap12:operation soapAction="http://www.trustweaver.com/tsswitch#Validate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateArchive">
+      <soap12:operation soapAction="http://www.trustweaver.com/tsswitch#ValidateArchive" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SwitchService">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Signature switch</wsdl:documentation>
+    <wsdl:port name="SwitchServiceSoap" binding="tns:SwitchServiceSoap">
+      <soap:address location="https://tseiod-test.trustweaver.com/ts/Svs.asmx" />
+    </wsdl:port>
+    <wsdl:port name="SwitchServiceSoap12" binding="tns:SwitchServiceSoap12">
+      <soap12:address location="https://tseiod-test.trustweaver.com/ts/Svs.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
