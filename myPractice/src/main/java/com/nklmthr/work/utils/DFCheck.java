@@ -14,6 +14,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class DFCheck {
+	public static void main(String[] args) {
+		boolean a= false, b= false, c= false, d= true;
+		
+		System.out.println(a&&b || c&&d);
+	}
+	
+	
 //	public static void main(String[] args) {
 //		File file1 = new File("/SAPDevelop/AN/src/ariba/ond/AN/mrel/network/service/common/sql/2018.06/DF26/NP-13242_requeue_failed_CTe_from_TaxID_16883860000746.sql");
 //		File file2 = new File("/SAPDevelop/AN/src/ariba/ond/AN/mrel/network/service/common/sql/2018.06/DF31/NP-13242_requeue_failed_CTe_from_TaxID_16883860000746.sql");

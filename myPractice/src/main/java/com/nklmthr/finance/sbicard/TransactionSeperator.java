@@ -10,13 +10,13 @@ import java.text.SimpleDateFormat;
 
 public class TransactionSeperator {
 	public static void main(String[] args) {
-		String file = "/Users/i344377/Desktop/transactions.txt";
+		String file = "/Users/i344377/Desktop/Unbilled_Transactions.txt";
 		BufferedReader reader = null;
 		FileWriter fileWriter = null;
 		DateFormat istformat = new SimpleDateFormat("dd/MM/yyyy");
 		DateFormat usFormat = new SimpleDateFormat("MM/dd/yyyy");
 		try {
-			fileWriter = new FileWriter("/Users/i344377/Desktop/transactions.csv");
+			fileWriter = new FileWriter("/Users/i344377/Desktop/Unbilled_Transactions.csv");
 			reader = new BufferedReader(new FileReader(new File(file)));
 			String line = reader.readLine();
 			while (line != null && line.trim().length() > 0) {

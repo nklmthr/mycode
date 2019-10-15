@@ -12,28 +12,28 @@ import java.util.stream.Stream;
 
 public class Test {
 
-//	private static final List<Employee> SAMPLE_EMPLOYEES =
-//			Arrays.asList(
-//			new Employee("Harry", "Hacker", 1, 234567),
-//			new Employee("Polly", "Programmer", 2, 333333),
-//			new Employee("Cody", "Coder", 8, 199999),
-//			new Employee("Devon", "Developer", 11, 175000),
-//			new Employee("Desiree", "Designer", 14, 212000),
-//			new Employee("Archie", "Architect", 16, 144444),
-//			new Employee("Tammy", "Tester", 19, 166777),
-//			new Employee("Sammy", "Sales", 21, 45000),
-//			new Employee("Larry", "Lawyer", 22, 33000),
-//			new Employee("Amy", "Accountant", 25, 85000) );
-//			public static List<Employee> getSampleEmployees() {
-//			return(SAMPLE_EMPLOYEES);
-//			}
-//	public static void main(String[] args) throws IOException {
-//		
-//		List<String> list = new ArrayList<>();
-//		int[] array = new Random().ints(100000, 1, 999999).toArray();
-//		IntStream.of(array).forEach(System.out::println);
-//		
-//		
+	private static final List<Employee> SAMPLE_EMPLOYEES =
+			Arrays.asList(
+			new Employee("Harry", "Hacker", 1, 234567),
+			new Employee("Polly", "Programmer", 2, 333333),
+			new Employee("Cody", "Coder", 8, 199999),
+			new Employee("Devon", "Developer", 11, 175000),
+			new Employee("Desiree", "Designer", 14, 212000),
+			new Employee("Archie", "Architect", 16, 144444),
+			new Employee("Tammy", "Tester", 19, 166777),
+			new Employee("Sammy", "Sales", 21, 45000),
+			new Employee("Larry", "Lawyer", 22, 33000),
+			new Employee("Amy", "Accountant", 25, 85000) );
+			public static List<Employee> getSampleEmployees() {
+			return(SAMPLE_EMPLOYEES);
+			}
+	public static void main(String[] args) throws IOException {
+		
+		List<String> list = new ArrayList<>();
+		int[] array = new Random().ints(100000, 1, 999999).toArray();
+		IntStream.of(array).forEach(System.out::println);
+		
+		
 ////		URI inputFileName = null;
 ////		List<String> words =
 ////				Files.lines(Paths.get(inputFileName))
@@ -90,41 +90,42 @@ public class Test {
 ////			System.out.println(s[i]);
 ////		}
 ////		Collection c;
-//	}
-//
-//	public static int eChecker(String s1, String s2) {
-//		if (s1.contains("e") && !s2.contains("e")) {
-//			return Integer.MAX_VALUE;
-//		}
-//		if (!s1.contains("e") && s2.contains("e")) {
-//			return Integer.MIN_VALUE;
-//		}
-//		return s1.charAt(0) - s2.charAt(0);
-//	}
-//
-//	public static <T> T betterString(TwoStringPredicate<T> func, T s1, T s2) {
+	}
+
+	public static int eChecker(String s1, String s2) {
+		if (s1.contains("e") && !s2.contains("e")) {
+			return Integer.MAX_VALUE;
+		}
+		if (!s1.contains("e") && s2.contains("e")) {
+			return Integer.MIN_VALUE;
+		}
+		return s1.charAt(0) - s2.charAt(0);
+	}
+
+	public static <T> T betterString(TwoStringPredicate<T> func, T s1, T s2) {
+		return s2;
 //		if (func.betterString(s1, s2)) {
 //			return s1;
 //		} else {
 //			return s2;
 //		}
-//	}
-//	
-//	public static <T> List<T> allMatches(List<T> list, Predicate<T> predicate){
-//		List<T> returnList = new ArrayList<>();
-//		for(T obj : list){
-//			if(predicate.test(obj)){
-//				returnList.add(obj);
-//			}
-//		}
-//		return returnList;
-//	}
-//	
-//	public static <T> List<T> transformedList(List<T> list, Function<T, T> function){
-//		List<T> returnList = new ArrayList<>();
-//		for(T obj : list){
-//			returnList.add(function.apply(obj));
-//		}
-//		return returnList;
-//	}
+	}
+	
+	public static <T> List<T> allMatches(List<T> list, Predicate<T> predicate){
+		List<T> returnList = new ArrayList<>();
+		for(T obj : list){
+			if(predicate.test(obj)){
+				returnList.add(obj);
+			}
+		}
+		return returnList;
+	}
+	
+	public static <T> List<T> transformedList(List<T> list, Function<T, T> function){
+		List<T> returnList = new ArrayList<>();
+		for(T obj : list){
+			returnList.add(function.apply(obj));
+		}
+		return returnList;
+	}
 }
