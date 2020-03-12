@@ -1,0 +1,13 @@
+docker build -t microserv/registry-service:latest --build-arg JAR_FILE=./target/*.jar .
+docker build -t microserv/product-service:latest --build-arg JAR_FILE=./target/*.jar .
+docker build -t microserv/discovery-service:latest --build-arg JAR_FILE=./target/*.jar .
+docker build -t microserv/edge-service:latest --build-arg JAR_FILE=./target/*.jar .
+
+docker run --name=registry-service -p 8761:8761 microserv/registry-service
+docker run --name=product-service -p 9091:9091 microserv/product-service
+docker run --name=discovery-service -p 8081:8081 microserv/discovery-service
+docker run --name=edge-service -p 8111:8111 microserv/edge-service
+
+docker run --name=emp-service -p 8080:8080 --env="DB_HOST=192.168.1.100" mstraining/emp-service:v1
+kubectl run emp-service --image=mstraining/emp-service:v1 --port=8080
+kubectl expose deployment emp-service --type=NodePort

@@ -1,0 +1,498 @@
+<adaptor protocol="http" transport="fsocket" urlVersion="4">
+
+    <application name="ANCXMLDispatcher" scheduler="ROUNDROBIN" retries="3"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5000" host="zzzm56587658a"
+                  port="10100"
+                  sendTimeout="10"
+                  recvTimeout="30"
+                  cnctTimeout="3"
+                  community="1,3"
+                  processingTimeout="210"
+                  lastRecvTimeout="150"
+                  transportPort="10103"/>
+    </application>
+    <application name="ANCXMLDispatcher" scheduler="ROUNDROBIN" retries="3"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5001" host="zzzm56587658a"
+                  port="10110"
+                  sendTimeout="10"
+                  recvTimeout="30"
+                  cnctTimeout="3"
+                  community="2,4"
+                  processingTimeout="210"
+                  lastRecvTimeout="150"
+                  transportPort="10113"/>
+    </application>
+    <application name="ANCXMLOutDispatcher" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5002" host="zzzm56587658a"
+                  port="10120"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="1,3"
+                  transportPort="10123"/>
+    </application>
+    <application name="ANCXMLOutDispatcher" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5003" host="zzzm56587658a"
+                  port="10130"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="2,4"
+                  transportPort="10133"/>
+    </application>
+    <application name="ANDocumentDispatcher" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5004" host="zzzm56587658a"
+                  port="10140"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="1,3"
+                  transportPort="10143"/>
+    </application>
+    <application name="ANDocumentOutDispatcher" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5005" host="zzzm56587658a"
+                  port="10150"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="1,3"
+                  transportPort="10153"/>
+    </application>
+    <application name="ANDocumentOutProcessor" scheduler="ROUNDROBIN" retries="3"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5006" host="zzzm56587658a"
+                  port="10160"
+                  sendTimeout="10"
+                  recvTimeout="30"
+                  cnctTimeout="3"
+                  community="1,3"
+                  processingTimeout="210"
+                  lastRecvTimeout="150"
+                  transportPort="10163"/>
+    </application>
+    <application name="ANDocumentProcessor" scheduler="ROUNDROBIN" retries="3"
+                 errHttpCode="503"
+                 dormant="60">
+        <instance id="5007" host="zzzm56587658a"
+                  port="10170"
+                  sendTimeout="10"
+                  recvTimeout="30"
+                  cnctTimeout="3"
+                  community="1,3"
+                  processingTimeout="210"
+                  lastRecvTimeout="150"
+                  transportPort="10173"/>
+    </application>
+    <application name="ANDocumentScheduler" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5008" host="zzzm56587658a"
+                  port="10180"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="1,3"
+                  transportPort="10183"/>
+    </application>
+    <application name="ANExternalDataService" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5009" host="zzzm56587658a"
+                  port="10190"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  transportPort="10193"/>
+    </application>
+    <application name="ANMailDispatcher" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5010" host="zzzm56587658a"
+                  port="10200"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="1,3"
+                  transportPort="10203"/>
+    </application>
+    <application name="ANMailDispatcher" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5011" host="zzzm56587658a"
+                  port="10210"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="2,4"
+                  transportPort="10213"/>
+    </application>
+    <application name="ANMobile" scheduler="ROUNDROBIN" retries="3"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5012" host="zzzm56587658a"
+                  port="10220"
+                  sendTimeout="10"
+                  recvTimeout="30"
+                  cnctTimeout="3"
+                  community="1,3"
+                  processingTimeout="210"
+                  lastRecvTimeout="150"
+                  transportPort="10223"/>
+    </application>
+    <application name="ANPODispatcher" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5013" host="zzzm56587658a"
+                  port="10230"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="1,3"
+                  transportPort="10233"/>
+    </application>
+    <application name="ANSapGateway" scheduler="ROUNDROBIN" retries="3"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5014" host="zzzm56587658a"
+                  port="10240"
+                  sendTimeout="10"
+                  recvTimeout="30"
+                  cnctTimeout="3"
+                  processingTimeout="210"
+                  lastRecvTimeout="150"
+                  transportPort="10243"/>
+    </application>
+    <application name="Admin" scheduler="ROUNDROBIN" retries="3"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5016" host="zzzm56587658a"
+                  port="10260"
+                  sendTimeout="5"
+                  recvTimeout="600"
+                  cnctTimeout="3"
+                  processingTimeout="180"
+                  lastRecvTimeout="90"
+                  transportPort="10263"/>
+    </application>
+    <application name="Authenticator" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5017" host="zzzm56587658a"
+                  port="10270"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  transportPort="10273"/>
+    </application>
+    <application name="Buyer" scheduler="ROUNDROBIN" retries="4"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5018" host="zzzm56587658a"
+                  port="10280"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="2,4"
+                  processingTimeout="180"
+                  lastRecvTimeout="90"
+                  transportPort="10283"/>
+    </application>
+    <application name="CustomizationAdmin" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5022" host="zzzm56587658a"
+                  port="10320"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  transportPort="10323"/>
+    </application>
+    <application name="CustomizationTestApp" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5023" host="zzzm56587658a"
+                  port="10330"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  transportPort="10333"/>
+    </application>
+    <application name="Directory" scheduler="ROUNDROBIN" retries="4"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5024" host="zzzm56587658a"
+                  port="10340"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  processingTimeout="180"
+                  lastRecvTimeout="90"
+                  transportPort="10343"/>
+    </application>
+    <application name="Discovery" scheduler="ROUNDROBIN" retries="4"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5027" host="zzzm56587658a"
+                  port="10370"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  processingTimeout="180"
+                  lastRecvTimeout="90"
+                  transportPort="10373"/>
+    </application>
+    <application name="DiscoveryAdmin" scheduler="ROUNDROBIN" retries="4"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5028" host="zzzm56587658a"
+                  port="10380"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  processingTimeout="180"
+                  lastRecvTimeout="90"
+                  transportPort="10383"/>
+    </application>
+    <application name="InvoiceArchiverDispatcher" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5038" host="zzzm56587658a"
+                  port="10480"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="1,3"
+                  transportPort="10483"/>
+    </application>
+    <application name="LegalizationDispatcher" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5039" host="zzzm56587658a"
+                  port="10490"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="1,3"
+                  transportPort="10493"/>
+    </application>
+    <application name="PDFGenerator" scheduler="ROUNDROBIN" retries="3"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5044" host="zzzm56587658a"
+                  port="10540"
+                  sendTimeout="10"
+                  recvTimeout="30"
+                  cnctTimeout="3"
+                  community="1,3"
+                  processingTimeout="210"
+                  lastRecvTimeout="150"
+                  transportPort="10543"/>
+    </application>
+    <application name="PDFGenerator" scheduler="ROUNDROBIN" retries="3"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5045" host="zzzm56587658a"
+                  port="10550"
+                  sendTimeout="10"
+                  recvTimeout="30"
+                  cnctTimeout="3"
+                  community="2,4"
+                  processingTimeout="210"
+                  lastRecvTimeout="150"
+                  transportPort="10553"/>
+    </application>
+    <application name="ProfileManagement" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5054" host="zzzm56587658a"
+                  port="10640"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="1,3"
+                  transportPort="10643"/>
+    </application>
+    <application name="PropogationDispatcher" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5057" host="zzzm56587658a"
+                  port="10670"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="1,3"
+                  transportPort="10673"/>
+    </application>
+    <application name="PropogationDispatcher" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5058" host="zzzm56587658a"
+                  port="10680"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="2,4"
+                  transportPort="10683"/>
+    </application>
+    <application name="PropogationProcessor" scheduler="ROUNDROBIN" retries="3"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5059" host="zzzm56587658a"
+                  port="10690"
+                  sendTimeout="10"
+                  recvTimeout="30"
+                  cnctTimeout="3"
+                  community="1,3"
+                  processingTimeout="210"
+                  lastRecvTimeout="150"
+                  transportPort="10693"/>
+    </application>
+    <application name="PropogationProcessor" scheduler="ROUNDROBIN" retries="3"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5060" host="zzzm56587658a"
+                  port="10700"
+                  sendTimeout="10"
+                  recvTimeout="30"
+                  cnctTimeout="3"
+                  community="2,4"
+                  processingTimeout="210"
+                  lastRecvTimeout="150"
+                  transportPort="10703"/>
+    </application>
+    <application name="Register" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5067" host="zzzm56587658a"
+                  port="10770"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  transportPort="10773"/>
+    </application>
+    <application name="SCMSupplier" scheduler="ROUNDROBIN" retries="4"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5076" host="zzzm56587658a"
+                  port="10860"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="1,3"
+                  processingTimeout="180"
+                  lastRecvTimeout="90"
+                  transportPort="10863"/>
+    </application>
+    <application name="SQLDiagnosticLogger" scheduler="ROUNDROBIN" retries="3"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5079" host="zzzm56587658a"
+                  port="10890"
+                  sendTimeout="10"
+                  recvTimeout="30"
+                  cnctTimeout="3"
+                  processingTimeout="210"
+                  lastRecvTimeout="150"
+                  transportPort="10893"/>
+    </application>
+    <application name="Search" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5080" host="zzzm56587658a"
+                  port="10900"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  transportPort="10903"/>
+    </application>
+    <application name="SearchUpdater" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5081" host="zzzm56587658a"
+                  port="10910"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  transportPort="10913"/>
+    </application>
+    <application name="Supplier" scheduler="ROUNDROBIN" retries="4"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5083" host="zzzm56587658a"
+                  port="10930"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="1,3"
+                  processingTimeout="180"
+                  lastRecvTimeout="90"
+                  transportPort="10933"/>
+    </application>
+    <application name="SupplierData" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5085" host="zzzm56587658a"
+                  port="10950"
+                  sendTimeout="5"
+                  recvTimeout="600"
+                  cnctTimeout="3"
+                  transportPort="10953"/>
+    </application>
+    <application name="TXServer" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5089" host="zzzm56587658a"
+                  port="10990"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  transportPort="10993"/>
+    </application>
+    <application name="TestRunner" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5090" host="zzzm56587658a"
+                  port="11000"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  transportPort="11003"/>
+    </application>
+
+    <application name="TXNDocBuyerApp" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5087" host="zzzm56587658a"
+                  port="10970"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="2,4"
+                  transportPort="10973"/>
+    </application>
+    <application name="TXNDocSupplierApp" scheduler="ROUNDROBIN" retries="5"
+                 errHttpCode="500"
+                 dormant="60">
+        <instance id="5088" host="zzzm56587658a"
+                  port="10980"
+                  sendTimeout="5"
+                  recvTimeout="90"
+                  cnctTimeout="3"
+                  community="1,3"
+                  transportPort="10983"/>
+    </application>
+
+</adaptor>

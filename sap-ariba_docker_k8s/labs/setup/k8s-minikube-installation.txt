@@ -1,0 +1,16 @@
+STEP 1: Download kubectl from web -> https://storage.googleapis.com/kubernetes-release/release/v1.15.0/bin/windows/amd64/kubectl.exe
+STEP 2: Download minikube from web -> https://github.com/kubernetes/minikube/releases
+STEP 3: Create local directory structure - KUBERNETES_HOME e.g: C:/Program Files/Kubernetes
+STEP 4: Copy the downloaded kubectl.exe and minikube-windows-amd64.exe to KUBERNETES_HOME
+STEP 5: Rename minikube-windows-amd64.exe to minikube.exe
+STEP 6: Configure environment variables to reference kubernetes installation directory
+		KUBERNETES_HOME = C:/Program Files/Kubernetes
+		Path = %Path%;%KUBERNETES_HOME%
+STEP 7: Open command prompt in Administrator mode and check kubectl and minikube versions
+		> kubectl version
+		> minikube version
+STEP 8: Open Windows Powershell in Administrator
+STEP 9: > minikube start --vm-driver=hyperv --hyperv-virtual-switch="SWITCH NAME"
+          minikube.exe start --vm-driver=virtualbox --v=7 --alsologtostderr
+STEP 10:> minikube status
+STEP 11:> kubectl cluster-info

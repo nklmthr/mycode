@@ -1,0 +1,103 @@
+#Open Windows Powershell as Administrator
+#Run below commands on Powershell
+
+#Starting Kubernetes
+minikube start			(=> will take few minutes to start)
+kubectl cluster-info	(=> shows k8s master url)
+minikube dashboard 		(=> opens minikube dashboard in browser)
+minikube dashboard --url(=> prints dashboard url)
+minikube start --vm-driver=none (=> will start minikube without vm driver for linux environment)
+
+#Stoping Kubernetes
+minikube stop
+#Deleting Minikube Cluster
+minikube delete
+
+#Connect to Minikube Docker Daemon
+#For Windows (Powershell)
+minikube docker-env | Invoke-Expression
+#For Linux
+eval $(minikube docker-env)		=> Enabling to use Minikube Docker Daemon
+eval $(minikube docker-env -u)	=> Disabling Minikube Docker Daemon
+
+#List Docker images available in Minikube registry
+docker images	=> Lists docker images available in Minikube Docker Daemon
+
+#Navigate to Project directory to build Docker images
+e.g: cd D:\Training\edrk_sboot-microserv-docker-k8s\labs\examples\spring-boot-docker-ex
+
+#Build Docker image and add into Minikube Docker Registry
+docker build -t k8sdemo/sboot-kube:v1 --build-arg JAR_FILE=./target/*.jar .
+docker build -t k8sdemo/sboot-kube:v1 .
+
+docker build -t k8sdemo/emp-service:v1 --build-arg JAR_FILE=./target/*.jar .
+docker tag k8sdemo/emp-service:v1 dockertraining072019/emp-service:v1
+
+#Running Docker container inside Minikube
+kubectl run sboot-kube --image=k8sdemo/sboot-kube:v1 --port=8080
+kubectl run emp-api --image=k8sdemo/emp-service:v1 --port=8080
+
+#List app deployments
+kubectl get deployments
+
+#List pods
+kubectl get pods
+
+#Expose application as service to access from outside
+kubectl expose deployment sboot-kube --type=NodePort --target-port=3000
+kubectl expose deployment sboot-kube --type=LoadBalancer --port=8080 --target-port=8080
+kubectl expose deployment emp-api --type=NodePort
+
+#List services
+kubectl get services
+
+#List replicasets
+kubectl get services
+
+#Autoscale service
+kubectl autoscale rs emp-api --min=2 --max=5 --cpu-percent=80
+
+#Launch app and opens in default browser
+minikube service sboot-kube
+minikube service emp-api
+
+#Get service URL
+minikube service sboot-kube --url
+minikube service emp-api --url
+
+#Rolling Update
+#Re-build Docker image with new changes and add into Minikube Docker Registry
+docker build -t sboot/sboot-docker:v1 --build-arg JAR_FILE=./target/*.jar .
+
+#Deploy the new image
+kubectl set image deployment/sboot-docker  sboot-docker=sboot/sboot-docker:v2
+
+#Deploy service from manifest
+kubectl apply -f https://k8s.io/examples/service/load-balancer-example.yaml
+kubectl create -f emp-service.yaml
+
+##Clean up
+
+#Delete service
+kubectl delete services sboot-kube
+
+#Delete pod
+kubectl delete pods sboot-kube-<podname>
+(K8s enforces to start new pod upon deletion of existing pod to provide HA)
+
+#Delete deployment
+kubectl delete deployments sboot-kube
+
+#For Linux
+eval $(minikube docker-env -u)	=> Disabling Minikube Docker Daemon
+
+#Enabling Addons
+minikube addons enable heapster
+
+#List system pods and services
+kubectl get pods -n kube-system
+kubectl get services -n kube-system
+
+#Launch Addon Service
+minikube addons open heapster
+(Opens in the default browser)

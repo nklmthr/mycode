@@ -1,0 +1,91 @@
+#Docker Windows
+Launch Docker Quicksart Terminal (From shortcut in Desktop OR Windows Programs)
+
+#Docker Mac
+Launch Docker App => Starts Docker Daemon
+Open Terminal => Run docker commands
+
+
+#Working with Docker
+docker version
+docker info												(=> Docker details)
+docker image ls											(=> Lists images)
+docker ps												(=> Lists active containers)
+docker ps -as											(=> Lists all containers)
+docker build <dockerfilepath> <target image path>		(=> Build image from Dockerfile)
+docker build --build-arg JAR_FILE=a_value .				(=> Build image with command line args)
+docker build -t sboot-docker --build-arg JAR_FILE=./target/*.jar .		(=> Build image with command line args)
+docker run <image path> <optional args>					(=> Starts container)
+docker run -e "env_var_name=another_value" <image id>	(=> Start container with environmental variables)
+docker stop <container id/name>							(=> Stop container)
+docker rm <container id/name>							(=> Remove container)
+docker image rm <image id/name>							(=> Remove image)
+docker pull <image id/name>								(=> Pull image from Hub)
+docker inspect <containerid>							(=> List docker container detail)
+docker-machine ip										(=> Show docker machine ip)
+docker exec -it <container name> /bin/bash				(=> Connect to running container)
+docker exec -it <container name> /bin/sh
+
+#Spring Boot Docker Example
+docker build -t sboot/sboot-docker:latest --build-arg JAR_FILE=./target/*.jar .
+docker run -p 8081:8080 sboot/sboot-docker
+docker run -p 8081:8080 -env="SERVER_PORT=9091" sboot/sboot-docker
+
+docker build -t empservice-docker:latest --build-arg JAR_FILE=./target/*.jar .
+docker run -p 8080:8080 empservice-docker
+
+#Jenkins Docker image setup Example
+docker pull jenkins
+docker run -p 8080:8080 -p 50000:50000 jenkins
+3df307ca21874a66a0d10a8a9c3bb8		(=> Auth key)
+
+#Ngnix
+docker run --detach --publish=80:80 --name=webserver nginx
+
+#Save Image to Disk
+docker save -o images.tar image1 [image2 ..]
+
+#Load Image from Disk
+docker load -i images.tar
+
+#Export Container to Disk
+docker export -o myContainner1.tar container1
+
+#Import Container from Disk
+docker import -i myContainer1
+
+
+#Delete image
+docker image rm <imageid> -f
+
+#Login to DockerHub
+docker login
+
+#Tag image
+docker tag image username/repository:tag
+
+docker tag sboot-hello-world:v1 dockertraining/sboot-hello-world:v1
+
+docker tag sboot/sboot-docker dockertraining/dockerrepo:sbootv1
+docker tag empservice-docker dockertraining/empservice:v1
+
+#Push image to DockerHub Registry
+docker push username/repository:tag
+
+docker push dockertraining/sboot-hello-world:v1
+docker push dockertraining/dockerrepo:sbootv1
+docker push dockertraining/empservice:v1
+
+#Pull image from DockerHub Registry
+docker pull dockertraining/dockerrepo:sbootv1
+
+#List Docker Images
+docker image ls
+
+#Run Docker image
+docker run -p 8080:8080 username/repository:tag
+
+docker run -p 8080:8080 dockertrainingltts/dockerrepo:sbootv1
+
+#Logout from DockerHub
+docker logout

@@ -11,7 +11,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -20,7 +19,7 @@ public class GenerateRunFile {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
-		File file = new File("/SAPDevelop/AN/ws/config/WebObjects.xml");
+		File file = new File("/Users/i344377/work/personal/github/nklmthr/an-utils/src/main/resources/WebObjects.xml");
 
 		BufferedReader br = new BufferedReader(new FileReader(file));
 
@@ -64,19 +63,20 @@ public class GenerateRunFile {
          
         //API to obtain DOM Document instance
         DocumentBuilder builder = null;
+        Document doc = null;
         try
         {
             //Create DocumentBuilder with default configuration
             builder = factory.newDocumentBuilder();
              
             //Parse the content to Document object
-            Document doc = builder.parse(new InputSource(new StringReader(xmlString)));
+            doc = builder.parse(new InputSource(new StringReader(xmlString)));
             return doc;
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-        return null;
+        return doc;
     }
 }
