@@ -1,5 +1,6 @@
 */.project
 **/.classpath
+target
 **/.settings
 */target
 */.DS_Store
