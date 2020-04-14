@@ -11,7 +11,7 @@ public class HashCheck {
 		Hash h2 = new Hash("h2");
 		Hash h3 = new Hash("h1");
 		Hash h4 = new Hash("h4");
-		Set set = new HashSet();
+		Set<Hash> set = new HashSet<Hash>();
 		set.add(h1);
 		set.add(h2);
 		set.add(h3);

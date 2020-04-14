@@ -1,7 +1,5 @@
 package com.nklmthr.practice.phase1;
 
-import com.itextpdf.text.log.SysoCounter;
-
 public class BooleanTest {
 
 	public static void main(String[] args) {
