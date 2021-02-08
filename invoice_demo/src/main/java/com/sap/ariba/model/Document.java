@@ -60,5 +60,69 @@ public class Document {
 	
 	@Column(name = "retry_count", nullable=false,columnDefinition="SMALLINT")
 	private long retryCount;
+
+	public String getIdentifier() {
+		return identifier;
+	}
+
+	public void setIdentifier(String identifier) {
+		this.identifier = identifier;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public byte[] getDocumentData() {
+		return documentData;
+	}
+
+	public void setDocumentData(byte[] documentData) {
+		this.documentData = documentData;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+	public String getOcrResult() {
+		return ocrResult;
+	}
+
+	public void setOcrResult(String ocrResult) {
+		this.ocrResult = ocrResult;
+	}
+
+	public long getRetryCount() {
+		return retryCount;
+	}
+
+	public void setRetryCount(long retryCount) {
+		this.retryCount = retryCount;
+	}
 	
 }

@@ -40,4 +40,48 @@ public class MediaContent {
 		this.localPath = localRoot + getMediaPath();
 	}
 
+	public String getMediaName() {
+		return mediaName;
+	}
+
+	public void setMediaName(String mediaName) {
+		this.mediaName = mediaName;
+	}
+
+	public String getExifName() {
+		return exifName;
+	}
+
+	public void setExifName(String exifName) {
+		this.exifName = exifName;
+	}
+
+	public String getMediaPath() {
+		return mediaPath;
+	}
+
+	public void setMediaPath(String mediaPath) {
+		this.mediaPath = mediaPath;
+	}
+
+	public String getExtension() {
+		return extension;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public Date getContentDate() {
+		return contentDate;
+	}
+
+	public String getLocalPath() {
+		return localPath;
+	}
+
 }

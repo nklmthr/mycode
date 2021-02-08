@@ -13,5 +13,17 @@ public class MediaContainer {
 	}
 	private String path;
 	private List<MediaContent> contents;
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
+	public List<MediaContent> getContents() {
+		return contents;
+	}
+	public void setContents(List<MediaContent> contents) {
+		this.contents = contents;
+	}
 	
 }
