@@ -1,0 +1,11 @@
+INSERT INTO institution (name) VALUES ( 'SBI');
+INSERT INTO institution (name) VALUES ('ICICI');
+INSERT INTO institution (name) VALUES ('YES');
+INSERT INTO institution (name) VALUES ('Citibank');
+INSERT INTO institution (name) VALUES ('IndusInd');
+INSERT INTO account_type (name) VALUES ('SAVINGS');
+INSERT INTO account_type (name) VALUES ('CREDIT_CARD');
+INSERT INTO account_type (name) VALUES ('LOAN');
+INSERT INTO file_type (name) VALUES ('CSV');
+INSERT INTO file_type (name) VALUES ('PDF');
+INSERT INTO file_type (name) VALUES ('TXT');

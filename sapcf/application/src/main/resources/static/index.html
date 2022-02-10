@@ -1,0 +1,176 @@
+<html>
+<head>
+<title>Welcome to Your Application!</title>
+<script type="text/javascript">
+	function loadInstitutions() {
+		var xmlhttp = new XMLHttpRequest();
+
+		let dropdown = document.getElementById('institution-dropdown');
+		dropdown.length = 0;
+
+		let defaultOption = document.createElement('option');
+		defaultOption.text = 'Choose Institution';
+
+		dropdown.add(defaultOption);
+		dropdown.selectedIndex = 0;
+		const url = 'statement/institutions';
+		const request = new XMLHttpRequest();
+		request.open('GET', url, true);
+		request.onload = function() {
+			if (request.status === 200) {
+				const data = JSON.parse(request.responseText);
+				let option;
+				for (let i = 0; i < data.length; i++) {
+					option = document.createElement('option');
+					option.text = data[i].name;
+					option.value = data[i].institutionId;
+					dropdown.add(option);
+				}
+			} else {
+				// Reached the server, but it returned an error
+			}
+		}
+
+		request.onerror = function() {
+			console.error('An error occurred fetching the JSON from ' + url);
+		};
+
+		request.send();
+	}
+
+	function loadAccountTypes() {
+		var xmlhttp = new XMLHttpRequest();
+
+		let dropdown = document.getElementById('accountTypes-dropdown');
+		dropdown.length = 0;
+
+		let defaultOption = document.createElement('option');
+		defaultOption.text = 'Choose Account Type';
+
+		dropdown.add(defaultOption);
+		dropdown.selectedIndex = 0;
+		const url = 'statement/accountTypes';
+		const request = new XMLHttpRequest();
+		request.open('GET', url, true);
+		request.onload = function() {
+			if (request.status === 200) {
+				const data = JSON.parse(request.responseText);
+				let option;
+				for (let i = 0; i < data.length; i++) {
+					option = document.createElement('option');
+					option.text = data[i].name;
+					option.value = data[i].accountTypeId;
+					dropdown.add(option);
+				}
+			} else {
+				// Reached the server, but it returned an error
+			}
+		}
+
+		request.onerror = function() {
+			console.error('An error occurred fetching the JSON from ' + url);
+		};
+
+		request.send();
+	}
+	
+	function loadFileTypes() {
+		var xmlhttp = new XMLHttpRequest();
+
+		let dropdown = document.getElementById('fileTypes-dropdown');
+		dropdown.length = 0;
+
+		let defaultOption = document.createElement('option');
+		defaultOption.text = 'Choose File Type';
+
+		dropdown.add(defaultOption);
+		dropdown.selectedIndex = 0;
+		const url = 'statement/fileTypes';
+		const request = new XMLHttpRequest();
+		request.open('GET', url, true);
+		request.onload = function() {
+			if (request.status === 200) {
+				const data = JSON.parse(request.responseText);
+				let option;
+				for (let i = 0; i < data.length; i++) {
+					option = document.createElement('option');
+					option.text = data[i].name;
+					option.value = data[i].fileTypeId;
+					dropdown.add(option);
+				}
+			} else {
+				// Reached the server, but it returned an error
+			}
+		}
+
+		request.onerror = function() {
+			console.error('An error occurred fetching the JSON from ' + url);
+		};
+
+		request.send();
+	}
+	function loadXMLDoc(){
+		loadInstitutions();
+		loadAccountTypes();
+		loadFileTypes();
+	}
+</script>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	color: #333333;
+}
+
+a {
+	color: #0C7ECF;
+}
+
+li {
+	margin: 10px 0;
+}
+
+code {
+	font-family: Courier, monospace;
+	font-size: 95%;
+	padding: 0.2em;
+	padding-left: 0.4em;
+	padding-right: 0.4em;
+	background-color: #EBEBEB;
+	border-radius: 3px;
+}
+</style>
+</head>
+<body onload="javascript:loadXMLDoc()">
+	<h1>Welcome to Statement Extracter!</h1>
+
+	<ul>
+		<div id="myDiv">
+			<form id="uploadForm" method="POST" enctype="multipart/form-data"
+				action="/statement/upload">
+				<table>
+					<tr>
+						<th>File Upload</th>
+						<th>Account Type</th>
+						<th>Institution</th>
+						<th>Action</th>
+					</tr>
+					<tr>
+						<td><input type="file" name="file" /></td>
+						<td><select name="accountTypes" id="accountTypes-dropdown"
+							form="uploadForm">
+						</select></td>
+						<td><select name="institution" id="institution-dropdown"
+							form="uploadForm">
+						</select></td>
+						<td><select name="fileTypes" id="fileTypes-dropdown"
+							form="uploadForm">
+						</select></td>
+						<td><input type="submit" value="Upload" /></td>
+					</tr>
+				</table>
+			</form>
+
+		</div>
+	</ul>
+</body>
+</html>
