@@ -28,10 +28,10 @@ public class RiskController {
 			OAuthClient client = new OAuthClient(new URLConnectionClient());
 			System.out.println("Start sending request...." + entity);
 			TokenRequestBuilder reqBuilder = OAuthClientRequest
-					.tokenLocation("https://spmproviderpoc-mllayeho.authentication.sap.hana.ondemand.com/oauth/token")
+					.tokenLocation("https://lbn-canary.authentication.sap.hana.ondemand.com/oauth/token?grant_type=client_credentials")
 					.setGrantType(GrantType.CLIENT_CREDENTIALS)
-					.setClientId("sb-clone-fa5694f2-98a2-4bff-b73e-59339c1a74d9!b33941|workflow!b2746").setClientSecret(
-							"1ad5e884-40f9-4eb2-8d37-7d1e5d99c78f$12Mbf-Rz1TwYYwWWHtLEPZxGmGFUkVpVj1tlUmEQu7A=");
+					.setClientId("sb-lbn-reminderservice-sb-dev!b468").setClientSecret(
+							"UjWSzoG3e4FDgfBtk1xEvUzWQVg=");
 
 			OAuthJSONAccessTokenResponse oAuthResponse = client.accessToken(reqBuilder.buildBodyMessage(),
 					OAuthJSONAccessTokenResponse.class);

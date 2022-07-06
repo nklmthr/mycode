@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ===================================================================== -->
+<!-- -->
+<!-- Log4j Configuration -->
+<!-- -->
+<!-- ===================================================================== -->
+<!DOCTYPE log4j:configuration PUBLIC
+  "-//APACHE//DTD LOG4J 1.2//EN" "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
+	debug="false">
+
+	<!-- ================================= -->
+	<!-- Preserve messages in a local file -->
+	<!-- ================================= -->
+
+	<appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="myfinance.log" />
+		<param name="Append" value="false" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<!-- <param name="ConversionPattern" value="%d %-5p: [%c:%L] %m%n" /> -->
+			<param name="ConversionPattern" value="%d level=%p %c:%M:%L: %m%n" />
+			<!-- value="%d level=%p app_name=%X{app_name} intuit_tid=%X{intuit_tid} 
+				app_class=%c app_method=%M:%L : %m%n" -->
+		</layout>
+	</appender>
+
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d level=%p %c:%M:%L: %m%n" />
+			<!-- value="%d level=%p app_name=%X{app_name} intuit_tid=%X{intuit_tid} 
+				app_class=%c app_method=%M:%L : %m%n" /> -->
+		</layout>
+	</appender>
+
+
+	<!-- ======================= -->
+	<!-- Setup the Root category -->
+	<!-- ======================= -->
+
+	<root>
+		<level value="TRACE" />
+		<appender-ref ref="FILE" />
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</log4j:configuration>
