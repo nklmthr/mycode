@@ -1,7 +1,5 @@
 package com.nklmthr.project.myfinance.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,16 +25,15 @@ public class TransactionCategory {
 	@GeneratedValue(generator = "uuid2")
 	@GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
 	private String id;
-	
-	@Column(name="name")
-	private Date name;
-	
+
+	@Column(name = "name")
+	private String name;
+
 	@Column(name = "description")
-	private boolean description;
-	
+	private String description;
+
 	@ManyToOne
 	@JoinColumn(name = "parent_category_id", referencedColumnName = "id")
 	private TransactionCategory parent;
-	
 
 }
