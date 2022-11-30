@@ -10,32 +10,16 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "EMPLOYEE")
+@Table(name = "INSTITUION")
 @Getter
 @Setter
 @ToString
-public class Employee {
+public class Institution {
 	@Id
-	@Column(name="id")
-	private Long id;
+	@Column(name = "id")
+	private String id;
 	
 	@Column(name = "name")
 	private String name;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
 
 }

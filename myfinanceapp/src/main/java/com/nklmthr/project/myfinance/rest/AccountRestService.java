@@ -7,18 +7,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.nklmthr.project.myfinance.model.Employee;
-import com.nklmthr.project.myfinance.service.EmployeeService;
+import com.nklmthr.project.myfinance.model.Account;
+import com.nklmthr.project.myfinance.service.AccountService;
 
 @Controller
-public class EmployeeRestService {
+public class AccountRestService {
 	
 	@Autowired
-	private EmployeeService service;
+	private AccountService service;
 
-	@GetMapping("/employee")
+	@GetMapping("/account")
     @ResponseBody
-    public List<Employee> welcomeUser() {
-        return service.getAllEmployees();
+    public List<Account> getAccounts() {
+        return service.getAccounts();
 	}
 }
