@@ -31,7 +31,7 @@ public class Application {
 	@Bean
 	public Trigger sampleJobTrigger() {
 		SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-				.withIntervalInSeconds(2).repeatForever();
+				.withIntervalInSeconds(60).repeatForever();
 
 		return TriggerBuilder.newTrigger().forJob(sampleJobDetail())
 				.withIdentity("sampleTrigger").withSchedule(scheduleBuilder).build();
