@@ -1,0 +1,28 @@
+1;"HOME";"HOME";
+2;"DEBIT";"Debit Expense";1
+3;"CREDIT";"Credit Expenses";1
+4;"GROC";"Groceries";2
+5;"MNTN";"Maintainence General";2
+6;"HLTH";"Health General";2
+7;"LRNG";"Learning & Education";2
+8;"ENTR";"Entertainment";2
+9;"DINN";"Dinning";2
+10;"BVRG";"Beverages";2
+11;"PUJA";"Puja and Expense";2
+12;"TRVL";"Travelling Out Station Expenses";2
+13;"FNFE";"Friends and Family Expense";2
+14;"STLN";"Short term loan to Others";2
+15;"EDUF";"Children Education Fees";7
+16;"CTUT";"Children Tution Fees";7
+17;"CUNF";"Children Uniform and Others";7
+18;"CACT";"Children Activities and Toys";7
+19;"CLTH";"Clothing and general needs";8
+20;"MDCN";"Medicines and General";6
+21;"PAPA";"Papa Expenses";2
+22;"VHCL";"Vehicles and General Expenses";5
+23;"DNOT";"Dinning with others";9
+24;"DNSF";"Dinning with Self";9
+25;"MAID";"Maids and Other Expenses";5
+26;"INVT";"Investments";1
+27;"ESHP";"Shopping Online";8
+28;"CWDL";"Cash Withdrawal";2
