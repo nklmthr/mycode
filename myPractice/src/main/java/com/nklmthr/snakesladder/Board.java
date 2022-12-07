@@ -14,11 +14,11 @@ public class Board {
 		snakes = new int[complexity][2];
 		ladders = new int[complexity][2];
 		for (int i = 0; i < complexity; i++) {
-			snakes[i][0] = ran.nextInt(21, 97);
-			snakes[i][1] = ran.nextInt(5, snakes[i][0] - 1);
-
-			ladders[i][0] = ran.nextInt(1, 85);
-			ladders[i][1] = ran.nextInt(ladders[i][0] + 1, 95);
+//			snakes[i][0] = ran.nextInt(21, 97);
+//			snakes[i][1] = ran.nextInt(5, snakes[i][0] - 1);
+//
+//			ladders[i][0] = ran.nextInt(1, 85);
+//			ladders[i][1] = ran.nextInt(ladders[i][0] + 1, 95);
 		}
 	}
 

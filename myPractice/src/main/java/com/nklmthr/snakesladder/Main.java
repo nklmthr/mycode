@@ -17,7 +17,7 @@ public class Main {
 		String inp = sc.next();
 		int count = 0;
 		while (!inp.equalsIgnoreCase("x")) {
-			int dice = rand.nextInt(1, 6);
+			int dice = 0;//rand.nextInt(1, 6);
 			System.out.println(dice);
 			if (count % 2 == 0) {
 				p1.play(dice);
