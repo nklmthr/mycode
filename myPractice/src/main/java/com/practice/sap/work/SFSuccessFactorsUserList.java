@@ -44,19 +44,30 @@ public class SFSuccessFactorsUserList {
 			SAXException, IOException, XPatherException {
 		Set<String> resultSet = new HashSet<String>();
 		Unirest.setTimeouts(0, 0);
-		for (int page = 0; page < 24; page++) {
+		for (int page = 1; page < 43; page++) {
+			System.out.println("Processing page "+page);
 //			System.out.println("page:" + page);
 			HttpResponse<String> response = Unirest.post(
-					"https://qacand.hcm.ondemand.com/acme?bplte_company=RWDNBCUnivT2&fbacme_o=admin&itrModule=rewarding&_s.crb=32B1p8dExhLT8WGekMoQhpOnC%2bvGm%2fgaZnUdQtm1%2bnc%3d")
+					"https://qacand.hcm.ondemand.com/acme?bplte_company=RWDVF8&fbacme_o=admin&itrModule=rewarding&_s.crb=i6blEvK57L6SW7Cd1EpNwN3Ak7imEesvKy3Y1XY%252fMo4%253d&")
 					.header("Content-Type", "application/x-www-form-urlencoded")
 					.header("Cookie", "\r\n"
-							+ "loginMethodCookieKey=PWD; route=c249d7cdf981ce76e77b986f908c89deb3d85ada; bizxCompanyId=RWDNBCUnivT2; bizxThemeId=27obg8pky; JSESSIONID=668DBBE7885390B58484DD64E362C3D7.mc25bcf07; zsessionid=b1475024-305b-4eaa-966b-430c68b632af; BIGipServer~net_bd50ec9f_4652_44cc_8c3e_014201a323f8~lb_17147c27-86e3-42f8-a627-cbc312c3bb6b~pool_d30b1bdd-93e1-4db7-88a4-2facd1f2fb08=rd2789o00000000000000000000ffff0aed0818o80")
+							+ "loginMethodCookieKey=PWD; route=ce3f45a6526e3c4860494071f2b1ad1d1121203c; bizxThemeId=1z0beuq2ca; fontstyle=null; bizxCompanyId=RWDVF8; BIGipServer~net_bd50ec9f_4652_44cc_8c3e_014201a323f8~lb_17147c27-86e3-42f8-a627-cbc312c3bb6b~pool_d30b1bdd-93e1-4db7-88a4-2facd1f2fb08=rd2789o00000000000000000000ffff0aed081eo80; JSESSIONID=36059909461A0B5373F3AC45FCC4B973.mc25bcf12; zsessionid=03c2e743-3908-4bee-b346-d2b0fec22b9f")
 					.header("Referer",
-							"https://qacand.hcm.ondemand.com/acme?bplte_p_hide_v12_layout_and_header_url=true&bplte_company=RWDNBCUnivT2&fbacme_o=admin&_s.crb=Czt41EGeisMDA%2fMB5jLBAHoErzRzxCq77wVcpKNl2S8%3d&ap_param_action=comp_admin_plan_mgt&fbca_comp_plan_hasVarPay=false&fbca_comp_plan_plan_id=356&fbca_comp_plan_ttlCmp=true&itrModule=rewarding")
-					.body("ap_param_action=comp_admin_plan_mgt&fbca_comp_plan_plan_id=356&fbca_comp_plan_listsize=10&fbca_comp_plan_hasVarPay=false&fbca_comp_plan_ttlCmp=true&sortFieldIndex=&sortDirection=&deleteTypeIdx=&exportTypeIdx=&ajaxSecKey=&bplte_p_hide_v12_layout_and_header_url=true&fbca_comp_plan_employee_type=planner&fbca_comp_plan_employee=&fbca_comp_plan_employee_text=&fbca_comp_plan_division=&fbca_comp_plan_department_selection=All&fbca_comp_plan_department=&fbca_comp_plan_location_selection=All&fbca_comp_plan_location=&fbca_comp_plan_status=&"
-							+ "ps_defaultPaginationBean=250&nps_defaultPaginationBean=250&ri_defaultPaginationBean="
-							+ (page * 250)
-							+ "&ps_defaultPaginationBean=250&nps_defaultPaginationBean=10&ri_defaultPaginationBean=250")
+							"https://qacand.hcm.ondemand.com/acme?bplte_p_hide_v12_layout_and_header_url=true&bplte_company=RWDVF8&fbacme_o=admin&_s.crb=MG9Ciaq%2f3Ufgep%2b5l%2faZhryvD4l0jKtiD11qlGlS3D4%3d&ap_param_action=comp_admin_plan_mgt&fbca_comp_plan_hasVarPay=false&fbca_comp_plan_plan_id=460&fbca_comp_plan_ttlCmp=true&itrModule=rewarding")
+					.body("ap_param_action=comp_admin_plan_mgt&fbca_comp_plan_plan_id=460&fbca_comp_plan_listsize=250"
+							+ "&fbca_comp_plan_hasVarPay=false&fbca_comp_plan_ttlCmp=true"
+							+ "&sortFieldIndex=&sortDirection=&deleteTypeIdx=&exportTypeIdx=&ajaxSecKey=&bplte_p_hide_v12_layout_and_header_url=true"
+							+ "&fbca_comp_plan_employee_type=planner&fbca_comp_plan_employee="
+							+ "&fbca_comp_plan_employee_text=&fbca_comp_plan_division_selection=All"
+							+ "&fbca_comp_plan_division=&fbca_comp_plan_department_selection=All&fbca_comp_plan_department="
+							+ "&fbca_comp_plan_location_selection=All&fbca_comp_plan_location="
+							+ "&fbca_comp_plan_status=&ps_defaultPaginationBean=250&nps_defaultPaginationBean=250"
+							+ "&ri_defaultPaginationBean="
+							+  (page*250))
+//					.body("ap_param_action=comp_admin_plan_mgt&fbca_comp_plan_plan_id=356&fbca_comp_plan_listsize=10&fbca_comp_plan_hasVarPay=false&fbca_comp_plan_ttlCmp=true&sortFieldIndex=&sortDirection=&deleteTypeIdx=&exportTypeIdx=&ajaxSecKey=&bplte_p_hide_v12_layout_and_header_url=true&fbca_comp_plan_employee_type=planner&fbca_comp_plan_employee=&fbca_comp_plan_employee_text=&fbca_comp_plan_division=&fbca_comp_plan_department_selection=All&fbca_comp_plan_department=&fbca_comp_plan_location_selection=All&fbca_comp_plan_location=&fbca_comp_plan_status=&"
+//							+ "ps_defaultPaginationBean=250&nps_defaultPaginationBean=250"							
+//							+ (page * 250)
+//							+ "&ps_defaultPaginationBean=250&nps_defaultPaginationBean=10&ri_defaultPaginationBean=250")
 					.asString();
 			String responseStr = response.getBody();
 			CleanerProperties props = new CleanerProperties();
@@ -64,6 +75,7 @@ public class SFSuccessFactorsUserList {
 			TagNode resultHmtl = new HtmlCleaner(props).clean(responseStr);
 //			System.out.println(responseStr);
 			String path = "//*[@id=\"planListTbl\"]/tbody/tr";
+			// *[@id="planListTbl"]/tbody/tr[4]/td[3]
 			Object[] result = resultHmtl.evaluateXPath(path);
 //			System.out.println("result size:" + result.length);
 
@@ -76,12 +88,12 @@ public class SFSuccessFactorsUserList {
 				NodeList trNodeList = trNode.getChildNodes();
 				for (int j = 0; j < trNodeList.getLength(); j++) {
 					Node tdNodeList = trNodeList.item(j);
-					// System.out.println("tdNode:"+tdNodeList.getTextContent());
-					if (tdNodeList.getTextContent() != null
-							&& tdNodeList.getTextContent().trim().startsWith("worksheet")) {
+//					System.out.println("tdNode:" + tdNodeList.getTextContent());
+					if (tdNodeList.getTextContent() != null && j == 3) {
 						String cellValue = tdNodeList.getTextContent().trim();
+						
 //						System.out.println(cellValue.substring(cellValue.indexOf("(")+1, cellValue.indexOf(")")));
-						resultSet.add(cellValue.substring(cellValue.indexOf("(")+1, cellValue.indexOf(")")));											
+						resultSet.add(cellValue);											
 					}
 				}
 
