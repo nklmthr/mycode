@@ -8,6 +8,9 @@
 	<packaging>jar</packaging>
 
 	<properties>
+		<frontend-src-dir>${project.basedir}/src/main/frontend</frontend-src-dir>
+		<node.version>v12.3.1</node.version>
+		<yarn.version>v1.16.0</yarn.version>
 		<java.version>1.8</java.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -56,7 +59,10 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
 		</dependency>
-
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-thymeleaf</artifactId>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -99,16 +105,74 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.0.1</version>
+					<executions>
+						<execution>
+							<id>position-react-build</id>
+							<goals>
+								<goal>copy-resources</goal>
+							</goals>
+							<phase>prepare-package</phase>
+							<configuration>
+								<outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+								<resources>
+									<resource>
+										<directory>${frontend-src-dir}/build</directory>
+										<filtering>false</filtering>
+									</resource>
+								</resources>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
+<!--					<configuration>-->
+<!--						<finalName>nklmthr-finance</finalName>-->
+<!--						<mainClass>com.nklmthr.finance.personal.Application</mainClass>-->
+<!--					</configuration>-->
+<!--					<executions>-->
+<!--						<execution>-->
+<!--							<goals>-->
+<!--								<goal>repackage</goal>-->
+<!--							</goals>-->
+<!--						</execution>-->
+<!--					</executions>-->
+				</plugin>
+				<plugin>
+					<groupId>com.github.eirslett</groupId>
+					<artifactId>frontend-maven-plugin</artifactId>
+					<version>1.12.0</version>
 					<configuration>
-						<finalName>nklmthr-finance</finalName>
-						<mainClass>com.nklmthr.finance.personal.Application</mainClass>
+						<workingDirectory>${frontend-src-dir}</workingDirectory>
+						<installDirectory>${project.build.directory}</installDirectory>
 					</configuration>
 					<executions>
 						<execution>
+							<id>install node and npm</id>
 							<goals>
-								<goal>repackage</goal>
+								<goal>install-node-and-npm</goal>
+							</goals>
+							<configuration>
+								<nodeVersion>v14.17.3</nodeVersion>
+								<npmVersion>7.18.1</npmVersion>
+							</configuration>
+						</execution>
+						<execution>
+							<id>npm install</id>
+							<goals>
+								<goal>npm</goal>
+							</goals>
+							<configuration>
+								<arguments>install</arguments>
+							</configuration>
+						</execution>
+						<execution>
+							<id>webpack build</id>
+							<goals>
+								<goal>webpack</goal>
 							</goals>
 						</execution>
 					</executions>

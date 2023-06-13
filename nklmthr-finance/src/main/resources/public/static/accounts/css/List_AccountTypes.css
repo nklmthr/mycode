@@ -1,0 +1,13 @@
+table, th, td {
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+th, td {
+  background-color: #96D4D4;
+}
+input {
+    width: 100%; /* force to expand to container's width */
+    border: 7px solid #DFDFDF;
+    padding: 0 10px;
+    margin: 0 -17px; /* negative margin = border-width + horizontal padding */
+}

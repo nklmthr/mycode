@@ -29,6 +29,7 @@ import com.nklmthr.finance.personal.dao.Transaction;
 import com.nklmthr.finance.personal.dao.TransactionRepository;
 
 @RestController
+@RequestMapping("/api")
 public class AccountRestService {
 
 	Logger logger = Logger.getLogger(AccountRestService.class);

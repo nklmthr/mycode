@@ -2,24 +2,50 @@
 <html>
 <head>
 <meta charset="ISO-8859-1" />
-<link href="css/styles.css" rel="stylesheet" />
+<link href="css/List_AccountTypes.css" rel="stylesheet" />
 <title>Spring Boot Application</title>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js">
-	
 </script>
+
 <script type="text/javascript">
-	function loadDoc() {
-		$.getJSON("/accountType", function(data){
-		    for (var i = 0, len = data.length; i < len; i++) {
-		        console.log(data[i]);
-		    }
-		});
+	var row = "<tr>\
+				<td><input id='accountTypeNameIdInputBox' width='100%' type='text'/></td>\
+				<td><input id='accountTypeDescIdInputBox'  width='100%' type='text'/></td>\
+				<td>\
+					<a href='javascript:editAccountType()'>Edit</a>\
+					<a href='javascript:deleteAccountType()'>Delete</a>\
+					<a href='javascript:saveAccountType()'>Save</a>\
+				</td>\
+				</tr>";
+	function addAccountType(){
+		$('#accountTypeTable tr:last').after(row);
+	}
+	function saveAccountType(){
+		var currentRow=$('#accountTypeTable tr:last').closest("tr");
+        var data1 = currentRow.find("td:eq(0) input[type='text']").val();
+        var data2 = currentRow.find("td:eq(1) input[type='text']").val();
+        alert(data1);
+        alert(data2);
 	}
 </script>
 </head>
 <body>
 	<h4>Welcome to my finance application</h4>
-	<button id="button1" onclick="loadDoc()">Click Me</button>
+	<button id="addButton" onclick="addAccountType()">Add</button>
+	<table id="accountTypeTable" width = "100%" borders="1px solid black">
+		<thead>
+			<tr>
+				<th>Account Type</th>
+				<th>Descrition</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			<div id="datarows"></div>
+		</tbody>
+
+	</table>
+
 </body>
 </html>
