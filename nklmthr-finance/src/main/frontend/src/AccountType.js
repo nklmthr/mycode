@@ -21,7 +21,7 @@ class AccountType extends React.Component {
     deleteAccountType = (accountTypeId) => {
         var index = this.state.data.findIndex(e => (e.id === accountTypeId));
         var accountType = this.state.data[this.state.data.findIndex(e => (e.id === accountTypeId))];
-        alert(accountType['id']);
+//        alert(accountType['id']);
         var url  = 'http://localhost:8080/api/accountType/'+accountType['id'];
         alert(url);
         fetch(url, { method: 'DELETE' })
