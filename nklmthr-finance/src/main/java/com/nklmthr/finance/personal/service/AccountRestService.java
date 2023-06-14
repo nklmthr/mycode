@@ -10,12 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.nklmthr.finance.personal.dao.Account;
 import com.nklmthr.finance.personal.dao.AccountRepository;
@@ -28,7 +23,10 @@ import com.nklmthr.finance.personal.dao.InstitutionRepository;
 import com.nklmthr.finance.personal.dao.Transaction;
 import com.nklmthr.finance.personal.dao.TransactionRepository;
 
+import javax.websocket.server.PathParam;
+
 @RestController
+@CrossOrigin
 @RequestMapping("/api")
 public class AccountRestService {
 
@@ -64,6 +62,13 @@ public class AccountRestService {
 		accountType = accountTypeRepository.save(accountType);
 		logger.info(accountType);
 		return new ResponseEntity<AccountType>(accountType, HttpStatus.OK);
+	}
+
+	@DeleteMapping("/accountType/{accountTypeId}")
+	public ResponseEntity<String> deleteAccountType(@PathVariable("accountTypeId") String accountTypeId) {
+		accountTypeRepository.deleteById(accountTypeId);
+		logger.info(accountTypeId);
+		return new ResponseEntity<String>("Successfully deleted"+accountTypeId, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/institution", method = RequestMethod.GET)

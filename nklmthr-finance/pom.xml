@@ -129,17 +129,18 @@
 				<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
-<!--					<configuration>-->
-<!--						<finalName>nklmthr-finance</finalName>-->
-<!--						<mainClass>com.nklmthr.finance.personal.Application</mainClass>-->
-<!--					</configuration>-->
-<!--					<executions>-->
-<!--						<execution>-->
-<!--							<goals>-->
-<!--								<goal>repackage</goal>-->
-<!--							</goals>-->
-<!--						</execution>-->
-<!--					</executions>-->
+					<configuration>
+						<finalName>nklmthr-finance</finalName>
+						<mainClass>com.nklmthr.finance.personal.Application</mainClass>
+						<layout>JAR</layout>
+					</configuration>
+					<executions>
+						<execution>
+							<goals>
+								<goal>repackage</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 				<plugin>
 					<groupId>com.github.eirslett</groupId>
