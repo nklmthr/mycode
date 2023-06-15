@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './App.css';
-class AccountType extends React.Component {
+export default class AccountType extends React.Component {
     constructor(props){
         super(props);
-        this.state = {data:[], isEditing:false};
+        this.state = {data:[], isEditing:false, isNew: false, editRow:''};
     }
     componentDidMount(){
         fetch('http://localhost:8080/api/accountType')
@@ -22,32 +22,26 @@ class AccountType extends React.Component {
         //alert(url);
         fetch(url, { method: 'DELETE' })
             .then(() => {
-                this.state.data.splice(index, 1);
-                this.setState({data:this.state.data});
+                var stateData = this.state.data;
+                stateData.splice(index, 1);
+                this.setState({data: stateData});
             })
     };
 
     updateStateChangeForEdit = (accountTypeId) => {
-        this.setState({data:this.state.data, isEditing:true, editRow: accountTypeId});
-//        alert("updateAccountType"+this.state.isEditing);
+        this.setState({isEditing:true});
+        this.setState({editRow: accountTypeId});
+        alert("updateStateChangeForEdit"+this.state.isEditing);
     }
 
    draftAccountTypeName = (event)=> {
-        console.log(event.target.name);
-        console.log(event.target.value)
         if(event.target.name==='accountTypeName'){
-            var state = this.state;
-            this.setState({state, newAccountTypeName:event.target.value})
-            console.log(JSON.stringify(state));
+            this.setState({newAccountTypeName:event.target.value})
         }
     }
     draftAccountTypeDescription = (event) => {
         if(event.target.name==='accountTypeDescription'){
-            console.log(event.target.name);
-            console.log(event.target.value);
-            var state = this.state;
-            this.setState({state, newAccountTypeDescription:event.target.value})
-            console.log(JSON.stringify(state));
+            this.setState({newAccountTypeDescription:event.target.value})
         }
     }
 
@@ -56,7 +50,7 @@ class AccountType extends React.Component {
         var newAccountTypeDescription = this.state.newAccountTypeDescription;
         if(this.state.isNew){
             if(newAccountTypeName===undefined){
-                alert("Account Type Name must Not be Null");
+                alert("Account Type Name must Not be Null when adding new Account Type");
                 return;
             }
             var payloadStr = '{"name":"'+newAccountTypeName+'","description":"'+newAccountTypeDescription+'"}';
@@ -72,23 +66,20 @@ class AccountType extends React.Component {
             })
             .then((response) => response.json())
             .then((responseData) => {
-                  console.log(responseData);
-                  this.state.data.push(responseData);
-                  this.state.newAccountTypeName='';
-                  this.state.newAccountTypeDescription='';
-                  var index = this.state.data.findIndex(e => (e.id === ''));
-                  this.state.data.splice(index,1);
-                  this.setState({data:this.state.data});
-                  this.state.isNew=false;
-                  //alert(JSON.stringify(this.state.data));
+                  var stateData = this.state.data;
+                  stateData.push(responseData);
+                  var index = stateData.findIndex(e => (e.id === ''));
+                  stateData.splice(index,1);
+                  this.setState({data:stateData});
+                  this.setState({isNew:false});
+                  this.setState({newAccountTypeName:""});
+                  this.setState({newAccountTypeDescription:""});
+                  alert("After Add:"+this.state.newAccountTypeDescription);
             });
         } else{
             var index = this.state.data.findIndex(e => (e.id === accountTypeId));
             var accountType = this.state.data[index];
-            if(newAccountTypeName !=undefined && newAccountTypeName.trim()===''){
-                alert("Account Type Name must Not be Null");
-                return;
-            } else if(newAccountTypeName===undefined){
+            if(newAccountTypeName===undefined || newAccountTypeName.trim()==='') {
                 newAccountTypeName = accountType['name'];
             }
             var payloadStr = '{"id":"'+accountTypeId+'","name":"'+newAccountTypeName+'","description":"'+newAccountTypeDescription+'"}';
@@ -105,12 +96,15 @@ class AccountType extends React.Component {
                     },
             })
             .then(() => {
-                this.state.data.splice(index, 1);
-                this.state.data.push(payload);
-                this.state.editRow='';
-                this.setState({data:this.state.data});
-                this.state.isEditing=false;
-                //alert(JSON.stringify(this.state.data));
+                var stateData = this.state.data;
+                stateData.splice(index, 1);
+                stateData.push(payload);
+                this.setState({data:stateData});
+                this.setState({editRow:""});;
+                this.setState({isEditing:false});
+                this.setState({newAccountTypeName:""});
+                this.setState({newAccountTypeDescription:""});
+                alert("After Add:"+this.state.newAccountTypeDescription);
             });
         }
         //alert(payloadStr);
@@ -200,4 +194,3 @@ class AccountType extends React.Component {
 
     }
 }
-export default AccountType;
