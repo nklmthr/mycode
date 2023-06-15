@@ -130,7 +130,7 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
 					<configuration>
-						<finalName>nklmthr-finance</finalName>
+						<finalName>finance.personal</finalName>
 						<mainClass>com.nklmthr.finance.personal.Application</mainClass>
 						<layout>JAR</layout>
 					</configuration>

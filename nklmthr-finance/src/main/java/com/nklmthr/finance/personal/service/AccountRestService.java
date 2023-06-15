@@ -71,6 +71,25 @@ public class AccountRestService {
 		return new ResponseEntity<String>("Successfully deleted"+accountTypeId, HttpStatus.OK);
 	}
 
+	@PutMapping("/accountType/{accountTypeId}")
+	public ResponseEntity<String> updateAccountType(@PathVariable("accountTypeId")String accountTypeId, @RequestBody AccountType newAccountType) {
+		logger.info("update accountType:"+newAccountType.getId());
+		Optional<AccountType> accountTypeOptional = accountTypeRepository.findById(accountTypeId);
+		if(accountTypeOptional.isPresent()){
+			logger.info("accountType Fund");
+			AccountType oldAccountType = accountTypeOptional.get();
+			oldAccountType.setName(newAccountType.getName());
+			oldAccountType.setDescription((newAccountType.getDescription()));
+			accountTypeRepository.save(oldAccountType);
+		}
+		else{
+			logger.info("Account Type Not Found"+accountTypeId);
+			return new ResponseEntity<String>("Account Type not Found"+accountTypeId, HttpStatus.BAD_REQUEST);
+		}
+		logger.info("Successfully updated");
+		return new ResponseEntity<String>("Successfully updated"+accountTypeId, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/institution", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public List<Institution> getInstitutions() {
@@ -81,7 +100,7 @@ public class AccountRestService {
 	@PostMapping(value = "/institution", consumes = { MediaType.APPLICATION_JSON_VALUE,
 			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
 					MediaType.APPLICATION_XML_VALUE })
-	public ResponseEntity<Institution> addAccountType(@RequestBody Institution institution) {
+	public ResponseEntity<Institution> addInstitution(@RequestBody Institution institution) {
 
 		institution = institutionRepository.save(institution);
 		logger.info(institution);
