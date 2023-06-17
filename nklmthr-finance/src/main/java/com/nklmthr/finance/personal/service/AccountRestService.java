@@ -107,6 +107,32 @@ public class AccountRestService {
 		return new ResponseEntity<Institution>(institution, HttpStatus.OK);
 	}
 
+	@DeleteMapping("/institution/{institutionId}")
+	public ResponseEntity<String> deleteInstitution(@PathVariable("institutionId") String institutionId) {
+		accountTypeRepository.deleteById(institutionId);
+		logger.info(institutionId);
+		return new ResponseEntity<String>("Successfully deleted"+institutionId, HttpStatus.OK);
+	}
+
+	@PutMapping("/institution/{institutionId}")
+	public ResponseEntity<String> updateInstitution(@PathVariable("institutionId")String institutionId, @RequestBody Institution newInstitution) {
+		logger.info("update accountType:"+newInstitution.getId());
+		Optional<Institution> institutionOptional = institutionRepository.findById(institutionId);
+		if(institutionOptional.isPresent()){
+			logger.info("institution found");
+			Institution oldInstitution = institutionOptional.get();
+			oldInstitution.setName(newInstitution.getName());
+			oldInstitution.setDescription((newInstitution.getDescription()));
+			institutionRepository.save(oldInstitution);
+		}
+		else{
+			logger.info("Institution Not Found"+institutionId);
+			return new ResponseEntity<String>("Institution not Found"+institutionId, HttpStatus.BAD_REQUEST);
+		}
+		logger.info("Successfully updated");
+		return new ResponseEntity<String>("Successfully updated"+institutionId, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/account", method = RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public List<Account> getAccounts() {

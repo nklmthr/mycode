@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import Root from "./App";
 import AccountType from './AccountType';
 import ErrorPage from './error-page';
+import Institution from './Institution';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
             {
                 path: "/accountTypes",
                 element: <AccountType />,
+            },
+            {
+                path: '/institutions',
+                element: <Institution />
             }
         ],
     }
