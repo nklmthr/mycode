@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './App.css';
+import './Institution.css';
 export default class Institution extends React.Component {
     constructor(props){
         super(props);
