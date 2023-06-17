@@ -4,6 +4,7 @@ import Root from "./App";
 import AccountType from './AccountType';
 import ErrorPage from './error-page';
 import Institution from './Institution';
+import Categories from './Categories';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
             {
                 path: '/institutions',
                 element: <Institution />
+            },
+            {
+                path:'/Categories',
+                element:<Categories />
             }
         ],
     }
