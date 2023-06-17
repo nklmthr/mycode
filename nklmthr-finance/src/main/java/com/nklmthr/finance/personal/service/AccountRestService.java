@@ -109,8 +109,8 @@ public class AccountRestService {
 
 	@DeleteMapping("/institution/{institutionId}")
 	public ResponseEntity<String> deleteInstitution(@PathVariable("institutionId") String institutionId) {
-		accountTypeRepository.deleteById(institutionId);
-		logger.info(institutionId);
+		institutionRepository.deleteById(institutionId);
+		logger.info("deleted "+institutionId);
 		return new ResponseEntity<String>("Successfully deleted"+institutionId, HttpStatus.OK);
 	}
 
