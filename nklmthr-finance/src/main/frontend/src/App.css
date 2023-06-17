@@ -1,5 +1,5 @@
 body{
-    background-image: url(http://localhost:8080/background.jpg)
+    background-image: url(http://localhost:8080/background.png)
 }
 
 .accountTypeTable{
@@ -14,7 +14,7 @@ body{
 }
 table {
   width: 100%;
-  font-family: sans-serif;
+  font-family: Helvetica;
   border-collapse: collapse;
   border: 1px solid #ccc;
   background-color: #fff;
@@ -30,13 +30,19 @@ th, td {
 table, th, td {
   border: 1px solid black;
 }
-
+.addAccountTypeButton{
+    background-color: #008CBA;
+    padding: 12px 28px;
+    border-radius: 12px;
+    color:white;
+    font-size: 20px;
+}
 .accountTypeIdCol{
     width:20%;
 }
 
 .accountTypeNameCol{
-    width:20%;
+    width:15%;
 }
 
 .accountTypeDescCol{
@@ -44,5 +50,37 @@ table, th, td {
 }
 
 .accountTypeIdActionCol{
-    width:20%;
+    width:25%;
+}
+
+.deleteAccountTypeButton{
+    background-color: #008CBA;
+    padding: 12px 28px;
+    border-radius: 12px;
+    color:white;
+    font-size: 15px;
+}
+
+.updateAccountTypeButton{
+    background-color: #008CBA;
+    padding: 12px 28px;
+    border-radius: 12px;
+    color:white;
+    font-size: 15px;
+}
+
+.saveAccountTypeButton{
+    background-color: #008CBA;
+    padding: 12px 28px;
+    border-radius: 12px;
+    color:white;
+    font-size: 15px;
+}
+
+.cancelUpdateButton{
+    background-color: #008CBA;
+    padding: 12px 28px;
+    border-radius: 12px;
+    color:white;
+    font-size: 15px;
 }

@@ -17,9 +17,7 @@ export default class AccountType extends React.Component {
     deleteAccountType = (accountTypeId) => {
         var index = this.state.data.findIndex(e => (e.id === accountTypeId));
         var accountType = this.state.data[index];
-//        alert(accountType['id']);
         var url  = 'http://localhost:8080/api/accountType/'+accountType['id'];
-        //alert(url);
         fetch(url, { method: 'DELETE' })
             .then(() => {
                 var stateData = this.state.data;
@@ -31,7 +29,6 @@ export default class AccountType extends React.Component {
     updateStateChangeForEdit = (accountTypeId) => {
         this.setState({isEditing:true});
         this.setState({editRow: accountTypeId});
-        alert("updateStateChangeForEdit"+this.state.isEditing);
     }
 
    draftAccountTypeName = (event)=> {
@@ -44,80 +41,84 @@ export default class AccountType extends React.Component {
             this.setState({newAccountTypeDescription:event.target.value})
         }
     }
-
-    saveAccountType = (accountTypeId) =>{
+    createNewAccountType= (accountTypeId) =>{
         var newAccountTypeName = this.state.newAccountTypeName;
         var newAccountTypeDescription = this.state.newAccountTypeDescription;
-        if(this.state.isNew){
-            if(newAccountTypeName===undefined){
-                alert("Account Type Name must Not be Null when adding new Account Type");
-                return;
-            }
-            var payloadStr = '{"name":"'+newAccountTypeName+'","description":"'+newAccountTypeDescription+'"}';
-            var payload = JSON.parse(payloadStr);
-            var url  = 'http://localhost:8080/api/accountType';
-            //alert(url);
-            fetch(url, {
-                    method: 'POST',
-                    body: JSON.stringify(payload),
-                    headers: {
-                        'Content-type': 'application/json; charset=UTF-8',
-                    },
-            })
-            .then((response) => response.json())
-            .then((responseData) => {
-                  var stateData = this.state.data;
-                  stateData.push(responseData);
-                  var index = stateData.findIndex(e => (e.id === ''));
-                  stateData.splice(index,1);
-                  this.setState({data:stateData});
-                  this.setState({isNew:false});
-                  this.setState({newAccountTypeName:""});
-                  this.setState({newAccountTypeDescription:""});
-                  alert("After Add:"+this.state.newAccountTypeDescription);
-            });
-        } else{
-            var index = this.state.data.findIndex(e => (e.id === accountTypeId));
-            var accountType = this.state.data[index];
-            if(newAccountTypeName===undefined || newAccountTypeName.trim()==='') {
-                newAccountTypeName = accountType['name'];
-            }
-            var payloadStr = '{"id":"'+accountTypeId+'","name":"'+newAccountTypeName+'","description":"'+newAccountTypeDescription+'"}';
-            var index = this.state.data.findIndex(e => (e.id === accountTypeId));
-            var accountType = this.state.data[index];
-            var payload = JSON.parse(payloadStr);
-            var url  = 'http://localhost:8080/api/accountType/'+accountType['id'];
-            //alert(url);
-            fetch(url, {
-                    method: 'PUT',
-                    body: JSON.stringify(payload),
-                    headers: {
-                        'Content-type': 'application/json; charset=UTF-8',
-                    },
-            })
-            .then(() => {
-                var stateData = this.state.data;
-                stateData.splice(index, 1);
-                stateData.push(payload);
-                this.setState({data:stateData});
-                this.setState({editRow:""});;
-                this.setState({isEditing:false});
-                this.setState({newAccountTypeName:""});
-                this.setState({newAccountTypeDescription:""});
-                alert("After Add:"+this.state.newAccountTypeDescription);
-            });
+        if(newAccountTypeName===undefined){
+            alert("Account Type Name must Not be Null when adding new Account Type");
+            return;
         }
-        //alert(payloadStr);
-
+        var payloadStr = '{"name":"'+newAccountTypeName+'","description":"'+newAccountTypeDescription+'"}';
+        var payload = JSON.parse(payloadStr);
+        var url  = 'http://localhost:8080/api/accountType';
+        //alert(url);
+        fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(payload),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+        })
+        .then((response) => response.json())
+        .then((responseData) => {
+              var stateData = this.state.data;
+              stateData.push(responseData);
+              var index = stateData.findIndex(e => (e.id === ''));
+              stateData.splice(index,1);
+              this.setState({data:stateData});
+              this.setState({isNew:false});
+              this.setState({newAccountTypeName:""});
+              this.setState({newAccountTypeDescription:""});
+        });
     }
 
+    updateAccountType= (accountTypeId) => {
+        var newAccountTypeName = this.state.newAccountTypeName;
+        var newAccountTypeDescription = this.state.newAccountTypeDescription;
+        var index = this.state.data.findIndex(e => (e.id === accountTypeId));
+        var accountType = this.state.data[index];
+        if(newAccountTypeName===undefined || newAccountTypeName.trim()==='') {
+            newAccountTypeName = accountType['name'];
+        }
+        var payloadStr = '{"id":"'+accountTypeId+'","name":"'+newAccountTypeName+'","description":"'+newAccountTypeDescription+'"}';
+        var payload = JSON.parse(payloadStr);
+        var url  = 'http://localhost:8080/api/accountType/'+accountType['id'];
+        fetch(url, {
+                method: 'PUT',
+                body: JSON.stringify(payload),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+        })
+        .then(() => {
+            var stateData = this.state.data;
+            stateData.splice(index, 1);
+            stateData.push(payload);
+            this.setState({data:stateData});
+            this.setState({editRow:""});;
+            this.setState({isEditing:false});
+            this.setState({newAccountTypeName:""});
+            this.setState({newAccountTypeDescription:""});
+        });
+    }
+    saveAccountType = (accountTypeId) =>{
+        if(this.state.isNew){
+            this.createNewAccountType(accountTypeId);
+        } else{
+            this.updateAccountType(accountTypeId);
+        }
+    }
+    cancelUpdate =() =>{
+        this.setState({isEditing:false});
+        this.setState({editRow:""});
+    }
     addNewAccountType = () =>{
         var newAccountType = '{"id":"", "name":"","description":""}';
         this.state.data.push(JSON.parse(newAccountType));
         this.setState({data:this.state.data, isNew:true});
     }
 
-    updateAccountType = () => {
+    updateAccountTypeHMTL = () => {
         const DisplayData=this.state.data.map(
             (info)=>{
                 if((info.id === this.state.editRow) || (this.state.isNew===true && info.id === '')){
@@ -127,8 +128,8 @@ export default class AccountType extends React.Component {
                             <td><input type='text' name='accountTypeName' defaultValue={info.name} onChange={this.draftAccountTypeName.bind(this)}/></td>
                             <td><input type='text' name='accountTypeDescription' defaultValue={info.description} onChange={this.draftAccountTypeDescription.bind(this)}/></td>
                             <td>
-                                <button onClick={()=>this.saveAccountType(info.id)}>Save</button>
-
+                                <button className='saveAccountTypeButton' onClick={()=>this.saveAccountType(info.id)}>Save</button>
+                                <button className='cancelUpdateButton' onClick={()=>this.cancelUpdate()}>Cancel</button>
                             </td>
                         </tr>
                     )
@@ -147,7 +148,7 @@ export default class AccountType extends React.Component {
         return DisplayData;
     }
 
-    listAccountType = () => {
+    listAccountTypeHTML = () => {
         const DisplayData=this.state.data.map(
             (info)=>{
                 return(
@@ -156,8 +157,10 @@ export default class AccountType extends React.Component {
                         <td>{info.name}</td>
                         <td>{info.description}</td>
                         <td>
-                            <button onClick={()=>this.deleteAccountType(info.id)}>Delete</button>
-                            <button onClick={()=>this.updateStateChangeForEdit(info.id)}>Update</button>
+                            <div class="btn-group">
+                            <button className='deleteAccountTypeButton' onClick={()=>this.deleteAccountType(info.id)}>Delete</button>
+                            <button className='updateAccountTypeButton' onClick={()=>this.updateStateChangeForEdit(info.id)}>Update</button>
+                            </div>
                         </td>
                     </tr>
                 )
@@ -169,13 +172,14 @@ export default class AccountType extends React.Component {
 
         var displayHtml;
         if(this.state.isEditing===true || this.state.isNew===true){
-                displayHtml = this.updateAccountType();
+                displayHtml = this.updateAccountTypeHMTL();
         } else {
-                displayHtml = this.listAccountType();
+                displayHtml = this.listAccountTypeHTML();
         }
         return (
             <div className="accountTypeTable">
-            <button name='addAccountType' onClick={this.addNewAccountType.bind(this)}>Add</button>
+            <button className='addAccountTypeButton' onClick={this.addNewAccountType.bind(this)}>Add</button>
+            <br/><br/>
                 <table>
                     <thead>
                         <tr>
@@ -191,6 +195,5 @@ export default class AccountType extends React.Component {
                </table>
             </div>
         );
-
     }
 }
