@@ -2,7 +2,9 @@ package com.practice.sap.work;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class StreamCheckString {
@@ -18,13 +20,22 @@ public class StreamCheckString {
 		list.add(m2);
 		list.add(m3);
 		list.add(m4);
-		String[] s1 = { "Nikhil3" };
-		List search = Arrays.asList(s1);
-		System.out.println(list.stream().map(s -> Formatter.format(s.getName())).collect(Collectors.joining(",")));
-		list = list.stream().filter(s -> !search.contains(s.getName())).collect(Collectors.toList());
-		System.out.println(Arrays.toString(list.toArray()));
-		//System.out.println(Arrays.toString(res.toArray()));
+//		String[] s1 = { "Nikhil3" };
+//		List search = Arrays.asList(s1);
+//		System.out.println(list.stream().map(s -> Formatter.format(s.getName())).collect(Collectors.joining(",")));
+//		list = list.stream().filter(s -> !search.contains(s.getName())).collect(Collectors.toList());
+//		System.out.println(Arrays.toString(list.toArray()));
+		// System.out.println(Arrays.toString(res.toArray()));
 
+		Map<String, List<String>> ret = new HashMap();
+		List<String> s1 = Arrays.asList("s11", "s12", "s13");
+		ret.put("s1", s1);
+		List<String> s2 = Arrays.asList("s21", "s22", "s23");
+		ret.put("s2", s2);
+
+		System.out.println();
+		ret.entrySet().stream().forEach(s -> System.out.println(s.getKey()+":"+s.getValue().size()));
+				
 	}
 
 }
