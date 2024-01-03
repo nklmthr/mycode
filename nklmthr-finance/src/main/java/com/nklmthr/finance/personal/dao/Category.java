@@ -11,16 +11,18 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class Category {
+public class Category implements Cloneable {
 	@Id
 	@GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+	@GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
 	@Column
 	private String id;
 
 	@Column
 	private String name;
-	
+
+	private int level;
+
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "category", referencedColumnName = "id")
 	private Category parentCategory;
@@ -49,9 +51,20 @@ public class Category {
 		this.parentCategory = parentCategory;
 	}
 
-	@Override
-	public String toString() {
-		return "Category [id=" + id + ", name=" + name + ", parentCategory=" + parentCategory + "]";
+	public int getLevel() {
+		return level;
 	}
-	
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public Object clone() {
+		try {
+			return super.clone();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 }

@@ -1,0 +1,44 @@
+<html>
+
+<head>
+	<title>Institutions</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
+</head>
+
+<body>
+	<div>
+		<div class="topnav">
+			<a href="home">Home</a>
+			<a href="/Transactions">Transactions</a>
+			<a class="active" href="/Categorys">Categories</a>
+			<a href="/Accounts">Accounts</a>
+			<a href="/Institutions">Institutions</a>
+			<a href="/AccountTypes">Acount Types</a>
+		</div>
+	</div>
+	<div class="container">
+		<h1>Category</h1>
+		<hr>
+		<h2>Update Category</h2>
+
+		<form action="#" th:action="@{/saveCategory}" th:object="${category}" method="POST">
+
+			<!-- Add hidden form field to handle update -->
+			<input type="hidden" th:field="*{id}" />
+			<input type="text" th:field="*{name}" class="form-control mb-4 col-4">		
+			<select th:field="*{parentCategory}">
+				<option th:value="0" selected value=" " text="Please Select">Please Select</option>
+				<option th:each="category1 : ${CategoryList}" th:value="${category1.id}"
+					th:attr="showselected=(${category1.id} == *{parentCategory})"
+					th:text="${category1.name}"></option>
+			</select>
+			<button type="submit" class="btn btn-info col-2">Update Category</button>
+		</form>
+
+		<hr>
+
+		<a th:href="@{/}">Back to Category List</a>
+	</div>
+</body>
+
+</html>

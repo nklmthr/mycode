@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import com.nklmthr.finance.personal.dao.Account;
 import com.nklmthr.finance.personal.dao.AccountRepository;
 import com.nklmthr.finance.personal.dao.AccountType;
 import com.nklmthr.finance.personal.dao.AccountTypeRepository;
+import com.nklmthr.finance.personal.dao.Category;
 import com.nklmthr.finance.personal.dao.CategoryRepository;
 import com.nklmthr.finance.personal.dao.Institution;
 import com.nklmthr.finance.personal.dao.InstitutionRepository;
@@ -171,5 +173,58 @@ public class UIController {
 	public String deleteAccount(@PathVariable(value = "id") String id, Model model) {
 		accountRepository.deleteById(id);
 		return "redirect:/Accounts";
+	}
+
+	/*
+	 * 
+	 * Categories
+	 */
+
+	@GetMapping("/Categorys")
+	public String Categorys(Model m) {
+		List<Category> categoryPage = categoryRepository
+				.findAll(Sort.by(Direction.ASC, "level").and(Sort.by(Sort.Direction.ASC, "parentCategory")));
+		m.addAttribute("categoryList", categoryPage);
+		return "category/Categorys";
+	}
+
+	@GetMapping("/addnewCategory")
+	public String addnewCategory(Model m) {
+		List<Category> Categorys = categoryRepository
+				.findAll(Sort.by(Direction.ASC, "level").and(Sort.by(Sort.Direction.ASC, "parentCategory")));
+		m.addAttribute("CategoryList", Categorys);
+
+		Category category = new Category();
+		m.addAttribute("category", category);
+		return "category/addnewCategory";
+	}
+
+	@PostMapping("/saveCategory")
+	public String addnewCategory(@ModelAttribute("category") Category category) {
+		Category temp = (Category) category.clone();
+		int level = 0;
+		while (temp.getParentCategory() != null) {
+			temp = temp.getParentCategory();
+			level++;
+		}
+		category.setLevel(level);
+		categoryRepository.save(category);
+		return "redirect:/Categorys";
+	}
+
+	@GetMapping("/showFormForCategoryUpdate/{id}")
+	public String showFormForCategoryUpdate(@PathVariable(value = "id") String id, Model m) {
+		List<Category> Categorys = categoryRepository
+				.findAll(Sort.by(Direction.ASC, "level").and(Sort.by(Sort.Direction.ASC, "parentCategory")));
+		m.addAttribute("CategoryList", Categorys);
+		Category c = categoryRepository.findById(id).get();
+		m.addAttribute("category", c);
+		return "category/UpdateCategory";
+	}
+
+	@GetMapping("/deleteCategory/{id}")
+	public String deleteCategory(@PathVariable(value = "id") String id, Model model) {
+		categoryRepository.deleteById(id);
+		return "redirect:/Categorys";
 	}
 }
