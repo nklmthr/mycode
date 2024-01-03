@@ -1,0 +1,43 @@
+<html>
+
+<head>
+	<title>Institutions</title>
+	 <link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
+</head>
+
+<body>
+	<div>
+		<div class="topnav">
+			<a href="home">Home</a>
+			<a href="Transactions">Transactions</a>
+			<a href="Categories">Categories</a>
+			<a href="Accounts">Accounts</a>
+			<a class="active" href="Institutions">Institutions</a>
+			<a href="AccountTypes">Acount Types</a>
+
+		</div>
+	</div>
+	<div class="container">
+		<h1>Institutions</h1>
+		<hr>
+		<h2>Update Institution</h2>
+
+		<form action="#" th:action="@{/saveInstitution}" th:object="${institution}" method="POST">
+
+			<!-- Add hidden form field to handle update -->
+			<input type="hidden" th:field="*{id}" />
+
+			<input type="text" th:field="*{name}" class="form-control mb-4 col-4">
+
+			<input type="text" th:field="*{description}" class="form-control mb-4 col-4">
+
+			<button type="submit" class="btn btn-info col-2">Update Institution</button>
+		</form>
+
+		<hr>
+
+		<a th:href="@{/}">Back to institution List</a>
+	</div>
+</body>
+
+</html>

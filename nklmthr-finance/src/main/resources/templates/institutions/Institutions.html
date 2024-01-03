@@ -1,0 +1,51 @@
+<html>
+
+<head>
+	<title>Institutions</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
+</head>
+
+<body>
+	<div>
+		<div class="topnav">
+			<a href="home">Home</a>
+			<a href="Transactions">Transactions</a>
+			<a href="Categories">Categories</a>
+			<a href="Accounts">Accounts</a>
+			<a class="active" href="Institutions">Institutions</a>
+			<a href="AccountTypes">Acount Types</a>
+
+		</div>
+	</div>
+
+
+
+
+	<div class="container my-2" align="left">
+
+		<h3>Insitutions List</h3>
+		<button type="button" th:onclick="|window.location.href='/addnewInstitution'|">Add Institution</button>
+		<br/><br/>
+		<table style="width:50%" border="1" class="table table-striped table-responsive-md">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Update/Delete</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="institution : ${institutionList}">
+					<td th:text="${institution.name}"></td>
+					<td th:text="${institution.description}"></td>
+					<td> <a th:href="@{/showFormForInstitutionUpdate/{id}(id=${institution.id})}"
+							class="btn btn-primary">Update</a>
+						<a th:href="@{/deleteInstitution/{id}(id=${institution.id})}" class="btn btn-danger">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+
+</html>
