@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Transaction {
@@ -22,6 +23,7 @@ public class Transaction {
 	private String id;
 
 	@Column
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date date;
 
 	@Column

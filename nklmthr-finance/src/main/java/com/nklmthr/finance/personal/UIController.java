@@ -22,6 +22,7 @@ import com.nklmthr.finance.personal.dao.Category;
 import com.nklmthr.finance.personal.dao.CategoryRepository;
 import com.nklmthr.finance.personal.dao.Institution;
 import com.nklmthr.finance.personal.dao.InstitutionRepository;
+import com.nklmthr.finance.personal.dao.Transaction;
 import com.nklmthr.finance.personal.dao.TransactionRepository;
 import com.nklmthr.finance.personal.service.AccountRestService;
 
@@ -226,5 +227,61 @@ public class UIController {
 	public String deleteCategory(@PathVariable(value = "id") String id, Model model) {
 		categoryRepository.deleteById(id);
 		return "redirect:/Categorys";
+	}
+	
+	/*
+	 * 
+	 * Transactions
+	 */
+
+	@GetMapping("/Transactions")
+	public String Transactions(Model m) {
+		List<Transaction> transactionPage = transactionRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "date"));
+		m.addAttribute("transactionList", transactionPage);
+		return "transactions/Transactions";
+	}
+
+	@GetMapping("/addnewTransaction")
+	public String addnewTransaction(Model m) {
+		List<Transaction> transactions = transactionRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "date"));
+		m.addAttribute("transactionList", transactions);
+		List<Category> Categorys = categoryRepository
+				.findAll(Sort.by(Direction.ASC, "level").and(Sort.by(Sort.Direction.ASC, "parentCategory")));
+		m.addAttribute("CategoryList", Categorys);
+		
+		List<Account> accountPage = accountRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "name"));
+		m.addAttribute("accountList", accountPage);
+		Transaction transaction = new Transaction();
+		m.addAttribute("transaction", transaction);
+		return "transactions/addnewTransaction";
+	}
+
+	@PostMapping("/saveTransaction")
+	public String addnewTransaction(@ModelAttribute("transaction") Transaction transaction) {
+		transactionRepository.save(transaction);
+
+		return "redirect:/Transactions";
+	}
+
+	@GetMapping("/showFormForTransactionUpdate/{id}")
+	public String showFormForTransactionUpdate(@PathVariable(value = "id") String id, Model m) {
+		List<Transaction> transactions = transactionRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "date"));
+		m.addAttribute("transactionList", transactions);
+		List<Category> Categorys = categoryRepository
+				.findAll(Sort.by(Direction.ASC, "level").and(Sort.by(Sort.Direction.ASC, "parentCategory")));
+		m.addAttribute("CategoryList", Categorys);
+		
+		List<Account> accountPage = accountRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "name"));
+		m.addAttribute("accountList", accountPage);
+
+		Transaction i = transactionRepository.findById(id).get();
+		m.addAttribute(i);
+		return "transactions/UpdateTransaction";
+	}
+
+	@GetMapping("/deleteTransaction/{id}")
+	public String deleteTransaction(@PathVariable(value = "id") String id, Model model) {
+		transactionRepository.deleteById(id);
+		return "redirect:/Transactions";
 	}
 }
