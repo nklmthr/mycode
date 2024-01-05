@@ -41,12 +41,12 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="category : ${categoryList}">
-					<td th:text="${category.name}">gfdfd</td>
-					<td th:text="${category.parentCategory?.name}"></td>
-					<td> <a th:href="@{/showFormForCategoryUpdate/{id}(id=${category.id})}"
+				<tr th:each="category1 : ${CategoryList}">
+					<td th:text="${category1.name}">gfdfd</td>
+					<td th:text="${category1.parentCategory?.name}"></td>
+					<td> <a th:href="@{/showFormForCategoryUpdate/{id}(id=${category1.id})}"
 							class="btn btn-primary">Update</a>
-						<a th:href="@{/deleteCategory/{id}(id=${category.id})}" class="btn btn-danger">Delete</a>
+						<a th:href="@{/deleteCategory/{id}(id=${category1.id})}" class="btn btn-danger">Delete</a>
 					</td>
 				</tr>
 			</tbody>

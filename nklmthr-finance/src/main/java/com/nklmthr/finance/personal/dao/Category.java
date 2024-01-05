@@ -21,6 +21,7 @@ public class Category implements Cloneable {
 	@Column
 	private String name;
 
+	@Column
 	private int level;
 
 	@ManyToOne(cascade = CascadeType.MERGE)
@@ -65,6 +66,12 @@ public class Category implements Cloneable {
 		} catch (Exception e) {
 			return null;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Category [name=" + name + ", level=" + level + ", parentCategory=" + parentCategory
+				+ "]";
 	}
 
 }

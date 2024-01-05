@@ -3,23 +3,73 @@
 
 <head>
 	<meta charset="ISO-8859-1" />
-	<link href="styles.css" rel="stylesheet" />
-	<title>Spring Boot Application</title>
-	<script src="built/bundle.js"></script>
-	<link rel="stylesheet" href="styles.css">
+	<title>My Finance App</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
+	<script type="text/javascript" th:src="@{/assets/js/tree.js}"></script>
+
 </head>
 
 <body>
 	<div>
-		<div class="topnav">
-			<a class="active" href="#home">Home</a>
-			<a href="Transactions">Transactions</a>
-			<a href="Categories">Categories</a>
-			<a href="Accounts">Accounts</a>
-			<a href="Institutions">Institutions</a>
-			<a href="AcountTypes">Acount Types</a>
+		<div>
+			<div class="topnav">
+				<a class="active" href="/home">Home</a>
+				<a href="/Transactions">Transactions</a>
+				<a href="/Categorys">Categorys</a>
+				<a href="/Accounts">Accounts</a>
+				<a href="/Institutions">Institutions</a>
+				<a href="/AcountTypes">Acount Types</a>
 
+			</div>
 		</div>
+		<div id="script">
+			<script>
+				var data;
+				$(document).ready(function () {
+					$.getJSON("/api/categorySpends", function (result) {
+						$.each(result, function (key, value) {
+							//alert(value.name);	
+							$("#table").append("<tr><td>" + value.name + "</td><td align = 'right'>" + value.amount + "</td></tr>");
+						});
+						data = result;
+						//alert(JSON.stringify(data));
+						for (let i = 0; i < data.length; i++) {
+							let obj = data[i];
+							if (obj.parentCategory) {
+								var existingUL = document.getElementById('ul' + obj.parentCategory.id);
+								//alert("existing " + existingUL);
+								if (existingUL) {
+									var liParent = document.getElementById(obj.parentCategory.id);
+									var ul = document.createElement('ul');
+									ul.setAttribute("id", 'ul' + obj.id);
+									ul.setAttribute("class", "nested");
+									var li = document.createElement('li');
+									li.setAttribute("id", obj.id);
+									li.appendChild(document.createTextNode(obj.name + '-->' + obj.amount));
+									ul.appendChild(li);
+									liParent.appendChild(ul);
+								} else {
+									var ul = document.createElement('ul');
+									ul.setAttribute("id", 'ul' + obj.id);
+									ul.setAttribute("class", "nested");
+									var li = document.createElement('li');
+									li.setAttribute("id", obj.id);
+									li.appendChild(document.createTextNode(obj.name + '-->' + obj.amount));
+									ul.appendChild(li);
+									$("#tree").append(ul);
+								}
+							}
+						}
+					});
+
+				});
+
+
+
+			</script>
+		</div>
+		<div id="tree"/>
 	</div>
 </body>
 

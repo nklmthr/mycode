@@ -46,6 +46,17 @@ public class UIController {
 	@Autowired
 	private TransactionRepository transactionRepository;
 
+	@GetMapping("/home")
+	public String getHome(Model m) {
+		return "index";
+	}
+	
+	
+	/**
+	 * Institutions
+	 * @param m
+	 * @return
+	 */
 	@GetMapping("/Institutions")
 	public String Institutions(Model m) {
 		List<Institution> institutionPage = institutionRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "name"));
@@ -138,7 +149,8 @@ public class UIController {
 	public String addnewAccount(Model m) {
 		List<AccountType> accountTypes = accountTypeRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "name"));
 		m.addAttribute("accountTypeList", accountTypes);
-
+		List<Institution> institutionPage = institutionRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "name"));
+		m.addAttribute("institutionList", institutionPage);
 		List<Account> accountPage = accountRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "name"));
 		m.addAttribute("accountList", accountPage);
 

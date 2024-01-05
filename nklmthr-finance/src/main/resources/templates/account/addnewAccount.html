@@ -17,7 +17,7 @@
 
 		</div>
 	</div>
-	<h2>Add Institution</h2>
+	<h2>Add Account</h2>
 	<form action="#" th:action="@{/saveAccount}" th:object="${account}" method="POST">
 		<input type="text" th:field="*{name}" placeholder="Account Name" class="form-control mb-4 col-4">
 		<select th:field="*{accountType}">
@@ -50,8 +50,8 @@
 			<tbody>
 				<tr th:each="account : ${accountList}">
 					<td th:text="${account.name}">gfdfd</td>
-					<td th:text="${account.accountType}"></td>
-					<td th:text="${account.institution}"></td>
+					<td th:text="${account.accountType.name}"></td>
+					<td th:text="${account.institution.name}"></td>
 					<td th:text="${account.transactionBalance}"></td>
 					<td> <a th:href="@{/showFormForAccountUpdate/{id}(id=${account.id})}"
 							class="btn btn-primary">Update</a>
