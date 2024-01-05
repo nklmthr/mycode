@@ -1,6 +1,7 @@
 package com.nklmthr.finance.personal.dao;
 
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -38,7 +39,7 @@ public class Transaction {
 	private Category category;
 	
 	@Column
-	private Double amount;
+	private BigDecimal amount;
 
 	public String getId() {
 		return id;
@@ -80,11 +81,11 @@ public class Transaction {
 		this.category = category;
 	}
 
-	public Double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 

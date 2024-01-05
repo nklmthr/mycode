@@ -19,7 +19,7 @@
 				<a href="/Categorys">Categorys</a>
 				<a href="/Accounts">Accounts</a>
 				<a href="/Institutions">Institutions</a>
-				<a href="/AcountTypes">Acount Types</a>
+				<a href="/AccountTypes">Account Types</a>
 
 			</div>
 		</div>
@@ -36,7 +36,17 @@
 						//alert(JSON.stringify(data));
 						for (let i = 0; i < data.length; i++) {
 							let obj = data[i];
-							if (obj.parentCategory) {
+							if(obj.name==='Home'){
+								var ul = document.createElement('ul');
+								ul.setAttribute("id", 'ul' + obj.id);
+								ul.setAttribute("class", "nested");
+								var li = document.createElement('li');
+								li.setAttribute("id", obj.id);
+								li.appendChild(document.createTextNode(obj.name + '-->' + obj.amount.format(2,3,',','.')));
+								ul.appendChild(li);
+								$("#tree").append(ul);
+							}
+							if (obj.parentCategory ) {
 								var existingUL = document.getElementById('ul' + obj.parentCategory.id);
 								//alert("existing " + existingUL);
 								if (existingUL) {
@@ -46,7 +56,7 @@
 									ul.setAttribute("class", "nested");
 									var li = document.createElement('li');
 									li.setAttribute("id", obj.id);
-									li.appendChild(document.createTextNode(obj.name + '-->' + obj.amount));
+									li.appendChild(document.createTextNode(obj.name + '-->' + obj.amount.format(2,3,',','.')));
 									ul.appendChild(li);
 									liParent.appendChild(ul);
 								} else {
@@ -55,7 +65,7 @@
 									ul.setAttribute("class", "nested");
 									var li = document.createElement('li');
 									li.setAttribute("id", obj.id);
-									li.appendChild(document.createTextNode(obj.name + '-->' + obj.amount));
+									li.appendChild(document.createTextNode(obj.name + '-->' + obj.amount.format(2,3,',','.')));
 									ul.appendChild(li);
 									$("#tree").append(ul);
 								}
@@ -64,12 +74,23 @@
 					});
 
 				});
+				/**
+				 * Number.prototype.format(n, x, s, c)
+				 * 
+				 * @param integer n: length of decimal
+				 * @param integer x: length of whole part
+				 * @param mixed   s: sections delimiter
+				 * @param mixed   c: decimal delimiter
+				 */
+				Number.prototype.format = function (n, x, s, c) {
+					var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+						num = this.toFixed(Math.max(0, ~~n));
 
-
-
+					return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+				};
 			</script>
 		</div>
-		<div id="tree"/>
+		<div id="tree" />
 	</div>
 </body>
 

@@ -1,16 +1,16 @@
 package com.nklmthr.finance.personal.dao;
 
-import java.util.Comparator;
+import java.math.BigDecimal;
 
 public class CategorySpends extends Category implements Comparable<CategorySpends> {
 
-	private Double amount = new Double(0.00);
+	private BigDecimal amount = new BigDecimal(0.00);
 
-	public Double getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Double amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 

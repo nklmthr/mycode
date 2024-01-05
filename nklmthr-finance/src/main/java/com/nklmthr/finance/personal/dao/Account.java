@@ -1,5 +1,7 @@
 package com.nklmthr.finance.personal.dao;
 
+import java.math.BigDecimal;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +33,7 @@ public class Account {
 	private AccountType accountType;
 	
 	@Column
-	private Double transactionBalance;
+	private BigDecimal transactionBalance;
 
 	public String getId() {
 		return id;
@@ -65,11 +67,11 @@ public class Account {
 		this.accountType = accountType;
 	}
 
-	public Double getTransactionBalance() {
+	public BigDecimal getTransactionBalance() {
 		return transactionBalance;
 	}
 
-	public void setTransactionBalance(Double transactionBalance) {
+	public void setTransactionBalance(BigDecimal transactionBalance) {
 		this.transactionBalance = transactionBalance;
 	}
 

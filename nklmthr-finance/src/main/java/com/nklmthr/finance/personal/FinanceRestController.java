@@ -27,9 +27,17 @@ public class FinanceRestController {
 
 	@Autowired
 	CategoryRepository categoryRepository;
+	
+	@GetMapping("/categorys")
+	public List<Category> getCategories(){
+		List<Category> categorys = new ArrayList<Category>(); 
+		categorys =	categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "level"));
+		return categorys;
+		
+	}
 
 	@GetMapping("/categorySpends")
-	public Collection<CategorySpends> getCategorySpends() {
+	public List<CategorySpends> getCategorySpends() {
 		List<Category> categorys = categoryRepository.findAll(Sort.by(Sort.Direction.DESC, "level"));
 		System.out.println("categories " + categorys.size());
 		List<CategorySpends> results = new ArrayList<CategorySpends>();
@@ -41,7 +49,7 @@ public class FinanceRestController {
 			catSpend.setParentCategory(cat.getParentCategory());
 			List<Transaction> catTransactions = transactionRepository.findAllByCategory(cat);
 			for (Transaction t : catTransactions) {
-				catSpend.setAmount(catSpend.getAmount() + t.getAmount());
+				catSpend.setAmount(catSpend.getAmount().add(t.getAmount()));
 			}
 			results.add(catSpend);
 		}
@@ -53,7 +61,7 @@ public class FinanceRestController {
 				if (c.getLevel() == highestLevel) {
 					CategorySpends currentCS = getCategorySpendsForCategory(results, c);
 					CategorySpends parentCS = getCategorySpendsForCategory(results, c.getParentCategory());
-					parentCS.setAmount(parentCS.getAmount() + currentCS.getAmount());
+					parentCS.setAmount(parentCS.getAmount().add(currentCS.getAmount()));
 					System.out.println(c.getLevel() + ", " + c.getName() + ", " + highestLevel);
 					System.out.println(currentCS);
 					System.out.println(parentCS);
