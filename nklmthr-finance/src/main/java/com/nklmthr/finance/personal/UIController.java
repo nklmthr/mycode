@@ -1,9 +1,12 @@
 package com.nklmthr.finance.personal;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
@@ -267,21 +270,23 @@ public class UIController {
 	public String getTransactions(Model m) {
 		List<Transaction> transactionList = transactionRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
 		m.addAttribute("transactionList", transactionList);
-		logger.info("getTransactions size:" + transactionList.size());
+		logger.info("getTransactions size:" + transactionList);
 		return "transactions/Transactions";
 	}
 
 	@GetMapping("/addnewTransaction")
 	public String addNewTransaction(Model m) {
-		List<Transaction> transactionList = transactionRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "date"));
-		m.addAttribute("transactionList", transactionList);
+		Page<Transaction> transactionList = transactionRepository
+				.findAll(PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "date")));
+		m.addAttribute("transactionList", transactionList.getContent());
 		List<Category> categoryList = categoryRepository
 				.findAll(Sort.by(Direction.ASC, "level").and(Sort.by(Sort.Direction.ASC, "parentCategory")));
-		m.addAttribute("CategoryList", categoryList);
+		m.addAttribute("categoryList", categoryList);
 
 		List<Account> accountList = accountRepository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "name"));
 		m.addAttribute("accountList", accountList);
 		Transaction transaction = new Transaction();
+		transaction.setDate(new Date());
 		m.addAttribute("transaction", transaction);
 		logger.info("addNewTransaction ");
 		return "transactions/addnewTransaction";
@@ -314,7 +319,7 @@ public class UIController {
 	@GetMapping("/deleteTransaction/{id}")
 	public String deleteTransaction(@PathVariable(value = "id") String id, Model model) {
 		transactionRepository.deleteById(id);
-		logger.info("deleteTransaction "+id);
+		logger.info("deleteTransaction " + id);
 		return "redirect:/Transactions";
 	}
 }

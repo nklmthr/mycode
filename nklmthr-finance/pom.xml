@@ -116,7 +116,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>MyFinanceApp</finalName>
+		<finalName>MyFinanceApp${version}</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>
