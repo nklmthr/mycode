@@ -183,7 +183,7 @@ public class AccountRestService {
 		Optional<Account> optional = accountRepository.findById(transaction.getId());
 		if (optional.isPresent()) {
 			Account account = optional.get();
-			account.setTransactionBalance(account.getTransactionBalance() + transaction.getAmount());
+			account.setTransactionBalance(account.getTransactionBalance().add(transaction.getAmount()));
 		}
 		logger.info(transaction);
 		return new ResponseEntity<Transaction>(transaction, HttpStatus.OK);

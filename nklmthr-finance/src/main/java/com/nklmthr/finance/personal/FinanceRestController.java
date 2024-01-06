@@ -1,12 +1,10 @@
 package com.nklmthr.finance.personal;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,24 +20,27 @@ import com.nklmthr.finance.personal.dao.TransactionRepository;
 @RestController
 @RequestMapping("/api")
 public class FinanceRestController {
+	Logger logger = Logger.getLogger(getClass());
+
 	@Autowired
 	TransactionRepository transactionRepository;
 
 	@Autowired
 	CategoryRepository categoryRepository;
-	
+
 	@GetMapping("/categorys")
-	public List<Category> getCategories(){
-		List<Category> categorys = new ArrayList<Category>(); 
-		categorys =	categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "level"));
+	public List<Category> getCategories() {
+		List<Category> categorys = new ArrayList<Category>();
+		categorys = categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "level"));
+		logger.info("getCategories size:" + categorys.size());
 		return categorys;
-		
+
 	}
 
 	@GetMapping("/categorySpends")
 	public List<CategorySpends> getCategorySpends() {
 		List<Category> categorys = categoryRepository.findAll(Sort.by(Sort.Direction.DESC, "level"));
-		System.out.println("categories " + categorys.size());
+		logger.info("categories " + categorys.size());
 		List<CategorySpends> results = new ArrayList<CategorySpends>();
 		for (Category cat : categorys) {
 			CategorySpends catSpend = new CategorySpends();
@@ -53,23 +54,22 @@ public class FinanceRestController {
 			}
 			results.add(catSpend);
 		}
-
+		logger.debug("results " + results);
+		logger.info("CategorySpends size:" + results.size());
 		int highestLevel = findHighestCategoryLevel(categorys);
-		System.out.println(highestLevel);
+		logger.info("highestLevel:" + highestLevel);
 		while (highestLevel >= 0) {
 			for (Category c : categorys) {
 				if (c.getLevel() == highestLevel) {
 					CategorySpends currentCS = getCategorySpendsForCategory(results, c);
 					CategorySpends parentCS = getCategorySpendsForCategory(results, c.getParentCategory());
 					parentCS.setAmount(parentCS.getAmount().add(currentCS.getAmount()));
-					System.out.println(c.getLevel() + ", " + c.getName() + ", " + highestLevel);
-					System.out.println(currentCS);
-					System.out.println(parentCS);
 				}
 			}
 			highestLevel--;
 		}
 		Collections.sort(results);
+		logger.info("result getCategorySpends size:" + results.size());
 		return results;
 	}
 
@@ -85,13 +85,14 @@ public class FinanceRestController {
 
 	private CategorySpends getCategorySpendsForCategory(List<CategorySpends> results, Category temp) {
 		for (CategorySpends cs : results) {
-			if(temp==null) {
-				if(cs.getName().equals("Home")) {
+			if (temp == null) {
+				if (cs.getName().equals("Home")) {
 					return cs;
 				}
-			}						
-			else if (cs.getName().equals(temp.getName())) {
+			} else if (cs.getName().equals(temp.getName())) {
 				return cs;
 			}
-		}return null;
-}}
+		}
+		return null;
+	}
+}

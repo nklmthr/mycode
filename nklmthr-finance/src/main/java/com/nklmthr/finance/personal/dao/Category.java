@@ -70,8 +70,7 @@ public class Category implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "Category [name=" + name + ", level=" + level + ", parentCategory=" + parentCategory
-				+ "]";
+		return "Category [name=" + name + ", level=" + level + ", parentCategory=" + parentCategory.getName() + "]";
 	}
 
 }

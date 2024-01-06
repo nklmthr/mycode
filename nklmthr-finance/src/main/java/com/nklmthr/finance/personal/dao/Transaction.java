@@ -1,6 +1,5 @@
 package com.nklmthr.finance.personal.dao;
 
-
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -29,15 +28,15 @@ public class Transaction {
 
 	@Column
 	private String description;
-	
+
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "account", referencedColumnName = "id")
 	private Account account;
-	
+
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "category", referencedColumnName = "id")
 	private Category category;
-	
+
 	@Column
 	private BigDecimal amount;
 
@@ -91,8 +90,7 @@ public class Transaction {
 
 	@Override
 	public String toString() {
-		return "Transaction [id=" + id + ", date=" + date + ", description=" + description + ", account=" + account
-				+ ", category=" + category + ", amount=" + amount + "]";
+		return "Transaction [id=" + id + ", account=" + account + ", category=" + category + "]";
 	}
-	
+
 }
