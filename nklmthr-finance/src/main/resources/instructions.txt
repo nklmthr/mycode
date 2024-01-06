@@ -2,3 +2,9 @@ mvn clean package spring-boot:repackage
 
 cd /home/ec2-user/app/
 java -jar -Dserver.port=9000 MyFinanceApp-1.0.0.jar
+
+sudo ln -s /home/ec2-user/app/MyFinanceApp1.0.0.jar /etc/init.d//MyFinanceApp1.0.0.jar
+sudo systemctl status javaservice.service
+sudo ps -ef | grep java
+sudo systemctl daemon-reload
+sudo systemctl start  javaservice.service

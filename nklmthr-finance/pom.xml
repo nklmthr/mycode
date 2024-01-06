@@ -148,8 +148,8 @@
 					<executions>
 						<execution>
 							<configuration>
-								<mainClass>
-									com.nklmthr.finance.personal.Application</mainClass>
+								<mainClass>com.nklmthr.finance.personal.Application</mainClass>
+								<executable>true</executable>
 							</configuration>
 						</execution>
 					</executions>
