@@ -1,8 +1,13 @@
 package com.nklmthr.finance.personal;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +25,7 @@ import com.nklmthr.finance.personal.dao.TransactionRepository;
 @RestController
 @RequestMapping("/api")
 public class FinanceRestController {
+
 	Logger logger = Logger.getLogger(getClass());
 
 	@Autowired
@@ -35,6 +41,16 @@ public class FinanceRestController {
 		logger.info("getCategories size:" + categorys.size());
 		return categorys;
 
+	}
+
+	@GetMapping("/months")
+	public static Map<Integer, String> getMonths() {
+		Map<Integer, String> months = new LinkedHashMap<Integer, String>();
+		YearMonth current = YearMonth.now();
+		for (int i = -5; i < 1; i++) {
+			months.put(i, current.plusMonths(i).getMonth().name());
+		}
+		return months;
 	}
 
 	@GetMapping("/categorySpends")
@@ -63,7 +79,9 @@ public class FinanceRestController {
 				if (c.getLevel() == highestLevel) {
 					CategorySpends currentCS = getCategorySpendsForCategory(results, c);
 					CategorySpends parentCS = getCategorySpendsForCategory(results, c.getParentCategory());
-					parentCS.setAmount(parentCS.getAmount().add(currentCS.getAmount()));
+					if (parentCS != null) {
+						parentCS.setAmount(parentCS.getAmount().add(currentCS.getAmount()));
+					}
 				}
 			}
 			highestLevel--;
@@ -85,11 +103,7 @@ public class FinanceRestController {
 
 	private CategorySpends getCategorySpendsForCategory(List<CategorySpends> results, Category temp) {
 		for (CategorySpends cs : results) {
-			if (temp == null) {
-				if (cs.getName().equals("Home")) {
-					return cs;
-				}
-			} else if (cs.getName().equals(temp.getName())) {
+			if (temp!=null && cs.getName().equals(temp.getName())) {
 				return cs;
 			}
 		}

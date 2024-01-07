@@ -23,30 +23,36 @@
 
 			</div>
 		</div>
+		<!--<div id="month"><select name="Select Month" id="selectedMonth"></select></div>-->
 		<div id="script">
+
 			<script>
+				var months;
 				var data;
+
 				$(document).ready(function () {
-					$.getJSON("/api/categorySpends", function (result) {
+					$.getJSON("/api/months"), function (result) {
+						alert(result);
 						$.each(result, function (key, value) {
-							//alert(value.name);	
-							$("#table").append("<tr><td>" + value.name + "</td><td align = 'right'>" + value.amount + "</td></tr>");
+							$("#month").append("<option value=" + key + ">" + value + "</option>");
 						});
+					};
+					$.getJSON("/api/categorySpends", function (result) {						
 						data = result;
 						//alert(JSON.stringify(data));
 						for (let i = 0; i < data.length; i++) {
 							let obj = data[i];
-							if(obj.name==='Home'){
+							if (obj.name === 'Home') {
 								var ul = document.createElement('ul');
 								ul.setAttribute("id", 'ul' + obj.id);
 								ul.setAttribute("class", "nested");
 								var li = document.createElement('li');
 								li.setAttribute("id", obj.id);
-								li.appendChild(document.createTextNode(obj.name + '-->' + obj.amount.format(2,3,',','.')));
+								li.appendChild(document.createTextNode(obj.name + '-->' + obj.amount.format(2, 3, ',', '.')));
 								ul.appendChild(li);
 								$("#tree").append(ul);
 							}
-							if (obj.parentCategory ) {
+							if (obj.parentCategory) {
 								var existingUL = document.getElementById('ul' + obj.parentCategory.id);
 								//alert("existing " + existingUL);
 								if (existingUL) {
@@ -56,7 +62,7 @@
 									ul.setAttribute("class", "nested");
 									var li = document.createElement('li');
 									li.setAttribute("id", obj.id);
-									li.appendChild(document.createTextNode(obj.name + '-->' + obj.amount.format(2,3,',','.')));
+									li.appendChild(document.createTextNode(obj.name + '-->' + obj.amount.format(2, 3, ',', '.')));
 									ul.appendChild(li);
 									liParent.appendChild(ul);
 								} else {
@@ -65,7 +71,7 @@
 									ul.setAttribute("class", "nested");
 									var li = document.createElement('li');
 									li.setAttribute("id", obj.id);
-									li.appendChild(document.createTextNode(obj.name + '-->' + obj.amount.format(2,3,',','.')));
+									li.appendChild(document.createTextNode(obj.name + '-->' + obj.amount.format(2, 3, ',', '.')));
 									ul.appendChild(li);
 									$("#tree").append(ul);
 								}
