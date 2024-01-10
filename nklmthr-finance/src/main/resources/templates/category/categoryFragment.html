@@ -1,0 +1,9 @@
+<section th:fragment="categoryFragment">
+	<ul>
+		<li th:each="category : ${headerCategories}">
+			<a th:href="'/showFormForCategoryUpdate/'+${category.id}"><span th:text="${category.name}"</span></span></a>
+			<section th:include="@{/category/categoryFragment}:: categoryFragment"
+				th:with="headerCategories=${category.childCategorys}"></section>
+		</li>
+	</ul>
+</section>

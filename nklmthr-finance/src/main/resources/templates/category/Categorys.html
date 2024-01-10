@@ -9,7 +9,7 @@
 <body>
 	<div>
 		<div class="topnav">
-			<a href="home">Home</a>
+			<a href="/home">Home</a>
 			<a href="/Transactions">Transactions</a>
 			<a class="active" href="/Categorys">Categories</a>
 			<a href="/Accounts">Accounts</a>
@@ -21,53 +21,9 @@
 	<h3>Category List</h3>
 	<button type="button" th:onclick="|window.location.href='/addnewCategory'|">Add Category</button>
 	<br /><br />
-	<div id="tree" />
-	<div id="script">
-		<script>
-			var data;
-			$(document).ready(function () {
-				$.getJSON("/api/categorys", function (result) {
-					data = result;
-					alert(JSON.stringify(data));
-					for (let i = 0; i < data.length; i++) {
-						let obj = data[i];
-						if (obj.parentCategory) {
-							var existingUL = document.getElementById('ul' + obj.parentCategory.id);
-							//alert("existing " + existingUL);
-							if (existingUL) {
-								var liParent = document.getElementById(obj.parentCategory.id);
-								var ul = document.createElement('ul');
-								ul.setAttribute("id", 'ul' + obj.id);
-								ul.setAttribute("class", "nested");
-								var li = document.createElement('li');
-								li.setAttribute("id", obj.id);
-								var anchor = document.createElement("a");
-								anchor.setAttribute("href", "/showFormForCategoryUpdate/" + obj.id);
-								anchor.appendChild(document.createTextNode(obj.name));
-								//li.appendChild(document.createTextNode(obj.name+" "+"<a href=/showFormForCategoryUpdate/"+obj.id));
-								li.appendChild(anchor);
-								//li.appendChild(document.createTextNode(obj.name));
-								ul.appendChild(li);
-								liParent.appendChild(ul);
-							} else {
-								var ul = document.createElement('ul');
-								ul.setAttribute("id", 'ul' + obj.id);
-								ul.setAttribute("class", "nested");
-								var li = document.createElement('li');
-								li.setAttribute("id", obj.id);
-								var anchor = document.createElement("a");
-								anchor.setAttribute("href", "/showFormForCategoryUpdate/" + obj.id);
-								anchor.appendChild(document.createTextNode(obj.name));
-								//li.appendChild(document.createTextNode(obj.name+" "+"<a href=/showFormForCategoryUpdate/"+obj.id));
-								li.appendChild(anchor);
-								ul.appendChild(li);
-								$("#tree").append(ul);
-							}
-						}
-					}
-				});
-			});
-		</script>
+	<div id="categoriesDiv">
+		<section th:include="@{/category/categoryFragment} :: categoryFragment" th:with="headerCategories=${categoryList}">
+		</section>
 	</div>
 </body>
 

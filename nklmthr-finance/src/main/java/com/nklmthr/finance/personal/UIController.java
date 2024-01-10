@@ -55,9 +55,10 @@ public class UIController {
 	@Autowired
 	private TransactionRepository transactionRepository;
 
-	/*
-	 * @GetMapping("/") public String index(Model m) { return "index"; }
-	 */
+	@GetMapping("/")
+	public String index(Model m) {
+		return "index";
+	}
 
 	/*
 	 * @GetMapping("/home") public String getHome(Model m) {
@@ -224,7 +225,8 @@ public class UIController {
 	public String getCategorys(Model m) {
 		List<Category> categoryList = categoryRepository
 				.findAll(Sort.by(Direction.ASC, "level").and(Sort.by(Sort.Direction.ASC, "parentCategory")));
-		m.addAttribute("categoryList", categoryList);
+		Collections.sort(categoryList);
+		m.addAttribute("categoryList", categoryList.get(0));
 		logger.info("getCategorys size:" + categoryList.size());
 		return "category/Categorys";
 	}
@@ -399,7 +401,7 @@ public class UIController {
 			CategorySpends catSpend = new CategorySpends();
 			catSpend.setId(cat.getId());
 			catSpend.setName(cat.getName());
-			catSpend.setLevel(cat.getLevel());					
+			catSpend.setLevel(cat.getLevel());
 			List<Transaction> catTransactions = transactionRepository.findAllTransactionsInCategoryByMonth(year, month,
 					cat.getId());
 			for (Transaction t : catTransactions) {
@@ -409,20 +411,20 @@ public class UIController {
 			map.put(catSpend.getId(), catSpend);
 		}
 
-		for(Category cat:categorys) {
+		for (Category cat : categorys) {
 			CategorySpends catSpend = map.get(cat.getId());
-			logger.info("Processing category spends:"+catSpend);
-			for(Category child: cat.getChildCategorys()) {				
+			logger.info("Processing category spends:" + catSpend);
+			for (Category child : cat.getChildCategorys()) {
 				CategorySpends childCategorySpend = map.get(child.getId());
-				logger.info("Adding child category Spend:"+childCategorySpend);
-				catSpend.getChildCategorySpends().add(childCategorySpend);				
+				logger.info("Adding child category Spend:" + childCategorySpend);
+				catSpend.getChildCategorySpends().add(childCategorySpend);
 			}
-			if(cat.getParentCategory()!=null) {
+			if (cat.getParentCategory() != null) {
 				catSpend.setParentCategorySpends(map.get(cat.getParentCategory().getId()));
 			}
-			
+
 		}
-		
+
 		logger.debug("results " + results);
 		logger.info("CategorySpends size:" + results.size());
 		int highestLevel = findHighestCategoryLevel(categorys);
