@@ -221,6 +221,10 @@ public class UIController {
 	 * Categories
 	 */
 
+	@GetMapping("/category/categoryFragment")
+	public String getCategoryFragment(Model m) {
+		return "category/categoryFragment";
+	}
 	@GetMapping("/Categorys")
 	public String getCategorys(Model m) {
 		List<Category> categoryList = categoryRepository

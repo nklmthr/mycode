@@ -22,7 +22,7 @@
 	<button type="button" th:onclick="|window.location.href='/addnewCategory'|">Add Category</button>
 	<br /><br />
 	<div id="categoriesDiv">
-		<section th:include="@{/category/categoryFragment} :: categoryFragment" th:with="headerCategories=${categoryList}">
+		<section th:include="@{category/categoryFragment} :: categoryFragment" th:with="headerCategories=${categoryList}">
 		</section>
 	</div>
 </body>
