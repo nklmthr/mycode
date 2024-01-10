@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -225,6 +226,7 @@ public class UIController {
 	public String getCategoryFragment(Model m) {
 		return "category/categoryFragment";
 	}
+
 	@GetMapping("/Categorys")
 	public String getCategorys(Model m) {
 		List<Category> categoryList = categoryRepository
@@ -286,32 +288,57 @@ public class UIController {
 	public String getTransactions(Model m) {
 		return getTransactionsByMonth(m, null, null);
 	}
-
+	
 	@GetMapping("/Transactions/{year}/{month}")
-	public String getTransactionsByMonth(Model m, @PathVariable(value = "year") Integer year,
-			@PathVariable(value = "month") Integer month) {
-		YearMonth yearMonth = YearMonth.now();
+	public String getTransactionsByMonth(Model m, @PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month) {
 		Integer nextMonthYear = year, nextMonth = month, previousMonthYear = year, previousMonth = month;
-		if (year == null || year == 0) {
-			year = yearMonth.getYear();
+		if(year==null || year==0) {
+			year = YearMonth.now().getYear();
 		}
-		if (month == null || month == 0) {
-			month = yearMonth.getMonth().getValue();
+		if(month==null || month==0) {
+			month = YearMonth.now().getMonthValue();
 		}
 		previousMonthYear = YearMonth.of(year, month).minusMonths(1).getYear();
 		nextMonthYear = YearMonth.of(year, month).plusMonths(1).getYear();
 		previousMonth = YearMonth.of(year, month).minusMonths(1).getMonth().getValue();
 		nextMonth = YearMonth.of(year, month).plusMonths(1).getMonth().getValue();
-		logger.info("year-month" + year + "-" + month);
-		// List<Transaction> transactionList =
-		// transactionRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
-		List<Transaction> transactionList = transactionRepository.findAllTransactionsByMonth(year, month);
+		List<Transaction> transactionList = transactionRepository.findAllTransactionsByMonth(year, month);		
 		m.addAttribute("previousMonth", previousMonth);
 		m.addAttribute("previousMonthYear", previousMonthYear);
 		m.addAttribute("nextMonth", nextMonth);
 		m.addAttribute("nextMonthYear", nextMonthYear);
 		m.addAttribute("transactionList", transactionList);
-		logger.info("getTransactions size:" + transactionList);
+		return "transactions/Transactions";
+	}
+
+
+	@GetMapping("/Transactions/{categoryId}/{year}/{month}")
+	public String getTransactionsByCategoryInMonth(Model m, @PathVariable(value = "categoryId") String categoryId,
+			@PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month) {
+		Integer nextMonthYear = year, nextMonth = month, previousMonthYear = year, previousMonth = month;
+		previousMonthYear = YearMonth.of(year, month).minusMonths(1).getYear();
+		nextMonthYear = YearMonth.of(year, month).plusMonths(1).getYear();
+		previousMonth = YearMonth.of(year, month).minusMonths(1).getMonth().getValue();
+		nextMonth = YearMonth.of(year, month).plusMonths(1).getMonth().getValue();
+		List<Transaction> transactionList = new ArrayList<>();
+		Category category = categoryRepository.findById(categoryId).get();
+		transactionList.addAll(transactionRepository.findAllTransactionsInCategoryByMonth(year, month, categoryId));
+		List<Category> categories = new ArrayList<Category>();
+		for (Category cat : category.getChildCategorys()) {
+			categories.add(cat);
+			while (cat.getChildCategorys().size() > 0) {
+				categories.addAll(cat.getChildCategorys());
+			}
+		}
+		logger.info("Total Child Categories" + categories.size());
+		logger.info("Child Categories" + categories.stream().map(s -> s.getId()).collect(Collectors.joining("','")));
+		transactionList.addAll(transactionRepository.findAllTransactionsInCategoriesByMonth(year, month,
+				categories.stream().map(s -> s.getId()).collect(Collectors.toList())));
+		m.addAttribute("previousMonth", previousMonth);
+		m.addAttribute("previousMonthYear", previousMonthYear);
+		m.addAttribute("nextMonth", nextMonth);
+		m.addAttribute("nextMonthYear", nextMonthYear);
+		m.addAttribute("transactionList", transactionList);
 		return "transactions/Transactions";
 	}
 
@@ -396,7 +423,8 @@ public class UIController {
 		m.addAttribute("previousMonthYear", previousMonthYear);
 		m.addAttribute("nextMonth", nextMonth);
 		m.addAttribute("nextMonthYear", nextMonthYear);
-
+		m.addAttribute("currentYear", year);
+		m.addAttribute("currentMonth", month);
 		Map<String, CategorySpends> map = new HashMap<>();
 		List<Category> categorys = categoryRepository.findAll(Sort.by(Sort.Direction.DESC, "level"));
 		logger.info("categories " + categorys.size());

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -21,5 +22,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
 
 	@Query("select t from Transaction t where year(t.date) = ?1 and month(t.date) = ?2 and t.category.id = ?3 order by t.date desc")
 	List<Transaction> findAllTransactionsInCategoryByMonth(Integer year, Integer month, String categoryId);
+
+	@Query("select t from Transaction t where year(t.date) =?1  and month(t.date) = ?2 and t.category.id IN ?3 order by t.date desc")
+	List<Transaction> findAllTransactionsInCategoriesByMonth(Integer year, Integer month, List<String> categorys);
 
 }
