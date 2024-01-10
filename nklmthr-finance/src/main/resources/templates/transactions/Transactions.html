@@ -19,7 +19,29 @@
 
 
 
+	<div id="monthNav">
+		<table>
+			<tr>
+				<td>
+					<form th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}" method="GET">
+						<button type="submit">Previous Month</button>
+					</form>
+				</td>
+				<td>
+					<form th:action="@{/Transactions}" method="GET">
+						<button type="submit">Current Month</button>
+					</form>
+				</td>
+				<td>
+					<form th:action="'/Transactions/'+${nextMonthYear}+'/'+${nextMonth}" method="GET">
+						<button type="submit">Next Month</button>
+					</form>
+				</td>
+			</tr>
+		</table>
 
+
+	</div>
 	<div class="container my-2" align="left">
 
 		<h3>Transaction List</h3>
@@ -42,8 +64,9 @@
 					<td th:text="${transaction.description}"></td>
 					<td th:text="${transaction.account.name}"></td>
 					<td th:text="${transaction.category.name}"></td>
-					<td align = "right" th:text="${#numbers.formatDecimal(transaction.amount,1,'COMMA', 2, 'POINT')}"></td>
-					<td align = "right"> <a th:href="@{/showFormForTransactionUpdate/{id}(id=${transaction.id})}"
+					<td align="right" th:text="${#numbers.formatDecimal(transaction.amount,1,'COMMA', 2, 'POINT')}">
+					</td>
+					<td align="right"> <a th:href="@{/showFormForTransactionUpdate/{id}(id=${transaction.id})}"
 							class="btn btn-primary">Update</a>
 						<a th:href="@{/deleteTransaction/{id}(id=${transaction.id})}" class="btn btn-danger">Delete</a>
 					</td>

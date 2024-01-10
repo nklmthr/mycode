@@ -1,0 +1,9 @@
+<section th:fragment="fragment">
+	<ul>
+		<li th:each="categorySpend : ${maincategories}">
+			<span th:text="${categorySpend.name}+' - '+${categorySpend.amount}"></span>
+			<section th:include="@{CategorySpendsFragment}:: fragment"
+				th:with="maincategories=${categorySpend.childCategorySpends}"></section>
+		</li>
+	</ul>
+</section>

@@ -1,5 +1,7 @@
 package com.nklmthr.finance.personal.dao;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -24,9 +27,12 @@ public class Category implements Cloneable {
 	@Column
 	private int level;
 
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "category", referencedColumnName = "id")
 	private Category parentCategory;
+
+	@OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
+	private Set<Category> childCategorys;
 
 	public String getId() {
 		return id;
@@ -60,6 +66,14 @@ public class Category implements Cloneable {
 		this.level = level;
 	}
 
+	public Set<Category> getChildCategorys() {
+		return childCategorys;
+	}
+
+	public void setChildCategorys(Set<Category> childCategorys) {
+		this.childCategorys = childCategorys;
+	}
+
 	public Object clone() {
 		try {
 			return super.clone();
@@ -70,7 +84,7 @@ public class Category implements Cloneable {
 
 	@Override
 	public String toString() {
-		//this.parentCategory !=null ? this.parentCategory.getName():"" + 
+		// this.parentCategory !=null ? this.parentCategory.getName():"" +
 		return "Category [name=" + name + ", level=" + level + ", parentCategory=" + "]";
 	}
 

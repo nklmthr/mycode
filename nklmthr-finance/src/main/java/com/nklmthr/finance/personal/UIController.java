@@ -1,7 +1,12 @@
 package com.nklmthr.finance.personal;
 
+import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +28,7 @@ import com.nklmthr.finance.personal.dao.AccountType;
 import com.nklmthr.finance.personal.dao.AccountTypeRepository;
 import com.nklmthr.finance.personal.dao.Category;
 import com.nklmthr.finance.personal.dao.CategoryRepository;
+import com.nklmthr.finance.personal.dao.CategorySpends;
 import com.nklmthr.finance.personal.dao.Institution;
 import com.nklmthr.finance.personal.dao.InstitutionRepository;
 import com.nklmthr.finance.personal.dao.Transaction;
@@ -49,10 +55,15 @@ public class UIController {
 	@Autowired
 	private TransactionRepository transactionRepository;
 
-	@GetMapping("/home")
-	public String getHome(Model m) {
-		return "index";
-	}
+	/*
+	 * @GetMapping("/") public String index(Model m) { return "index"; }
+	 */
+
+	/*
+	 * @GetMapping("/home") public String getHome(Model m) {
+	 * 
+	 * return "index"; }
+	 */
 
 	/**
 	 * Institutions
@@ -265,10 +276,34 @@ public class UIController {
 	 * 
 	 * Transactions
 	 */
-
 	@GetMapping("/Transactions")
 	public String getTransactions(Model m) {
-		List<Transaction> transactionList = transactionRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
+		return getTransactionsByMonth(m, null, null);
+	}
+
+	@GetMapping("/Transactions/{year}/{month}")
+	public String getTransactionsByMonth(Model m, @PathVariable(value = "year") Integer year,
+			@PathVariable(value = "month") Integer month) {
+		YearMonth yearMonth = YearMonth.now();
+		Integer nextMonthYear = year, nextMonth = month, previousMonthYear = year, previousMonth = month;
+		if (year == null || year == 0) {
+			year = yearMonth.getYear();
+		}
+		if (month == null || month == 0) {
+			month = yearMonth.getMonth().getValue();
+		}
+		previousMonthYear = YearMonth.of(year, month).minusMonths(1).getYear();
+		nextMonthYear = YearMonth.of(year, month).plusMonths(1).getYear();
+		previousMonth = YearMonth.of(year, month).minusMonths(1).getMonth().getValue();
+		nextMonth = YearMonth.of(year, month).plusMonths(1).getMonth().getValue();
+		logger.info("year-month" + year + "-" + month);
+		// List<Transaction> transactionList =
+		// transactionRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
+		List<Transaction> transactionList = transactionRepository.findAllTransactionsByMonth(year, month);
+		m.addAttribute("previousMonth", previousMonth);
+		m.addAttribute("previousMonthYear", previousMonthYear);
+		m.addAttribute("nextMonth", nextMonth);
+		m.addAttribute("nextMonthYear", nextMonthYear);
 		m.addAttribute("transactionList", transactionList);
 		logger.info("getTransactions size:" + transactionList);
 		return "transactions/Transactions";
@@ -321,5 +356,111 @@ public class UIController {
 		transactionRepository.deleteById(id);
 		logger.info("deleteTransaction " + id);
 		return "redirect:/Transactions";
+	}
+
+	@GetMapping("/CategorySpendsFragment")
+	public String getCategorySpends(Model m) {
+		return "CategorySpendsFragment";
+	}
+
+	@GetMapping("/home")
+	public String categoryFragment(Model m) {
+		return getCategorySpendsByMonth(m, null, null);
+	}
+
+	@GetMapping("/home/{year}/{month}")
+	public String getCategorySpendsByMonth(Model m, @PathVariable(value = "year") Integer year,
+			@PathVariable(value = "month") Integer month) {
+		YearMonth yearMonth = YearMonth.now();
+		Integer nextMonthYear = year, nextMonth = month, previousMonthYear = year, previousMonth = month;
+		if (year == null || year == 0) {
+			year = yearMonth.getYear();
+		}
+		if (month == null || month == 0) {
+			month = yearMonth.getMonth().getValue();
+		}
+		previousMonthYear = YearMonth.of(year, month).minusMonths(1).getYear();
+		nextMonthYear = YearMonth.of(year, month).plusMonths(1).getYear();
+		previousMonth = YearMonth.of(year, month).minusMonths(1).getMonth().getValue();
+		nextMonth = YearMonth.of(year, month).plusMonths(1).getMonth().getValue();
+		logger.info("year-month" + year + "-" + month);
+		// List<Transaction> transactionList =
+		// transactionRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
+		m.addAttribute("previousMonth", previousMonth);
+		m.addAttribute("previousMonthYear", previousMonthYear);
+		m.addAttribute("nextMonth", nextMonth);
+		m.addAttribute("nextMonthYear", nextMonthYear);
+
+		Map<String, CategorySpends> map = new HashMap<>();
+		List<Category> categorys = categoryRepository.findAll(Sort.by(Sort.Direction.DESC, "level"));
+		logger.info("categories " + categorys.size());
+		List<CategorySpends> results = new ArrayList<CategorySpends>();
+		for (Category cat : categorys) {
+			CategorySpends catSpend = new CategorySpends();
+			catSpend.setId(cat.getId());
+			catSpend.setName(cat.getName());
+			catSpend.setLevel(cat.getLevel());					
+			List<Transaction> catTransactions = transactionRepository.findAllTransactionsInCategoryByMonth(year, month,
+					cat.getId());
+			for (Transaction t : catTransactions) {
+				catSpend.setAmount(catSpend.getAmount().add(t.getAmount()));
+			}
+			results.add(catSpend);
+			map.put(catSpend.getId(), catSpend);
+		}
+
+		for(Category cat:categorys) {
+			CategorySpends catSpend = map.get(cat.getId());
+			logger.info("Processing category spends:"+catSpend);
+			for(Category child: cat.getChildCategorys()) {				
+				CategorySpends childCategorySpend = map.get(child.getId());
+				logger.info("Adding child category Spend:"+childCategorySpend);
+				catSpend.getChildCategorySpends().add(childCategorySpend);				
+			}
+			if(cat.getParentCategory()!=null) {
+				catSpend.setParentCategorySpends(map.get(cat.getParentCategory().getId()));
+			}
+			
+		}
+		
+		logger.debug("results " + results);
+		logger.info("CategorySpends size:" + results.size());
+		int highestLevel = findHighestCategoryLevel(categorys);
+		logger.info("highestLevel:" + highestLevel);
+		while (highestLevel >= 0) {
+			for (Category c : categorys) {
+				if (c.getLevel() == highestLevel) {
+					CategorySpends currentCS = getCategorySpendsForCategory(results, c);
+					CategorySpends parentCS = getCategorySpendsForCategory(results, c.getParentCategory());
+					if (parentCS != null) {
+						parentCS.setAmount(parentCS.getAmount().add(currentCS.getAmount()));
+					}
+				}
+			}
+			highestLevel--;
+		}
+		Collections.sort(results);
+		logger.info("result getCategorySpends size:" + results.size());
+		m.addAttribute("categorySpends", results.get(0));
+		return "index";
+	}
+
+	private int findHighestCategoryLevel(List<Category> categorys) {
+		int level = 0;
+		for (Category c : categorys) {
+			if (c.getLevel() > level) {
+				level = c.getLevel();
+			}
+		}
+		return level;
+	}
+
+	private CategorySpends getCategorySpendsForCategory(List<CategorySpends> results, Category temp) {
+		for (CategorySpends cs : results) {
+			if (temp != null && cs.getName().equals(temp.getName())) {
+				return cs;
+			}
+		}
+		return null;
 	}
 }

@@ -28,7 +28,7 @@
 			$(document).ready(function () {
 				$.getJSON("/api/categorys", function (result) {
 					data = result;
-					//alert(JSON.stringify(data));
+					alert(JSON.stringify(data));
 					for (let i = 0; i < data.length; i++) {
 						let obj = data[i];
 						if (obj.parentCategory) {
