@@ -12,16 +12,8 @@
 
 <body>
 	<div>
-		<div>
-			<div class="topnav">
-				<a class="active" href="/home">Home</a>
-				<a href="/Transactions">Transactions</a>
-				<a href="/Categorys">Categorys</a>
-				<a href="/Accounts">Accounts</a>
-				<a href="/Institutions">Institutions</a>
-				<a href="/AccountTypes">Account Types</a>
-
-			</div>
+		<div th:insert="headerFragment.html ::header('home')"></div>
+			
 		</div>
 		<div id="monthNav">
 			<table>

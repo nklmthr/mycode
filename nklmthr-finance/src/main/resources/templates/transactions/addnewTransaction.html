@@ -7,15 +7,7 @@
 
 <body>
 	<div>
-		<div class="topnav">
-			<a href="home">Home</a>
-			<a class="active" href="/Transactions">Transactions</a>
-			<a href="/Categorys">Categories</a>
-			<a href="/Accounts">Accounts</a>
-			<a href="/Institutions">Institutions</a>
-			<a href="/AccountTypes">Account Types</a>
-
-		</div>
+		<div th:insert="headerFragment.html ::header('Transactions')"></div>
 	</div>
 	<h2>Add Transactions</h2>
 	<form action="#" th:action="@{/saveTransaction}" th:object="${transaction}" method="POST">
@@ -35,6 +27,9 @@
 			<input type="number" inputmode="numeric" th:field="*{amount}" class="form-control mb-4 col-4">
 			<button type="submit" class="btn btn-info col-2">Add Transaction</button>
 		</form>
+		<hr>			
+		<a th:href="@{/Transactions}">Back to Transactions List</a>
+		<hr>
 	<h2>Existing Transaction</h2>
 	<div class="container my-2" align="left">
 

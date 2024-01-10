@@ -7,15 +7,7 @@
 
 <body>
 	<div>
-		<div class="topnav">
-			<a href="home">Home</a>
-			<a class="active" href="/Transactions">Transactions</a>
-			<a href="/Categorys">Categories</a>
-			<a href="/Accounts">Accounts</a>
-			<a href="/Institutions">Institutions</a>
-			<a href="/AccountTypes">Account Types</a>
-
-		</div>
+		<div th:insert="headerFragment.html ::header('Transactions')"></div>
 	</div>
 	<div class="container">
 		<h1>Transactions</h1>
@@ -29,20 +21,19 @@
 			<input type="date" th:field="*{date}" class="form-control mb-4 col-4">
 			<input type="text" th:field="*{description}" class="form-control mb-4 col-4">
 			<select th:field="*{category}">
-				<option th:each="category : ${CategoryList}" th:value="${category.id}"
-					th:text="${category.name}"></option>
+				<option th:each="category : ${CategoryList}" th:value="${category.id}" th:text="${category.name}">
+				</option>
 			</select>
 			<select th:field="*{account}">
-				<option th:each="account : ${accountList}" th:value="${account.id}"
-					th:text="${account.name}"></option>
+				<option th:each="account : ${accountList}" th:value="${account.id}" th:text="${account.name}"></option>
 			</select>
 			<input type="text" th:field="*{amount}" class="form-control mb-4 col-4">
 			<button type="submit" class="btn btn-info col-2">Update Transaction</button>
 		</form>
 
 		<hr>
-
-		<a th:href="@{/}">Back to Transactions List</a>
+		<a th:href="@{/Transactions}">Back to Transactions List</a>
+		<hr>
 	</div>
 </body>
 

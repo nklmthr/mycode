@@ -7,14 +7,7 @@
 
 <body>
 	<div>
-		<div class="topnav">
-			<a href="/home">Home</a>
-			<a class="active" href="/Transactions">Transactions</a>
-			<a href="/Categorys">Categories</a>
-			<a href="/Accounts">Accounts</a>
-			<a href="/Institutions">Institutions</a>
-			<a href="/AccountTypes">Account Types</a>
-		</div>
+		<div th:insert="headerFragment.html ::header('Transactions')"></div>
 	</div>
 
 
@@ -23,9 +16,19 @@
 		<table>
 			<tr>
 				<td>
-					<form th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}" method="GET">
-						<button type="submit">Previous Month</button>
-					</form>
+					<div th:if="${param.categoryId !=null}">
+						<form
+							th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}+'?categoryId='+${param.categoryId}"
+							method="GET">
+							<button type="submit">Previous Month</span></button>
+						</form>
+					</div>
+					<div th:unless="${param.categoryId != null}">
+						<form th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}" method="GET">
+							<button type="submit">Previous Month</span></button>
+						</form>
+					</div>
+
 				</td>
 				<td>
 					<form th:action="@{/Transactions}" method="GET">

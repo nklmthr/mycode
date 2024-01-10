@@ -8,15 +8,7 @@
 
 <body>
 	<div>
-		<div class="topnav">
-			<a href="/home">Home</a>
-			<a href="/Transactions">Transactions</a>
-			<a class="active" href="/Categorys">Categories</a>
-			<a href="/Accounts">Accounts</a>
-			<a href="/Institutions">Institutions</a>
-			<a href="/AccountTypes">Acount Types</a>
-
-		</div>
+		<div th:insert="headerFragment.html ::header('Categorys')"></div>
 	</div>
 	<h3>Category List</h3>
 	<button type="button" th:onclick="|window.location.href='/addnewCategory'|">Add Category</button>
@@ -25,6 +17,8 @@
 		<section th:include="@{category/categoryFragment} :: categoryFragment" th:with="headerCategories=${categoryList}">
 		</section>
 	</div>
+	<hr>
+	<a th:href="@{/Categorys}">Back to Category List</a>
 </body>
 
 </html>

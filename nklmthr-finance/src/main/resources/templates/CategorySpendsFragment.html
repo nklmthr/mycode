@@ -1,7 +1,7 @@
 <section th:fragment="fragment">
 	<ul>
 		<li th:each="categorySpend : ${maincategories}">
-			<a th:href="'/Transactions/'+${categorySpend.id}+'/'+${currentYear}+'/'+${currentMonth}"><span th:text="${categorySpend.name}+' - '+${categorySpend.amount}"></span></a>
+			<a th:href="'/Transactions/'+${currentYear}+'/'+${currentMonth}+'?categoryId='+${categorySpend.id}"><span th:text="${categorySpend.name}+' - '+${categorySpend.amount}"></span></a>
 			<section th:include="@{CategorySpendsFragment}:: fragment"
 				th:with="maincategories=${categorySpend.childCategorySpends}"></section>
 		</li>

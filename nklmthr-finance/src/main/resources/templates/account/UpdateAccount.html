@@ -7,19 +7,9 @@
 
 <body>
 	<div>
-		<div class="topnav">
-			<a href="home">Home</a>
-			<a href="/Transactions">Transactions</a>
-			<a href="/Categorys">Categories</a>
-			<a class="active" href="/Accounts">Accounts</a>
-			<a href="/Institutions">Institutions</a>
-			<a href="/AccountTypes">Acount Types</a>
-
-		</div>
+		<div th:insert="headerFragment.html ::header('Accounts')"></div>
 	</div>
 	<div class="container">
-		<h1>Accounts</h1>
-		<hr>
 		<h2>Update Accounts</h2>
 
 		<form action="#" th:action="@{/saveAccount}" th:object="${account}" method="POST">
@@ -38,10 +28,9 @@
 			<input type="text" th:field="*{transactionBalance}" class="form-control mb-4 col-4">
 			<button type="submit" class="btn btn-info col-2">Update account</button>
 		</form>
-
 		<hr>
-
-		<a th:href="@{/}">Back to Accounts List</a>
+		<a th:href="@{/Accounts}">Back to Accounts List</a>
+		<hr>
 	</div>
 </body>
 

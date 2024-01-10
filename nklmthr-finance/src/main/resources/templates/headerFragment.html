@@ -1,0 +1,19 @@
+<div class="topnav" th:fragment="header(name)">
+	<a th:if="${name=='home'}" class="active" href="/home">Home</a>
+	<a th:unless="${name=='home'}" href="/home">Home</a>
+	
+	<a th:if="${name=='Transactions'}" class="active" href="/Transactions">Transactions</a>
+	<a th:unless="${name=='Transactions'}" href="/Transactions">Transactions</a>
+	
+	<a th:if="${name=='Categorys'}" class="active" href="/Categorys">Categorys</a>
+	<a th:unless="${name=='Categorys'}" href="/Categorys">Categorys</a>
+	
+	<a th:if="${name=='Accounts'}" class="active" href="/Accounts">Accounts</a>
+	<a th:unless="${name=='Accounts'}" href="/Accounts">Accounts</a>
+	
+	<a th:if="${name=='Institutions'}" class="active" href="/Institutions">Institutions</a>
+	<a th:unless="${name=='Institutions'}" href="/Institutions">Institutions</a>
+	
+	<a th:if="${name=='AccountTypes'}" class="active" href="/AccountTypes">Account Types</a>
+	<a th:unless="${name=='AccountTypes'}" href="/AccountTypes">Account Types</a>
+</div>

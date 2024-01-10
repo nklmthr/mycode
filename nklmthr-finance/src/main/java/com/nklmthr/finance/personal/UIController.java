@@ -5,9 +5,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.websocket.server.PathParam;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -286,54 +291,43 @@ public class UIController {
 	 */
 	@GetMapping("/Transactions")
 	public String getTransactions(Model m) {
-		return getTransactionsByMonth(m, null, null);
+		return getTransactionsByCategoryInMonth(m, null, null, null);
 	}
-	
+
+
 	@GetMapping("/Transactions/{year}/{month}")
-	public String getTransactionsByMonth(Model m, @PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month) {
+	public String getTransactionsByCategoryInMonth(Model m, @PathVariable(value = "year") Integer year,
+			@PathVariable(value = "month") Integer month, @PathParam(value = "categoryId") String categoryId) {
 		Integer nextMonthYear = year, nextMonth = month, previousMonthYear = year, previousMonth = month;
-		if(year==null || year==0) {
+		if (year == null || year == 0) {
 			year = YearMonth.now().getYear();
 		}
-		if(month==null || month==0) {
+		if (month == null || month == 0) {
 			month = YearMonth.now().getMonthValue();
 		}
 		previousMonthYear = YearMonth.of(year, month).minusMonths(1).getYear();
 		nextMonthYear = YearMonth.of(year, month).plusMonths(1).getYear();
 		previousMonth = YearMonth.of(year, month).minusMonths(1).getMonth().getValue();
 		nextMonth = YearMonth.of(year, month).plusMonths(1).getMonth().getValue();
-		List<Transaction> transactionList = transactionRepository.findAllTransactionsByMonth(year, month);		
-		m.addAttribute("previousMonth", previousMonth);
-		m.addAttribute("previousMonthYear", previousMonthYear);
-		m.addAttribute("nextMonth", nextMonth);
-		m.addAttribute("nextMonthYear", nextMonthYear);
-		m.addAttribute("transactionList", transactionList);
-		return "transactions/Transactions";
-	}
-
-
-	@GetMapping("/Transactions/{categoryId}/{year}/{month}")
-	public String getTransactionsByCategoryInMonth(Model m, @PathVariable(value = "categoryId") String categoryId,
-			@PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month) {
-		Integer nextMonthYear = year, nextMonth = month, previousMonthYear = year, previousMonth = month;
-		previousMonthYear = YearMonth.of(year, month).minusMonths(1).getYear();
-		nextMonthYear = YearMonth.of(year, month).plusMonths(1).getYear();
-		previousMonth = YearMonth.of(year, month).minusMonths(1).getMonth().getValue();
-		nextMonth = YearMonth.of(year, month).plusMonths(1).getMonth().getValue();
 		List<Transaction> transactionList = new ArrayList<>();
-		Category category = categoryRepository.findById(categoryId).get();
-		transactionList.addAll(transactionRepository.findAllTransactionsInCategoryByMonth(year, month, categoryId));
-		List<Category> categories = new ArrayList<Category>();
-		for (Category cat : category.getChildCategorys()) {
-			categories.add(cat);
-			while (cat.getChildCategorys().size() > 0) {
-				categories.addAll(cat.getChildCategorys());
+		if (categoryId != null) {
+			Category category = categoryRepository.findById(categoryId).get();
+			transactionList.addAll(transactionRepository.findAllTransactionsInCategoryByMonth(year, month, categoryId));
+			List<Category> categories = new ArrayList<Category>();
+			Queue<Category> queue = new LinkedList<Category>();
+			queue.add(category);
+			while (!queue.isEmpty()) {
+				logger.info("queue Size:" + queue.size() + " category sz:" + categories.size());
+				Category current = queue.poll();
+				categories.addAll(current.getChildCategorys());
+				queue.addAll(current.getChildCategorys());
 			}
+			logger.info("Total Child Categories" + categories.size());
+			transactionList.addAll(transactionRepository.findAllTransactionsInCategoriesByMonth(year, month,
+					categories.stream().map(s -> s.getId()).collect(Collectors.toList())));
+		}else {
+			transactionList = transactionRepository.findAllTransactionsByMonth(year, month);
 		}
-		logger.info("Total Child Categories" + categories.size());
-		logger.info("Child Categories" + categories.stream().map(s -> s.getId()).collect(Collectors.joining("','")));
-		transactionList.addAll(transactionRepository.findAllTransactionsInCategoriesByMonth(year, month,
-				categories.stream().map(s -> s.getId()).collect(Collectors.toList())));
 		m.addAttribute("previousMonth", previousMonth);
 		m.addAttribute("previousMonthYear", previousMonthYear);
 		m.addAttribute("nextMonth", nextMonth);
@@ -416,7 +410,7 @@ public class UIController {
 		nextMonthYear = YearMonth.of(year, month).plusMonths(1).getYear();
 		previousMonth = YearMonth.of(year, month).minusMonths(1).getMonth().getValue();
 		nextMonth = YearMonth.of(year, month).plusMonths(1).getMonth().getValue();
-		logger.info("year-month" + year + "-" + month);
+		logger.info("year-month=" + year + "-" + month);
 		// List<Transaction> transactionList =
 		// transactionRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
 		m.addAttribute("previousMonth", previousMonth);
@@ -445,10 +439,10 @@ public class UIController {
 
 		for (Category cat : categorys) {
 			CategorySpends catSpend = map.get(cat.getId());
-			logger.info("Processing category spends:" + catSpend);
+			logger.debug("Processing category spends:" + catSpend);
 			for (Category child : cat.getChildCategorys()) {
 				CategorySpends childCategorySpend = map.get(child.getId());
-				logger.info("Adding child category Spend:" + childCategorySpend);
+				logger.debug("Adding child category Spend:" + childCategorySpend);
 				catSpend.getChildCategorySpends().add(childCategorySpend);
 			}
 			if (cat.getParentCategory() != null) {
@@ -474,7 +468,7 @@ public class UIController {
 			highestLevel--;
 		}
 		Collections.sort(results);
-		logger.info("result getCategorySpends size:" + results.size());
+		logger.info("result getCategorySpends " + results.get(0));
 		m.addAttribute("categorySpends", results.get(0));
 		return "index";
 	}

@@ -7,15 +7,7 @@
 
 <body>
 	<div>
-		<div class="topnav">
-			<a href="/home">Home</a>
-			<a href="/Transactions">Transactions</a>
-			<a href="/Categorys">Categorys</a>
-			<a href="/Accounts">Accounts</a>
-			<a class="active" href="/Institutions">Institutions</a>
-			<a href="/AccountTypes">Acount Types</a>
-
-		</div>
+		<div th:insert="headerFragment.html ::header('Institutions')"></div>
 	</div>
 	<h2>Add Institution</h2>
 	<form action="#" th:action="@{/saveInstitution}" th:object="${institution}" method="POST">
@@ -25,6 +17,9 @@
 		<button type="submit" class="btn btn-info col-2">Save
 			Institution</button>
 	</form>
+	<hr>
+	<a th:href="@{/Institutions}">Back to Institutions List</a>
+	<hr>
 	<h2>Existing Institutions</h2>
 	<div class="container my-2" align="left">
 
@@ -49,6 +44,7 @@
 			</tbody>
 		</table>
 	</div>
+	
 </body>
 
 </html>
