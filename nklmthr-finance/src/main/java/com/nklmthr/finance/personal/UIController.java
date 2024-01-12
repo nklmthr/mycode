@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.websocket.server.PathParam;
@@ -40,6 +39,7 @@ import com.nklmthr.finance.personal.dao.InstitutionRepository;
 import com.nklmthr.finance.personal.dao.Transaction;
 import com.nklmthr.finance.personal.dao.TransactionRepository;
 import com.nklmthr.finance.personal.service.AccountRestService;
+import com.nklmthr.finance.personal.service.FinanceService;
 
 @Controller
 @RequestMapping("/")
@@ -61,9 +61,12 @@ public class UIController {
 	@Autowired
 	private TransactionRepository transactionRepository;
 
+	@Autowired
+	private FinanceService financeService;
+
 	@GetMapping("/")
 	public String index(Model m) {
-		return "index";
+		return getCategorySpendsByMonth(m, null, null);
 	}
 
 	/*
@@ -325,7 +328,7 @@ public class UIController {
 			logger.info("Total Child Categories" + categories.size());
 			transactionList.addAll(transactionRepository.findAllTransactionsInCategoriesByMonth(year, month,
 					categories.stream().map(s -> s.getId()).collect(Collectors.toList())));
-		}else {
+		} else {
 			transactionList = transactionRepository.findAllTransactionsByMonth(year, month);
 		}
 		m.addAttribute("previousMonth", previousMonth);
@@ -395,6 +398,14 @@ public class UIController {
 		return getCategorySpendsByMonth(m, null, null);
 	}
 
+	@GetMapping("/Reports")
+	public String getReports(Model m) {
+		Map<String, Map<String, String>> rows = financeService.getReportData();
+		m.addAttribute("headers", rows.get(0).keySet());
+		m.addAttribute("rows", rows);
+		return "reports/Reports";
+	}
+
 	@GetMapping("/home/{year}/{month}")
 	public String getCategorySpendsByMonth(Model m, @PathVariable(value = "year") Integer year,
 			@PathVariable(value = "month") Integer month) {
@@ -411,8 +422,6 @@ public class UIController {
 		previousMonth = YearMonth.of(year, month).minusMonths(1).getMonth().getValue();
 		nextMonth = YearMonth.of(year, month).plusMonths(1).getMonth().getValue();
 		logger.info("year-month=" + year + "-" + month);
-		// List<Transaction> transactionList =
-		// transactionRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
 		m.addAttribute("previousMonth", previousMonth);
 		m.addAttribute("previousMonthYear", previousMonthYear);
 		m.addAttribute("nextMonth", nextMonth);

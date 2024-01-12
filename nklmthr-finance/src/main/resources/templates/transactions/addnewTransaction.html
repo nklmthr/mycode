@@ -41,6 +41,7 @@
 					<th>Description</th>
 					<th>Account</th>
 					<th>Category</th>
+					<th>Amount</th>
 					<th>Update/Delete</th>
 				</tr>
 			</thead>
@@ -50,6 +51,7 @@
 					<td th:text="${transaction.description}"></td>
 					<td th:text="${transaction.account.name}"></td>
 					<td th:text="${transaction.category.name}"></td>
+					<td th:text="${transaction.amount}"></td>
 					<td> <a th:href="@{/showFormForTransactionUpdate/{id}(id=${transaction.id})}"
 							class="btn btn-primary">Update</a>
 						<a th:href="@{/deleteTransaction/{id}(id=${transaction.id})}" class="btn btn-danger">Delete</a>

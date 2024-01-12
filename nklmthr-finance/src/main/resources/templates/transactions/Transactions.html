@@ -16,19 +16,19 @@
 		<table>
 			<tr>
 				<td>
-					<div th:if="${param.categoryId !=null}">
+					<div th:if="${param.categoryId} !=null">
 						<form
-							th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}+'?categoryId='+${param.categoryId}"
+							th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}"
 							method="GET">
+							<input type="hidden" name="categoryId" th:value="${param.categoryId}"/>
 							<button type="submit">Previous Month</span></button>
 						</form>
 					</div>
-					<div th:unless="${param.categoryId != null}">
+					<div th:unless="${param.categoryId} !=null">
 						<form th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}" method="GET">
 							<button type="submit">Previous Month</span></button>
 						</form>
 					</div>
-
 				</td>
 				<td>
 					<form th:action="@{/Transactions}" method="GET">
@@ -36,9 +36,20 @@
 					</form>
 				</td>
 				<td>
-					<form th:action="'/Transactions/'+${nextMonthYear}+'/'+${nextMonth}" method="GET">
-						<button type="submit">Next Month</button>
-					</form>
+					<div th:if="${param.categoryId} !=null">
+						<form
+							th:action="'/Transactions/'+${nextMonthYear}+'/'+${nextMonth}+'?categoryId='+${param.categoryId}"
+							method="GET">
+							<input type="hidden" name="categoryId" th:value="${param.categoryId}"/>
+							<button type="submit">Next Month</button>
+						</form>
+					</div>
+					<div th:unless="${param.categoryId} !=null">
+						<form th:action="'/Transactions/'+${nextMonthYear}+'/'+${nextMonth}" method="GET">
+							<button type="submit">Next Month</button>
+						</form>
+					</div>
+
 				</td>
 			</tr>
 		</table>
