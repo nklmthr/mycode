@@ -14,8 +14,12 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.nklmthr.finance.personal.service.TransactionService.TransactionType;
+
+
 @Entity
-public class Transaction {
+public class Transaction {	
+	
 	@Id
 	@GeneratedValue(generator = "uuid2")
 	@GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
@@ -39,6 +43,9 @@ public class Transaction {
 
 	@Column
 	private BigDecimal amount;
+	
+	@Column
+	private TransactionType transactionType;
 
 	public String getId() {
 		return id;
@@ -87,10 +94,19 @@ public class Transaction {
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
+	
+
+	public TransactionType getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(TransactionType transactionType) {
+		this.transactionType = transactionType;
+	}
 
 	@Override
 	public String toString() {
 		return "Transaction [id=" + id + ", account=" + account + ", category=" + category + "]";
 	}
-
+	
 }

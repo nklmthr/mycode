@@ -44,14 +44,14 @@ public class CategorySpendsService {
 			catSpend.setId(cat.getId());
 			catSpend.setName(cat.getName());
 			catSpend.setLevel(cat.getLevel());
-			logger.info("Category:" + cat.getName() + ", year=" + year + ", month=" + month);
+			logger.debug("Category:" + cat.getName() + ", year=" + year + ", month=" + month);
 			List<Transaction> catTransactions = transactionService.getTransactionsByCategoryInMonth(year, month,
 					cat.getId());
 			for (Transaction t : catTransactions) {
 				catSpend.setAmount(catSpend.getAmount().add(t.getAmount()));
 			}
 			map.put(catSpend.getId(), catSpend);
-			logger.info("Current CatSpend:" + catSpend + " transactions size:" + catTransactions + " amount ="
+			logger.debug("Current CatSpend:" + catSpend + " transactions size:" + catTransactions + " amount ="
 					+ catSpend.getAmount() + " map.size:" + map.size());
 			queue.addAll(cat.getChildCategorys());
 		}
@@ -62,7 +62,7 @@ public class CategorySpendsService {
 			CategorySpends catSpend = map.get(cat.getId());
 			for (Category childCats : cat.getChildCategorys()) {
 				CategorySpends childCategorySpend = map.get(childCats.getId());
-				logger.info("Adding child category Spend:" + childCategorySpend);
+				logger.debug("Adding child category Spend:" + childCategorySpend);
 				catSpend.getChildCategorySpends().add(childCategorySpend);
 			}
 			queue.addAll(cat.getChildCategorys());

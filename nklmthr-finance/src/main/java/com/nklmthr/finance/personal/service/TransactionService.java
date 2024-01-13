@@ -1,6 +1,7 @@
 package com.nklmthr.finance.personal.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,8 @@ import com.nklmthr.finance.personal.dao.TransactionRepository;
 @Service
 public class TransactionService {
 
+	public enum TransactionType {DEBIT,CREDIT};
+	
 	private static Logger logger = Logger.getLogger(TransactionService.class);
 
 	@Autowired
@@ -60,7 +63,11 @@ public class TransactionService {
 	}
 
 	public void saveTransaction(Transaction transaction) {
-		transaction.getAccount().setTransactionBalance(transaction.getAccount().getTransactionBalance().subtract(transaction.getAmount()));
+		if(transaction.getTransactionType().equals(TransactionType.DEBIT)) {
+			transaction.getAccount().setTransactionBalance(transaction.getAccount().getTransactionBalance().subtract(transaction.getAmount()));
+		} else if(transaction.getTransactionType().equals(TransactionType.CREDIT)) {
+			transaction.getAccount().setTransactionBalance(transaction.getAccount().getTransactionBalance().add(transaction.getAmount()));
+		}
 		transactionRepository.save(transaction);	
 	}
 
@@ -79,6 +86,10 @@ public class TransactionService {
 
 	public List<Transaction> getTransactionsByCategoryInMonth(Integer year, Integer month, String categoryId) {
 		return transactionRepository.findAllTransactionsInCategoryByMonth(year, month, categoryId);
+	}
+	
+	public List<TransactionType> getTransactionTypes(){
+		return Arrays.asList(TransactionType.DEBIT, TransactionType.CREDIT);
 	}
 
 }

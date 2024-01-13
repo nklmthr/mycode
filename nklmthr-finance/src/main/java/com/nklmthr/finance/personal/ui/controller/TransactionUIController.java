@@ -65,14 +65,14 @@ public class TransactionUIController {
 		m.addAttribute("previousMonthYear", previousMonthYear);
 		m.addAttribute("nextMonth", nextMonth);
 		m.addAttribute("nextMonthYear", nextMonthYear);
-		m.addAttribute("transactionList", transactions);
+		m.addAttribute("transactions", transactions);
 		return "transactions/Transactions";
 	}
 
 	@GetMapping("/addnewTransaction")
 	public String addNewTransaction(Model m) {
 		List<Transaction> transactions = transactionService.getLatestTransaction(10);		
-		m.addAttribute("transactionList", transactions);
+		m.addAttribute("transactions", transactions);
 		List<Category> categorys = categoryService.getAllCategorys();				
 		m.addAttribute("categoryList", categorys);
 		List<Account> accounts = accountService.getAllAccounts();
@@ -80,6 +80,7 @@ public class TransactionUIController {
 		Transaction transaction = new Transaction();
 		transaction.setDate(new Date());
 		m.addAttribute("transaction", transaction);
+		m.addAttribute("transactionTypes", transactionService.getTransactionTypes());
 		logger.info("addNewTransaction ");
 		return "transactions/addnewTransaction";
 	}
@@ -99,6 +100,7 @@ public class TransactionUIController {
 		m.addAttribute("accountList", accounts);
 		Transaction transaction = transactionService.findTransactioById(id);
 		m.addAttribute("transaction", transaction);
+		m.addAttribute("transactionTypes", transactionService.getTransactionTypes());
 		logger.info("showFormForTransactionUpdate ");
 		return "transactions/UpdateTransaction";
 	}
@@ -109,5 +111,4 @@ public class TransactionUIController {
 		logger.info("deleteTransaction " + id);
 		return "redirect:/Transactions";
 	}
-
 }

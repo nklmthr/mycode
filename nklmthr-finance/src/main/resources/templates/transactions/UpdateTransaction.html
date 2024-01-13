@@ -10,30 +10,41 @@
 		<div th:insert="headerFragment.html ::header('Transactions')"></div>
 	</div>
 	<div class="container">
-		<h1>Transactions</h1>
-		<hr>
 		<h2>Update Transactions</h2>
-
+		<hr><br /><br />
 		<form action="#" th:action="@{/saveTransaction}" th:object="${transaction}" method="POST">
-
-			<!-- Add hidden form field to handle update -->
 			<input type="hidden" th:field="*{id}" />
-			<input type="date" th:field="*{date}" class="form-control mb-4 col-4">
-			<input type="text" th:field="*{description}" class="form-control mb-4 col-4">
+			<input type="hidden" name="oldAmount" th:value="*{amount}" />
+			<label for="date">Date</label>
+			<input type="date" th:field="*{date}" class="form-control mb-4 col-4" />
+			<br />
+			<label for="description">Description</label>
+			<input type="text" th:field="*{description}" class="form-control mb-4 col-4" />
+			<br />
+			<label for="category">Category</label>
 			<select th:field="*{category}">
 				<option th:each="category : ${CategoryList}" th:value="${category.id}" th:text="${category.name}">
 				</option>
 			</select>
+			<label for="account">Account</label>
 			<select th:field="*{account}">
 				<option th:each="account : ${accountList}" th:value="${account.id}" th:text="${account.name}"></option>
 			</select>
-			<input type="text" th:field="*{amount}" class="form-control mb-4 col-4">
+			<br />
+			<label for="amount">Amount</label>
+			<input type="text" th:field="*{amount}" placeholder="0.0" class="form-control mb-4 col-4" />
+			<br />
+			<label for="transactionType">Transaction Type</label>
+			<select th:field="*{transactionType}">
+				<option th:each="transactionType:${transactionTypes}" th:value="${transactionType.name}"
+					th:text="${transactionType.name}" />
+			</select>
+			<br /><br />
 			<button type="submit" class="btn btn-info col-2">Update Transaction</button>
-		</form>
+		</form><br />
+		<hr> <br /><br /><br />
 
-		<hr>
 		<a th:href="@{/Transactions}">Back to Transactions List</a>
-		<hr>
 	</div>
 </body>
 
