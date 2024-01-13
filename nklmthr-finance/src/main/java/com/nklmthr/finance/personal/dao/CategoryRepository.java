@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, String> {
-
 	@Query("select c from Category c where level = ?1 order by c.name")
 	List<Category> findAllCategorysAtLevel(int i);
 	

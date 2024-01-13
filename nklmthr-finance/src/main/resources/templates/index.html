@@ -14,27 +14,31 @@
 		<div th:insert="headerFragment.html ::header('home')"></div>
 			
 		</div>
+		<br/>		
 		<div id="monthNav">
-			<table>
+			<table width="100%">
 				<tr>
 					<td>
 						<form th:action="'/home/'+${previousMonthYear}+'/'+${previousMonth}" method="GET">
-							<button type="submit">Previous Month</button>
+							<button class="navButtonClass" type="submit">Previous Month</button>
 						</form>
 					</td>
 					<td>
 						<form th:action="@{/home}" method="GET">
-							<button type="submit">Current Month</button>
+							<button class="navButtonClass" type="submit">Current Month</button>
 						</form>
 					</td>
 					<td>
 						<form th:action="'/home/'+${nextMonthYear}+'/'+${nextMonth}" method="GET">
-							<button type="submit">Next Month</button>
+							<button class="navButtonClass" type="submit">Next Month</button>
 						</form>
 					</td>
 				</tr>
 			</table>
 		</div>
+		<br/>
+		<hr>
+		<br/>
 		<div id="catSpendsDiv">
 			<section  th:include="@{CategorySpendsFragment} :: fragment" th:with="maincategories=${categorySpends}"></section>
 		</div>

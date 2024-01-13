@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>Institutions</title>
+	<title>Categorys</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
@@ -11,9 +11,10 @@
 		<div th:insert="headerFragment.html ::header('Categorys')"></div>
 	</div>
 	<h3>Category List</h3>
-	<br/><br/>
+	<br/>
 	<hr>
-	<button type="button" th:onclick="|window.location.href='/addnewCategory'|">Add Category</button>
+	<br/>
+	<button class="addButtonClass" type="button" th:onclick="|window.location.href='/addnewCategory'|">Add Category</button>
 	<br /><br />
 	<div id="categoriesDiv">
 		<section th:include="@{category/categoryFragment} :: categoryFragment" th:with="headerCategories=${categoryList}">

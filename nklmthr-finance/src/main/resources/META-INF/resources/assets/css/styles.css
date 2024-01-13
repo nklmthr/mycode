@@ -1,8 +1,8 @@
 /* Add a black background color to the top navigation */
 .topnav {
-	background-color: darkblue;
+	background-color: steelblue;
 	overflow: hidden;
-	text-decoration-color: blueviolet;
+	
 }
 
 /* Style the links inside the navigation bar */
@@ -11,7 +11,7 @@
 	color: lightblue;
 	text-align: center;
 	padding: 14px 16px;
-	text-decoration-color: saddlebrown;
+	text-decoration-color: burlywood;
 	text-decoration-line: none;
 	font-size: 17px;
 }
@@ -24,7 +24,7 @@
 
 /* Add a color to the active/current link */
 .topnav a.active {
-	background-color: lightblue;
+	background-color: skyblue;
 	color: saddlebrown;
 }
 
@@ -95,5 +95,29 @@ ul li::after {
 }
 
 label:focus-within {
-   background: #DEF;
+	background: #DEF;
+}
+
+.addButtonClass {
+	background-color: royalblue;
+	/* Green */
+	border: none;
+	color: white;
+	padding: 10px 20px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+}
+
+.navButtonClass {
+	background-color: lightblue;
+	/* Green */
+	border: none;
+	color: sienna;
+	padding: 5px 10px;
+	text-align: center;
+	text-decoration-color: none;
+	display: inline-block;
+	font-size: 14px;
 }

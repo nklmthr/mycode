@@ -65,6 +65,8 @@ public class TransactionUIController {
 		m.addAttribute("previousMonthYear", previousMonthYear);
 		m.addAttribute("nextMonth", nextMonth);
 		m.addAttribute("nextMonthYear", nextMonthYear);
+		m.addAttribute("currentMonth", YearMonth.now().getMonthValue());
+		m.addAttribute("currentMonthYear", YearMonth.now().getYear());
 		m.addAttribute("transactions", transactions);
 		return "transactions/Transactions";
 	}

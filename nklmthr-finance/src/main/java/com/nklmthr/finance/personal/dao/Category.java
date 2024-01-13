@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class Category implements Cloneable, Comparable<Category> {
+public class Category{
 	@Id
 	@GeneratedValue(generator = "uuid2")
 	@GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
@@ -84,18 +84,6 @@ public class Category implements Cloneable, Comparable<Category> {
 
 	@Override
 	public String toString() {
-		// this.parentCategory !=null ? this.parentCategory.getName():"" +
 		return "Category [name=" + name + ", level=" + level + "]";
 	}
-
-	@Override
-	public int compareTo(Category o) {
-		if (this.getLevel() > o.getLevel()) {
-			return 1;
-		} else if (this.getLevel() < o.getLevel()) {
-			return -1;
-		}
-		return 0;
-	}
-
 }

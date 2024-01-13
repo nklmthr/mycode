@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.nklmthr.finance.personal.dao.Category;
@@ -22,9 +21,7 @@ public class CategoryService {
 	private CategoryRepository categoryRepository;
 
 	public List<Category> getAllCategorys() {
-		List<Category> categoryList = categoryRepository
-				.findAll(Sort.by(Direction.ASC, "level"));
-		Collections.sort(categoryList);
+		List<Category> categoryList = categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "level").and(Sort.by(Sort.Direction.ASC, "name")));
 		return categoryList;
 	}
 
@@ -36,12 +33,12 @@ public class CategoryService {
 			level++;
 		}
 		category.setLevel(level);
-		return categoryRepository.save(category);		
+		return categoryRepository.save(category);
 	}
 
 	public Category findCategoryById(String id) {
 		Optional<Category> cat = categoryRepository.findById(id);
-		if(cat.isPresent()) {
+		if (cat.isPresent()) {
 			return cat.get();
 		}
 		return null;
@@ -49,7 +46,7 @@ public class CategoryService {
 
 	public void deleteCategoryById(String id) {
 		categoryRepository.deleteById(id);
-		
+
 	}
 
 	public Category getRootCategory() {
