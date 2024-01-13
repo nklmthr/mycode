@@ -8,7 +8,8 @@ public class CategorySpends extends Category {
 
 	private BigDecimal amount = new BigDecimal(0.00);
 	private List<CategorySpends> childCategorySpends = new ArrayList<>();
-	private CategorySpends parentCategorySpends; 
+	private CategorySpends parentCategorySpends;
+
 	public BigDecimal getAmount() {
 		return amount;
 	}
@@ -34,15 +35,14 @@ public class CategorySpends extends Category {
 	}
 
 	@Override
-	public int hashCode() {	
+	public int hashCode() {
 		return super.hashCode();
 	}
 
 	@Override
 	public String toString() {
-		return "CategorySpends [ name()=" + getName() +", amount=" + amount + ", childCategorySpends=" + childCategorySpends.size()
-				+ ", parentCategorySpends=" + parentCategorySpends + "]";
+		return "CategorySpends [ name()=" + getName() + ", amount=" + amount + ",child " + childCategorySpends.size()
+				+ "]";
 	}
 
-	
 }

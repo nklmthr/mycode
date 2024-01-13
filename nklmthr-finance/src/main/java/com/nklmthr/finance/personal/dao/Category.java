@@ -85,7 +85,7 @@ public class Category implements Cloneable, Comparable<Category> {
 	@Override
 	public String toString() {
 		// this.parentCategory !=null ? this.parentCategory.getName():"" +
-		return "Category [name=" + name + ", level=" + level + ", parentCategory=" + "]";
+		return "Category [name=" + name + ", level=" + level + "]";
 	}
 
 	@Override
