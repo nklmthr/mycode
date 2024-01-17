@@ -26,7 +26,7 @@ public class CategoryService {
 	}
 
 	public Category saveCategory(Category category) {
-		Category temp = (Category) category.clone();
+		Category temp = category;
 		int level = 0;
 		while (temp.getParentCategory() != null) {
 			temp = temp.getParentCategory();

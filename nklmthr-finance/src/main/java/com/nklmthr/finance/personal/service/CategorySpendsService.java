@@ -1,12 +1,10 @@
 package com.nklmthr.finance.personal.service;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +46,9 @@ public class CategorySpendsService {
 			List<Transaction> catTransactions = transactionService.getTransactionsByCategoryInMonth(year, month,
 					cat.getId());
 			for (Transaction t : catTransactions) {
-				catSpend.setAmount(catSpend.getAmount().add(t.getAmount()));
+				if (t.getTransactionType().equals(TransactionType.DEBIT)) {
+					catSpend.setAmount(catSpend.getAmount().add(t.getAmount()));
+				}
 			}
 			map.put(catSpend.getId(), catSpend);
 			logger.debug("Current CatSpend:" + catSpend + " transactions size:" + catTransactions + " amount ="
@@ -73,9 +73,9 @@ public class CategorySpendsService {
 		while (highestLevel >= 0) {
 			for (Category c : categorys) {
 				if (c.getLevel() == highestLevel) {
-					CategorySpends currentCS = map.get(c.getId());					
+					CategorySpends currentCS = map.get(c.getId());
 					CategorySpends parentCS = null;
-					if(c.getParentCategory()!=null) {
+					if (c.getParentCategory() != null) {
 						parentCS = map.get(c.getParentCategory().getId());
 					}
 					if (parentCS != null) {

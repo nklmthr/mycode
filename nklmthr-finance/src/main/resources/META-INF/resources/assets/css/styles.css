@@ -28,12 +28,6 @@
 	color: saddlebrown;
 }
 
-
-th,
-td {
-	padding: 5px;
-}
-
 .container {
 	width: 100%;
 	display: inline-block;
@@ -42,19 +36,19 @@ td {
 }
 
 
-* {
+/** catspend {
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-ul li {
+ul li catspend{
 	margin-left: 15px;
 	position: relative;
 	padding-left: 5px;
 }
 
-ul li::before {
+ul li catspend::before {
 	content: " ";
 	position: absolute;
 	width: 1px;
@@ -64,15 +58,15 @@ ul li::before {
 	left: -10px;
 }
 
-body>ul>li:first-child::before {
+body>ul>li catspend:first-child::before {
 	top: 12px;
 }
 
-ul li:not(:first-child):last-child::before {
+ul li catspend:not(:first-child):last-child::before {
 	display: none;
 }
 
-ul li:only-child::before {
+ul li catspend:only-child::before {
 	display: list-item;
 	content: " ";
 	position: absolute;
@@ -84,7 +78,7 @@ ul li:only-child::before {
 	left: -10px;
 }
 
-ul li::after {
+ul li catspend::after {
 	content: " ";
 	position: absolute;
 	left: -10px;
@@ -92,10 +86,10 @@ ul li::after {
 	height: 1px;
 	background-color: #000;
 	top: 12px;
-}
+}*/
 
-label:focus-within {
-	background: #DEF;
+label :focus-within {
+	background: #4E9CAF;
 }
 
 .addButtonClass {
@@ -115,9 +109,22 @@ label:focus-within {
 	/* Green */
 	border: none;
 	color: sienna;
-	padding: 5px 10px;
+	padding: 15px 10px;
 	text-align: center;
 	text-decoration-color: none;
 	display: inline-block;
-	font-size: 14px;
+	font-size: 15px;
+}
+
+.update-delete-button {
+    display: block;
+    width: 85px;
+    height: 10px;
+    background: #4E9CAF;
+    padding: 12px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: normal;
+    line-height: 1px;
 }

@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.nklmthr.finance.personal.service.TransactionService.TransactionType;
+import com.nklmthr.finance.personal.service.TransactionType;
 
 
 @Entity

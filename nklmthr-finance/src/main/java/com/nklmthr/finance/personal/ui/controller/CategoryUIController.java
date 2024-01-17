@@ -39,7 +39,7 @@ public class CategoryUIController {
 	@GetMapping("/addnewCategory")
 	public String addnewCategory(Model m) {
 		List<Category> categorysList = categoryService.getAllCategorys();
-		m.addAttribute("CategoryList", categorysList);
+		m.addAttribute("categorys", categorysList);
 		logger.info("addnewCategory");
 		Category category = new Category();
 		m.addAttribute("category", category);
@@ -56,7 +56,7 @@ public class CategoryUIController {
 	@GetMapping("/showFormForCategoryUpdate/{id}")
 	public String showFormForCategoryUpdate(@PathVariable(value = "id") String id, Model m) {
 		List<Category> Categorys = categoryService.getAllCategorys();
-		m.addAttribute("CategoryList", Categorys);
+		m.addAttribute("categorys", Categorys);
 		Category c = categoryService.findCategoryById(id);
 		m.addAttribute("category", c);
 		logger.info("showFormForCategoryUpdate ");

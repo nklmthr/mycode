@@ -3,6 +3,11 @@
 <head>
 	<title>Transactions</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+		integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -38,13 +43,14 @@
 		</label>
 		<br />
 		<label>Amount
-			<input type="text" inputmode="numeric" th:field="*{amount}"  required="true" placeholder="0.0" class="form-control mb-4 col-4" />
+			<input type="text" inputmode="numeric" th:field="*{amount}" required="true" placeholder="0.0"
+				class="form-control mb-4 col-4" />
 		</label>
 		<label>Type
-		<select th:field="*{transactionType}">
-			<option th:each="transactionType:${transactionTypes}" th:value="${transactionType.name}"
-				th:text="${transactionType.name}" />
-		</select>
+			<select th:field="*{transactionType}">
+				<option th:each="transactionType:${transactionTypes}" th:value="${transactionType.name}"
+					th:text="${transactionType.name}" />
+			</select>
 		</label>
 		<br /><br />
 		<button class="addButtonClass" type="submit">Add Transaction</button>

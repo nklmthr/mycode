@@ -9,25 +9,31 @@
 	<div>
 		<div th:insert="headerFragment.html ::header('Institutions')"></div>
 	</div>
+	<br>
 	<h2>Add Institution</h2>
+	<br>
+	<br>
 	<form action="#" th:action="@{/saveInstitution}" th:object="${institution}" method="POST">
-		<input type="text" th:field="*{name}" placeholder="Insitution Name" class="form-control mb-4 col-4"> <input
-			type="text" th:field="*{description}" placeholder="Description" class="form-control mb-4 col-4">
-
-		<button type="submit" class="btn btn-info col-2">Save
+		<label>Name of Institution
+			<input type="text" th:field="*{name}" placeholder="Insitution Name" class="form-control mb-4 col-4">
+		</label><label>Description<input type="text" th:field="*{description}" placeholder="Description"
+				class="form-control mb-4 col-4">
+		</label>
+		<button type="submit" class="addButtonClass">Save
 			Institution</button>
 	</form>
-	<hr>
+	<br>
+	<br>
 	<a th:href="@{/Institutions}">Back to Institutions List</a>
+	<br>
+	<br>
 	<hr>
-	<h2>Existing Institutions</h2>
 	<div class="container my-2" align="left">
-
 		<h3>Insitutions List</h3>
-		<table style="width:50%" border="1" class="table table-striped table-responsive-md">
+		<br>
+		<table style="width:80%" border="1" class="table table-striped table-responsive-md">
 			<thead>
 				<tr>
-					<th>ID</th>
 					<th>Name</th>
 					<th>Description</th>
 				</tr>
@@ -36,15 +42,11 @@
 				<tr th:each="institution : ${institutionList}">
 					<td th:text="${institution.name}"></td>
 					<td th:text="${institution.description}"></td>
-					<td> <a th:href="@{/showFormForInstitutionUpdate/{id}(id=${institution.id})}"
-							class="btn btn-primary">Update</a>
-						<a th:href="@{/deleteInstitution/{id}(id=${institution.id})}" class="btn btn-danger">Delete</a>
-					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-	
+
 </body>
 
 </html>

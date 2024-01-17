@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>Institutions</title>
+	<title>Accounts</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
 </head>
 
@@ -10,27 +10,30 @@
 		<div th:insert="headerFragment.html ::header('Accounts')"></div>
 	</div>
 	<div class="container">
+		<br>
 		<h2>Update Accounts</h2>
-
+		<br><br>
 		<form action="#" th:action="@{/saveAccount}" th:object="${account}" method="POST">
 
 			<!-- Add hidden form field to handle update -->
 			<input type="hidden" th:field="*{id}" />
-			<input type="text" th:field="*{name}" class="form-control mb-4 col-4">
-			<select th:field="*{accountType}">
-				<option th:each="accountType : ${accountTypeList}" th:value="${accountType.id}"
-					th:text="${accountType.name}"></option>
-			</select>
-			<select th:field="*{institution}">
-				<option th:each="institution : ${institutionList}" th:value="${institution.id}"
-					th:text="${institution.name}"></option>
-			</select>
-			<input type="text" th:field="*{transactionBalance}" class="form-control mb-4 col-4">
-			<button type="submit" class="btn btn-info col-2">Update account</button>
+			<label>Name<input type="text" th:field="*{name}" class="form-control mb-4 col-4"></label>
+			<label>Account Type<select th:field="*{accountType}">
+					<option th:each="accountType : ${accountTypeList}" th:value="${accountType.id}"
+						th:text="${accountType.name}"></option>
+				</select></label><label>Institution
+				<select th:field="*{institution}">
+					<option th:each="institution : ${institutionList}" th:value="${institution.id}"
+						th:text="${institution.name}"></option>
+				</select></label><label>Balance
+				<input type="text" th:field="*{transactionBalance}" class="form-control mb-4 col-4"></label>
+			<button type="submit" class="addButtonClass">Update account</button>
 		</form>
+		<br><br>
 		<hr>
 		<a th:href="@{/Accounts}">Back to Accounts List</a>
-		<hr>
+		<br>
+		<br>
 	</div>
 </body>
 

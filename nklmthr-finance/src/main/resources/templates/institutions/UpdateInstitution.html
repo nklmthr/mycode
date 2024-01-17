@@ -10,22 +10,23 @@
 		<div th:insert="headerFragment.html ::header('Institutions')"></div>
 	</div>
 	<div class="container">
-		<h1>Institutions</h1>
-		<hr>
-		<h2>Update Institution</h2>
-
+		
+		<br><h2>Update Institution</h2>
+		<br /><br />
 		<form action="#" th:action="@{/saveInstitution}" th:object="${institution}" method="POST">
 
 			<!-- Add hidden form field to handle update -->
 			<input type="hidden" th:field="*{id}" />
-
-			<input type="text" th:field="*{name}" class="form-control mb-4 col-4">
-
-			<input type="text" th:field="*{description}" class="form-control mb-4 col-4">
-
-			<button type="submit" class="btn btn-info col-2">Update Institution</button>
+			<label>Name of Institution
+				<input type="text" th:field="*{name}" class="form-control mb-4 col-4">
+			</label><label>Description
+				<input type="text" th:field="*{description}" class="form-control mb-4 col-4">
+			</label>
+			<button type="submit" class="addButtonClass">Update Institution</button>
 		</form>
+		<br><br>
 		<hr>
+		<br>
 		<a th:href="@{/Institutions}">Back to Institutions List</a>
 	</div>
 </body>

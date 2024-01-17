@@ -19,10 +19,10 @@
 
 						<!-- Add hidden form field to handle update -->
 						<input type="hidden" th:field="*{id}" />
-						<input type="text" width="50%" th:field="*{name}" class="form-control mb-4 col-4">
+						<input type="text" width="80%" th:field="*{name}" class="form-control mb-4 col-4">
 						<select th:field="*{parentCategory}">
-							<option th:value="0" selected value=" " text="Please Select">Please Select</option>
-							<option th:each="category1 : ${CategoryList}" th:value="${category1.id}"
+							<option th:value="0" text="Please Select">Please Select</option>
+							<option th:each="category1 : ${categorys}" th:value="${category1.id}"
 								th:attr="showselected=(${category1.id} == *{parentCategory})"
 								th:text="${category1.name}"></option>
 						</select>

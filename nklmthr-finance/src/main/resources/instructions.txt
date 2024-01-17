@@ -8,3 +8,21 @@ sudo systemctl status javaservice.service
 sudo ps -ef | grep java
 sudo systemctl daemon-reload
 sudo systemctl start  javaservice.service
+
+
+javaservice.service
+[Unit]
+Description=Java Service
+
+[Service]
+User=ec2-user
+# The configuration file application.properties should be here:
+WorkingDirectory=/home/ec2-user/app 
+ExecStart=/usr/bin/java -Xmx256m -jar /home/ec2-user/app/MyFinanceApp1.0.0.jar.jar --server.port=9000
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

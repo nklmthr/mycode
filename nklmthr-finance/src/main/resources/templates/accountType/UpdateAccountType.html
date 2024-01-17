@@ -2,27 +2,32 @@
 
 <head>
 	<title>AccountTypes</title>
-	 <link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
 </head>
 
 <body>
 	<div>
 		<div th:insert="headerFragment.html ::header('AccountTypes')"></div>
 	</div>
-	<div class="container">		
+	<br>
+	<br>
+	<div class="container">
 		<h2>Update AccountType</h2>
-
+		<br><br>
 		<form action="#" th:action="@{/saveAccountType}" th:object="${accountType}" method="POST">
 
 			<!-- Add hidden form field to handle update -->
 			<input type="hidden" th:field="*{id}" />
-
-			<input type="text" th:field="*{name}" class="form-control mb-4 col-4">
-
-			<input type="text" th:field="*{description}" class="form-control mb-4 col-4">
-
+			<label>Account Type Name
+				<input type="text" th:field="*{name}" class="form-control mb-4 col-4">
+			</label>
+			<label>Description
+				<input type="text" th:field="*{description}" class="form-control mb-4 col-4">
+			</label>
 			<button type="submit" class="btn btn-info col-2">Update AccountType</button>
 		</form>
+		<br>
+		<br>
 		<hr>
 		<a th:href="@{/AccountTypes}">Back to AccountType List</a>
 	</div>

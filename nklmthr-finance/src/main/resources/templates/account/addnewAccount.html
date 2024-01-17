@@ -1,7 +1,7 @@
 <html>
 
 <head>
-	<title>Institutions</title>
+	<title>Accounts</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
 </head>
 
@@ -9,37 +9,42 @@
 	<div>
 		<div th:insert="headerFragment.html ::header('Accounts')"></div>
 	</div>
+	<br>
 	<h2>Add Account</h2>
+	<br><br>
 	<form action="#" th:action="@{/saveAccount}" th:object="${account}" method="POST">
-		<input type="text" th:field="*{name}" placeholder="Account Name" class="form-control mb-4 col-4">
-		<select th:field="*{accountType}">
-			<option th:each="accountType : ${accountTypeList}" th:value="${accountType.id}"
-				th:text="${accountType.name}"></option>
-		</select>		
-		<select th:field="*{institution}">
-			<option th:each="institution : ${institutionList}" th:value="${institution.id}"
-				th:text="${institution.name}"></option>
-		</select>
-		<input type="text" th:field="*{transactionBalance}" placeholder="transactionBalance"
-			class="form-control mb-4 col-4">
-		<button type="submit" class="btn btn-info col-2">Save Account</button>
+		<label>Name<input type="text" th:field="*{name}" placeholder="Account Name"
+				class="form-control mb-4 col-4"></label>
+		<label>Account type<select th:field="*{accountType}">
+				<option th:each="accountType : ${accountTypeList}" th:value="${accountType.id}"
+					th:text="${accountType.name}"></option>
+			</select></label>
+		<label>Institution
+			<select th:field="*{institution}">
+				<option th:each="institution : ${institutionList}" th:value="${institution.id}"
+					th:text="${institution.name}"></option>
+			</select></label>
+		<label>Balance
+			<input type="text" th:field="*{transactionBalance}" placeholder="transactionBalance"
+				class="form-control mb-4 col-4">
+		</label>
+		<button type="submit" class="addButtonClass">Save Account</button>
 
 	</form>
-	<hr>
+	<br><br>
 	<a th:href="@{/Accounts}">Back to Accounts List</a>
-	<hr>
-	<h2>Existing Account</h2>
+	<br><br>
+	<hr><br><br>
 	<div class="container my-2" align="left">
-
 		<h3>Account List</h3>
-		<table style="width:50%" border="1" class="table table-striped table-responsive-md">
+		<br>
+		<table style="width:80%" border="1" class="table table-striped table-responsive-md">
 			<thead>
 				<tr>
 					<th>Name</th>
 					<th>Account Type</th>
 					<th>Institution</th>
 					<th>Balance</th>
-					<th>Update/Delete</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -48,10 +53,7 @@
 					<td th:text="${account.accountType.name}"></td>
 					<td th:text="${account.institution.name}"></td>
 					<td th:text="${account.transactionBalance}"></td>
-					<td> <a th:href="@{/showFormForAccountUpdate/{id}(id=${account.id})}"
-							class="btn btn-primary">Update</a>
-						<a th:href="@{/deleteAccount/{id}(id=${account.id})}" class="btn btn-danger">Delete</a>
-					</td>
+
 				</tr>
 			</tbody>
 		</table>

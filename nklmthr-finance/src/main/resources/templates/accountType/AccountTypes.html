@@ -17,8 +17,8 @@
 
 		<h3>Account Type List</h3>
 		<br />
-		<button type="button" th:onclick="|window.location.href='/addnewAccountType'|">Add AccountType</button>
-		<br /><br/>
+		<button class="addButtonClass" type="button" th:onclick="|window.location.href='/addnewAccountType'|">Add AccountType</button>
+		<br /><br />
 		<hr>
 		<br />
 		<table style="width:80%" border="1" class="table table-striped table-responsive-md">
@@ -26,7 +26,8 @@
 				<tr>
 					<th>Name</th>
 					<th>Description</th>
-					<th>Update/Delete</th>
+					<th>Update</th>
+					<th>Delete</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -34,10 +35,12 @@
 					<td th:text="${accountType.name}"></td>
 					<td th:text="${accountType.description}"></td>
 					<td> <a th:href="@{/showFormForAccountTypeUpdate/{id}(id=${accountType.id})}"
-							class="btn btn-primary">Update</a>
-						<a th:href="@{/deleteAccountType/{id}(id=${accountType.id})}" class="btn btn-danger">Delete</a>
+							class="update-delete-button">Update</a></td>
+					<td>
+						<a th:href="@{/deleteAccountType/{id}(id=${accountType.id})}"
+							class="update-delete-button">Delete</a>
 					</td>
-				</tr>				
+				</tr>
 			</tbody>
 		</table>
 	</div>
