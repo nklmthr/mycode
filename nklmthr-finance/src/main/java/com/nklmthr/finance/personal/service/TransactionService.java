@@ -43,6 +43,7 @@ public class TransactionService {
 			while (!queue.isEmpty()) {
 				logger.debug("queue Size:" + queue.size() + " category sz:" + categories.size());
 				Category current = queue.poll();
+				categories.add(current);
 				categories.addAll(current.getChildCategorys());
 				queue.addAll(current.getChildCategorys());
 			}

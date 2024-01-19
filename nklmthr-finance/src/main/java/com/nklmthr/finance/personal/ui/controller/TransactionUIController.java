@@ -42,7 +42,12 @@ public class TransactionUIController {
 
 	@Autowired
 	private TransactionService transactionService;
-
+	
+	@GetMapping("transactions/ListTransactionsFragment")
+	public String getListTransactionsFragment() {
+		return "transactions/ListTransactionsFragment";
+	}
+	
 	@GetMapping("/Transactions")
 	public String getTransactions(Model m, @RequestParam(required = false) String keyword,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size,
@@ -112,7 +117,7 @@ public class TransactionUIController {
 		m.addAttribute("sortDirection", "desc");
 		m.addAttribute("reverseSortDirection", "asc");
 		logger.info("addNewTransaction ");
-		return "transactions/addnewTransaction";
+		return "transactions/AddnewTransaction";
 	}
 
 	@PostMapping("/saveTransaction")

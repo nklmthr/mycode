@@ -23,7 +23,7 @@
 		<!-- Add hidden form field to handle update -->
 		<input type="hidden" th:field="*{id}" />
 		<label>Date
-			<input type="date" th:field="*{date}" class="form-control mb-4 col-4">
+			<input type="date" th:field="*{date}">
 		</label>
 		<label>
 			Description
@@ -43,8 +43,7 @@
 		</label>
 		<br />
 		<label>Amount
-			<input type="text" inputmode="numeric" th:field="*{amount}" required="true" placeholder="0.0"
-				class="form-control mb-4 col-4" />
+			<input type="text" size="15" inputmode="numeric" th:field="*{amount}" required="true" placeholder="0.0" />
 		</label>
 		<label>Type
 			<select th:field="*{transactionType}">

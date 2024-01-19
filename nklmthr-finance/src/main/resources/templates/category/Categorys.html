@@ -1,9 +1,26 @@
 <html>
 
 <head>
-	<title>Categorys</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<title>Categorys</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/assets/css/styles.css}" />
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script th:src="@{/assets/js/dropdowntree.js}"></script>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/assets/css/dropdowntree.css}" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+	integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+	crossorigin="anonymous">
+<link
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
+	rel="stylesheet"
+	integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1"
+	crossorigin="anonymous">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+	integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+	crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -11,14 +28,17 @@
 		<div th:insert="headerFragment.html ::header('Categorys')"></div>
 	</div>
 	<h3>Category List</h3>
-	<br/>
+	<br />
 	<hr>
-	<br/>
-	<button class="addButtonClass" type="button" th:onclick="|window.location.href='/addnewCategory'|">Add Category</button>
-	<br /><br />
+	<br />
+	<button class="addButtonClass" type="button"
+		th:onclick="|window.location.href='/addnewCategory'|">Add
+		Category</button>
+	<br />
+	<br />
 	<div id="categoriesDiv">
-		<section th:include="@{category/categoryFragment} :: categoryFragment" th:with="headerCategories=${categoryList}">
-		</section>
+		<section th:include="@{category/categoryFragment} :: categoryFragment"
+			th:with="headerCategories=${categoryList}"></section>
 	</div>
 	<hr>
 	<a th:href="@{/Categorys}">Back to Category List</a>
