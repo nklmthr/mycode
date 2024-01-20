@@ -20,7 +20,10 @@ public class AccountType {
 
 	@Column
 	private String description;
-
+	
+	@Column
+	private String classification;
+	
 	public String getId() {
 		return id;
 	}
@@ -45,10 +48,18 @@ public class AccountType {
 		this.description = description;
 	}
 
+	public String getClassification() {
+		return classification;
+	}
+
+	public void setClassification(String classification) {
+		this.classification = classification;
+	}
+
 	@Override
 	public String toString() {
-		return "AccountType [id=" + id + ", name=" + name + ", description=" + description + "]";
+		return "AccountType [id=" + id + ", name=" + name + ", description=" + description + ", classification="
+				+ classification + "]";
 	}
-	
 
 }

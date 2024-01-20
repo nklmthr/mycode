@@ -117,7 +117,7 @@ public class TransactionUIController {
 		m.addAttribute("sortDirection", "desc");
 		m.addAttribute("reverseSortDirection", "asc");
 		logger.info("addNewTransaction ");
-		return "transactions/AddnewTransaction";
+		return "transactions/AddNewTransaction";
 	}
 
 	@PostMapping("/saveTransaction")

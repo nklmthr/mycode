@@ -19,10 +19,13 @@
 			<!-- Add hidden form field to handle update -->
 			<input type="hidden" th:field="*{id}" />
 			<label>Account Type Name
-				<input type="text" th:field="*{name}" class="form-control mb-4 col-4">
+				<input type="text" th:field="*{name}">
 			</label>
 			<label>Description
-				<input type="text" th:field="*{description}" class="form-control mb-4 col-4">
+				<input type="text" th:field="*{description}">
+			</label>
+			<label>Classification
+				<input type="text" th:field="*{classification}">
 			</label>
 			<button type="submit" class="btn btn-info col-2">Update AccountType</button>
 		</form>

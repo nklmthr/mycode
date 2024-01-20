@@ -26,6 +26,7 @@
 				<tr>
 					<th>Name</th>
 					<th>Description</th>
+					<th>Classification</th>
 					<th>Update</th>
 					<th>Delete</th>
 				</tr>
@@ -34,6 +35,7 @@
 				<tr th:each="accountType : ${accountTypeList}">
 					<td th:text="${accountType.name}"></td>
 					<td th:text="${accountType.description}"></td>
+					<td th:text="${accountType.classification}"></td>
 					<td> <a th:href="@{/showFormForAccountTypeUpdate/{id}(id=${accountType.id})}"
 							class="update-delete-button">Update</a></td>
 					<td>
