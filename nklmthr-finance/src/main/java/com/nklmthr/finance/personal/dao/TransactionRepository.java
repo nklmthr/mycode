@@ -15,7 +15,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
 
 	List<Transaction> findAllByCategory(Category cat);
 
-	@Query("select t from Transaction t where year(t.date) = ?1 and month(t.date) = ?2")
+	@Query("select t from Transaction t where year(t.date) = ?1 and month(t.date) = ?2 ")
 	Page<Transaction> findAllTransactionsByMonth(Pageable pageable, Integer year, Integer month);
 
 	

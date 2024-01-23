@@ -27,7 +27,7 @@ public class Transaction {
 	private String id;
 
 	@Column
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 	private Date date;
 
 	@Column

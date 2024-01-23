@@ -3,6 +3,7 @@
 <head>
 	<title>Transactions</title>
 	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
 </head>
 
 <body>
@@ -16,10 +17,10 @@
 			<input type="hidden" th:field="*{id}" />
 			<input type="hidden" name="oldAmount" th:value="*{amount}" />
 			<label for="date">Date</label>
-			<input type="date" th:field="*{date}" class="form-control mb-4 col-4" />
+			<input type="datetime-local" th:field="*{date}" />
 			<br />
 			<label for="description">Description</label>
-			<input type="text" th:field="*{description}" class="form-control mb-4 col-4" />
+			<input type="text" th:field="*{description}" size="100" />
 			<br />
 			<label for="category">Category</label>
 			<select th:field="*{category}">

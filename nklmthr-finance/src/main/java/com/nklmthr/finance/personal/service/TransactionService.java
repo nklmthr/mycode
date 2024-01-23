@@ -51,6 +51,7 @@ public class TransactionService {
 			pageTransactions = transactionRepository.findAllTransactionsInCategoriesByMonth(pageable, year,
 					month, categories.stream().map(s -> s.getId()).collect(Collectors.toList()));
 		} else {
+			logger.info("No Catgory. Find Transactions by year and month");
 			pageTransactions = transactionRepository.findAllTransactionsByMonth(pageable, year, month);
 		}
 		return pageTransactions;

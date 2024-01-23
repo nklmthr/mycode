@@ -50,7 +50,7 @@ public class TransactionUIController {
 	
 	@GetMapping("/Transactions")
 	public String getTransactions(Model m, @RequestParam(required = false) String keyword,
-			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int size,
 			@RequestParam(defaultValue = "date,desc") String[] sort) {
 		return getTransactionsByCategoryInMonth(m, null, null, null, keyword, page, size, sort);
 	}
@@ -59,7 +59,7 @@ public class TransactionUIController {
 	public String getTransactionsByCategoryInMonth(Model m, @PathVariable(value = "year") Integer year,
 			@PathVariable(value = "month") Integer month, @PathParam(value = "categoryId") String categoryId,
 			@RequestParam(required = false) String keyword, @RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "date,desc") String[] sort) {
+			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "date,desc") String[] sort) {
 
 		String sortField = sort[0];
 		String sortDirection = sort[1];
