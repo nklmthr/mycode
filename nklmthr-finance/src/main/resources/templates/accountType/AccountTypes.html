@@ -1,13 +1,8 @@
 <html>
-
-<head>
-	<title>Account Types</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
-</head>
-
+<head th:include="header.html ::header"></head>
 <body>
 	<div>
-		<div th:insert="headerFragment.html ::header('AccountTypes')"></div>
+		<div th:insert="TopNavigation.html ::topNavigation('AccountTypes')"></div>
 	</div>
 	<br />
 

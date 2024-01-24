@@ -1,47 +1,37 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-	<meta charset="ISO-8859-1" />
-	<title>My Finance App</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
-	<script type="text/javascript" th:src="@{/assets/js/tree.js}"></script>
-
-</head>
-
+<head th:include="header.html ::header"></head>
 <body>
-	<div>
-		<div th:insert="headerFragment.html ::header('home')"></div>
-			
-		</div>
-		<br/>		
-		<div id="monthNav">
-			<table width="100%">
-				<tr>
-					<td>
-						<form th:action="'/home/'+${previousMonthYear}+'/'+${previousMonth}" method="GET">
-							<button class="navButtonClass" type="submit">Previous Month</button>
-						</form>
-					</td>
-					<td>
-						<form th:action="@{/home}" method="GET">
-							<button class="navButtonClass" type="submit">Current Month</button>
-						</form>
-					</td>
-					<td>
-						<form th:action="'/home/'+${nextMonthYear}+'/'+${nextMonth}" method="GET">
-							<button class="navButtonClass" type="submit">Next Month</button>
-						</form>
-					</td>
-				</tr>
-			</table>
-		</div>
-		<br/>
-		<hr>
-		<br/>
-		<div id="catSpendsDiv">
-			<section  th:include="@{CategorySpendsFragment} :: fragment" th:with="maincategories=${categorySpends}"></section>
-		</div>
+	<div th:insert="TopNavigation.html ::topNavigation('home')"></div>
+	<br />
+	<div id="monthNav">
+		<table width="100%">
+			<tr>
+				<td>
+					<form th:action="'/home/'+${previousMonthYear}+'/'+${previousMonth}" method="GET">
+						<button class="navButtonClass" type="submit">Previous Month</button>
+					</form>
+				</td>
+				<td>
+					<form th:action="@{/home}" method="GET">
+						<button class="navButtonClass" type="submit">Current Month</button>
+					</form>
+				</td>
+				<td>
+					<form th:action="'/home/'+${nextMonthYear}+'/'+${nextMonth}" method="GET">
+						<button class="navButtonClass" type="submit">Next Month</button>
+					</form>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<br />
+	<hr>
+	<br />
+	<div id="catSpendsDiv">
+		<section th:include="@{CategorySpendsFragment} :: fragment" th:with="maincategories=${categorySpends}">
+		</section>
+	</div>
 </body>
 
 </html>

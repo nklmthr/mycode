@@ -1,14 +1,8 @@
 <html>
-
-<head>
-	<title>Institutions</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-</head>
-
+<head th:include="header.html ::header"></head>
 <body>
 	<div>
-		<div th:insert="headerFragment.html ::header('Categorys')"></div>
+		<div th:insert="TopNavigation.html ::topNavigation('Categorys')"></div>
 	</div>
 	<br>
 	<h2>Add Category</h2>

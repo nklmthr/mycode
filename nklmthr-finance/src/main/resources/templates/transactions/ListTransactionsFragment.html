@@ -1,66 +1,40 @@
-<div id="transactionListFragment">
-	<section th:fragment="transactionListFragment(showUpdateDelete, categoryId, currentMonthYear, currentMonth)">
-		<nav aria-label="Pagination" th:if="${transactions.size() > 0}">
-			<ul class="pagination justify-content-center">
-				<li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-					<a th:replace="common/paging :: paging(1, '<<', 'First Page' ,${categoryId}, ${currentMonthYear}, ${currentMonth})"></a>
-				</li>
-				<li class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
-					<a th:replace="common/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page',${categoryId}, ${currentMonthYear}, ${currentMonth})"></a>
-				</li>
-				<li class="page-item disabled" th:if="${currentPage - 2 > 1}">
-					<a class="page-link" href="#">...</a>
-				</li>
-				<li class="page-item" th:classappend="${page == currentPage} ? 'active'"
-					th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
-					<a th:replace="common/paging :: paging(${page}, ${page}, 'Page ' + ${page},${categoryId}, ${currentMonthYear}, ${currentMonth})"></a>
-				</li>
-				<li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
-					<a class="page-link" href="#">...</a>
-				</li>
-				<li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
-					<a th:replace="common/paging :: paging(${currentPage + 1},'Next', 'Next Page',${categoryId}, ${currentMonthYear}, ${currentMonth})"></a>
-				</li>
-				<li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-					<a th:replace="common/paging :: paging(${totalPages}, '>>', 'Last Page',${categoryId}, ${currentMonthYear}, ${currentMonth})"></a>
-				</li>
-			</ul>
-		</nav>
-		<table style="width:100%" border="1" class="table table-striped table-responsive-md">
-			<thead>
-				<tr>
-					<th th:replace="common/sorting :: sorting('date','Date')"></th>
-					<th th:replace="common/sorting :: sorting('description','Description')"></th>
-					<th th:replace="common/sorting :: sorting('account','Account')"></th>
-					<th th:replace="common/sorting :: sorting('category','Category')"></th>
-					<th th:replace="common/sorting :: sorting('amount','Amount')"></th>
-					<th th:replace="common/sorting :: sorting('transactionType','Type')"></th>
-					<th th:if=${showUpdateDelete}>Update</th>
-					<th th:if=${showUpdateDelete}>Delete</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="transaction : ${transactions}">
-					<td th:text="${#dates.format(transaction.date, 'dd/MM/yyyy HH:mm')}"></td>
-					<td th:text="${transaction.description}"></td>
-					<td th:text="${transaction.account.name}"></td>
-					<td th:text="${transaction.category.name}"></td>
-					<td align="right" th:text="${#numbers.formatDecimal(transaction.amount,1,'COMMA', 2, 'POINT')}">
-					</td>
-					<td th:text="${transaction.transactionType}"></td>
-					<td th:if=${showUpdateDelete} align="center"> <a
-							th:href="@{/showFormForTransactionUpdate/{id}(id=${transaction.id})}"
-							class="update-delete-button">Update</a></td>
-					<td th:if=${showUpdateDelete} align="center"><a
-							th:href="@{/deleteTransaction/{id}(id=${transaction.id})}"
-							class="update-delete-button">Delete</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="" th:unless="${transactions.size() > 0}">
-			<span>No Transactions found!</span>
-		</div>
-		
-	</section>
-</div>
+<section th:fragment="transactionListFragment(showUpdateDelete, categoryId, currentMonthYear, currentMonth)">
+	<section th:insert="common/Navigation :: navigation" />
+	<table style="width:100%" border="1" class="table table-striped table-responsive-md">
+		<thead>
+			<tr>
+				<th th:replace="common/sorting :: sorting('date','Date')"></th>
+				<th th:replace="common/sorting :: sorting('description','Description')"></th>
+				<th th:replace="common/sorting :: sorting('account','Account')"></th>
+				<th th:replace="common/sorting :: sorting('category','Category')"></th>
+				<th th:replace="common/sorting :: sorting('amount','Amount')"></th>
+				<th th:replace="common/sorting :: sorting('transactionType','Type')"></th>
+				<th th:if=${showUpdateDelete}>Update</th>
+				<th th:if=${showUpdateDelete}>Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="transaction : ${transactions}">
+				<td width="10%" th:text="${#dates.format(transaction.date, 'dd/MM/yyyy HH:mm')}"></td>
+				<td width="30%" th:text="${transaction.description}"></td>
+				<td width="10%" th:text="${transaction.account.name}"></td>
+				<td width="10%" th:text="${transaction.category.name}"></td>
+				<td width="8%" align="right" th:text="${#numbers.formatDecimal(transaction.amount,1,'COMMA', 2, 'POINT')}">
+				</td>
+				<td width="5%" th:text="${transaction.transactionType}"></td>
+				<td th:if=${showUpdateDelete} align="center"> <a
+						th:href="@{/showFormForTransactionUpdate/{id}(id=${transaction.id})}"
+						class="update-delete-button">Update</a></td>
+				<td th:if=${showUpdateDelete} align="center"><a
+						th:href="@{/deleteTransaction/{id}(id=${transaction.id})}"
+						class="update-delete-button">Delete</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<section th:insert="common/Navigation :: navigation" />
+	<div class="" th:unless="${transactions.size() > 0}">
+		<span>No Transactions found!</span>
+	</div>
+
+</section>

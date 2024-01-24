@@ -1,112 +1,95 @@
 <html>
 
-<head>
-<title>Transactions</title>
-<link rel="stylesheet" type="text/css"
-	th:href="@{/assets/css/styles.css}" />
-<link rel="stylesheet" type="text/css"
-	th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-	integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-	crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
+<head th:include="header.html ::header"></head>
 
 <body>
 	<div>
-		<div th:insert="headerFragment.html ::header('Transactions')"></div>
+		<div th:insert="TopNavigation.html ::topNavigation('Transactions')"></div>
 	</div>
 	<br />
 	<br />
 	<h2>Transaction List</h2>
-	<br />
 	<hr />
 	<br />
-	<div id="monthNav">
-		<table width="100%">
-			<tr>
-				<td>
-					<div th:if="${param.categoryId} !=null">
-						<form
-							th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}"
-							method="GET">
-							<input type="hidden" name="categoryId"
-								th:value="${param.categoryId}" />
-							<button class="navButtonClass" type="submit">
-								Previous Month</span>
-							</button>
-						</form>
-					</div>
-					<div th:unless="${param.categoryId} !=null">
-						<form
-							th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}"
-							method="GET">
-							<button class="navButtonClass" type="submit">
-								Previous Month</span>
-							</button>
-						</form>
-					</div>
-				</td>
-				<td>
-					<div th:if="${param.categoryId} !=null">
-						<form
-							th:action="'/Transactions/'+${currentMonthYear}+'/'+${currentMonth}"
-							method="GET">
-							<input type="hidden" name="categoryId"
-								th:value="${param.categoryId}" />
-							<button class="navButtonClass" type="submit">Current
-								Month</button>
-						</form>
-					</div>
-					<div th:unless="${param.categoryId} !=null">
-						<form
-							th:action="'/Transactions/'+${currentMonthYear}+'/'+${currentMonth}"
-							method="GET">
-							<button class="navButtonClass" type="submit">Current
-								Month</button>
-						</form>
-					</div>
-				</td>
-				<td>
-					<div th:if="${param.categoryId} !=null">
-						<form
-							th:action="'/Transactions/'+${nextMonthYear}+'/'+${nextMonth}+'?categoryId='+${param.categoryId}"
-							method="GET">
-							<input type="hidden" name="categoryId"
-								th:value="${param.categoryId}" />
-							<button class="navButtonClass" type="submit">Next Month</button>
-						</form>
-					</div>
-					<div th:unless="${param.categoryId} !=null">
-						<form
-							th:action="'/Transactions/'+${nextMonthYear}+'/'+${nextMonth}"
-							method="GET">
-							<button class="navButtonClass" type="submit">Next Month</button>
-						</form>
-					</div>
+	<table width="100%">
+		<tr>
+			<td>
+				<div th:if="${param.categoryId} !=null">
+					<form th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}" method="GET">
+						<input type="hidden" name="categoryId" th:value="${param.categoryId}" />
+						<button class="navButtonClass" type="submit">
+							Previous Month</span>
+						</button>
+					</form>
+				</div>
+				<div th:unless="${param.categoryId} !=null">
+					<form th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}" method="GET">
+						<button class="navButtonClass" type="submit">
+							Previous Month</span>
+						</button>
+					</form>
+				</div>
+			</td>
+			<td>
+				<div th:if="${param.categoryId} !=null">
+					<form th:action="'/Transactions/'+${currentMonthYear}+'/'+${currentMonth}" method="GET">
+						<input type="hidden" name="categoryId" th:value="${param.categoryId}" />
+						<button class="navButtonClass" type="submit">Current
+							Month</button>
+					</form>
+				</div>
+				<div th:unless="${param.categoryId} !=null">
+					<form th:action="'/Transactions/'+${currentMonthYear}+'/'+${currentMonth}" method="GET">
+						<button class="navButtonClass" type="submit">Current
+							Month</button>
+					</form>
+				</div>
+			</td>
+			<td>
+				<div th:if="${param.categoryId} !=null">
+					<form
+						th:action="'/Transactions/'+${nextMonthYear}+'/'+${nextMonth}+'?categoryId='+${param.categoryId}"
+						method="GET">
+						<input type="hidden" name="categoryId" th:value="${param.categoryId}" />
+						<button class="navButtonClass" type="submit">Next Month</button>
+					</form>
+				</div>
+				<div th:unless="${param.categoryId} !=null">
+					<form th:action="'/Transactions/'+${nextMonthYear}+'/'+${nextMonth}" method="GET">
+						<button class="navButtonClass" type="submit">Next Month</button>
+					</form>
+				</div>
 
-				</td>
-			</tr>
+			</td>
+		</tr>
+		<div th:if="${categoryId!=null}">
 			<tr>
+
 				<td colspan="3">
 					<button class="addButtonClass" type="button"
 						th:onclick="|window.location.href='/addnewTransaction'|">Add
 						Transaction</button> <br />
-				<br />
-					<div
-						th:insert="transactions/ListTransactionsFragment ::transactionListFragment(false, ${categoryId}, ${currentMonthYear}, ${currentMonth})"></div>
+					<br />
 					<br />
 
+			</tr>
+		</div>
+		<div th:unless="${categoryId!=null && categoryId!=''}">
+			<tr>
+				<td colspan="3">
+					<div
+						th:insert="transactions/ListTransactionsFragment ::transactionListFragment(true, null, ${currentMonthYear}, ${currentMonth})">
 					</div>
 				</td>
 			</tr>
-		</table>
-	</div>
+		</div>
+	</table>
+
 	<br />
 	<br />
 	<hr>
-<body>
-</body>
+
+	<body>
+	</body>
 
 </html>

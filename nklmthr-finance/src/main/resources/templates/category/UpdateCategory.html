@@ -1,13 +1,8 @@
 <html>
-
-<head>
-	<title>Institutions</title>
-	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/styles.css}" />
-</head>
-
+<head th:include="header.html ::header"></head>
 <body>
 	<div>
-		<div th:insert="headerFragment.html ::header('Categorys')"></div>
+		<div th:insert="TopNavigation.html ::topNavigation('Categorys')"></div>
 	</div>
 	<div class="container">		
 		<h2>Update Category</h2>

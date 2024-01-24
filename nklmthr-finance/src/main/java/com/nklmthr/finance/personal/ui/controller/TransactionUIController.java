@@ -45,10 +45,10 @@ public class TransactionUIController {
 
 	
 	@GetMapping("/Transactions")
-	public String getTransactions(Model m, @RequestParam(required = false) String keyword,
+	public String getTransactions(Model m, @PathParam(value = "categoryId") String categoryId,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int size,
 			@RequestParam(defaultValue = "date,desc") String[] sort) {
-		return getTransactionsByCategoryInMonth(m, null, null, null, keyword, page, size, sort);
+		return getTransactionsByCategoryInMonth(m, null, null, null, categoryId, page, size, sort);
 	}
 
 	@GetMapping("/Transactions/{year}/{month}")
