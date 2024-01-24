@@ -16,16 +16,16 @@
 		<tbody>
 			<tr th:each="transaction : ${transactions}">
 				<td width="10%" th:text="${#dates.format(transaction.date, 'dd/MM/yyyy HH:mm')}"></td>
-				<td width="30%" th:text="${transaction.description}"></td>
-				<td width="10%" th:text="${transaction.account.name}"></td>
-				<td width="10%" th:text="${transaction.category.name}"></td>
+				<td width="37%" th:text="${transaction.description}"></td>
+				<td width="15%" th:text="${transaction.account.name}"></td>
+				<td width="15%" th:text="${transaction.category.name}"></td>
 				<td width="8%" align="right" th:text="${#numbers.formatDecimal(transaction.amount,1,'COMMA', 2, 'POINT')}">
 				</td>
 				<td width="5%" th:text="${transaction.transactionType}"></td>
-				<td th:if=${showUpdateDelete} align="center"> <a
+				<td width="5%" th:if=${showUpdateDelete} align="center"> <a
 						th:href="@{/showFormForTransactionUpdate/{id}(id=${transaction.id})}"
 						class="update-delete-button">Update</a></td>
-				<td th:if=${showUpdateDelete} align="center"><a
+				<td width="5%" th:if=${showUpdateDelete} align="center"><a
 						th:href="@{/deleteTransaction/{id}(id=${transaction.id})}"
 						class="update-delete-button">Delete</a>
 				</td>

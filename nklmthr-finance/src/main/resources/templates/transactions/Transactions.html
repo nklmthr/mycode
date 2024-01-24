@@ -73,6 +73,13 @@
 					<br />
 
 			</tr>
+			<tr>
+				<td colspan="3">
+					<div
+						th:insert="transactions/ListTransactionsFragment ::transactionListFragment(false, ${categoryId}, ${currentMonthYear}, ${currentMonth})">
+					</div>
+				</td>
+			</tr>
 		</div>
 		<div th:unless="${categoryId!=null && categoryId!=''}">
 			<tr>
