@@ -117,13 +117,13 @@ public class TransactionUIController {
 		List<Account> accounts = accountService.getAllAccounts();
 		m.addAttribute("accountList", accounts);
 		Transaction transaction = new Transaction();
-		transaction.setDate(Date.from(LocalDateTime.now().toInstant(ZoneOffset.of("+05:30"))));
+		transaction.setDate(new Date());
 		m.addAttribute("transaction", transaction);
 		m.addAttribute("transactionTypes", transactionService.getTransactionTypes());
 		m.addAttribute("currentPage", pageTansactions.getNumber() + 1);
 		m.addAttribute("totalItems", pageTansactions.getTotalElements());
 		m.addAttribute("totalPages", pageTansactions.getTotalPages());
-		m.addAttribute("pageSize", 25);
+		m.addAttribute("pageSize", 20);
 		m.addAttribute("sortField", "date");
 		m.addAttribute("sortDirection", "desc");
 		m.addAttribute("reverseSortDirection", "asc");
