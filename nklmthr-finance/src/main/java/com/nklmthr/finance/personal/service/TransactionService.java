@@ -48,18 +48,17 @@ public class TransactionService {
 				queue.addAll(current.getChildCategorys());
 			}
 			logger.info("Total Child Categories" + categories.size());
-			pageTransactions = transactionRepository.findAllTransactionsInCategoriesByMonth(pageable, year,
-					month, categories.stream().map(s -> s.getId()).collect(Collectors.toList()));
+			pageTransactions = transactionRepository.findAllTransactionsInCategoriesByMonth(pageable, year, month,
+					categories.stream().map(s -> s.getId()).collect(Collectors.toList()));
 		} else {
 			logger.info("No Catgory. Find Transactions by year and month");
-			pageTransactions = transactionRepository.findAllTransactionsByMonth(pageable, year, month);
+			pageTransactions = findAllTransactionsByMonth(pageable, year, month);
 		}
 		return pageTransactions;
 	}
 
-	public Page<Transaction> getLatestTransaction(int numberOfTransactions) {
-		Page<Transaction> transactions = transactionRepository
-				.findAll(PageRequest.of(0, numberOfTransactions, Sort.by(Sort.Direction.DESC, "date")));
+	public Page<Transaction> findAllTransactionsByMonth(Pageable pageable, Integer year, Integer month) {
+		Page<Transaction> transactions = transactionRepository.findAllTransactionsByMonth(pageable, year, month);
 		return transactions;
 	}
 

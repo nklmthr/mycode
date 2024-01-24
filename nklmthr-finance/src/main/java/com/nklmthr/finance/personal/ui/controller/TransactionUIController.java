@@ -43,7 +43,6 @@ public class TransactionUIController {
 	@Autowired
 	private TransactionService transactionService;
 
-	
 	@GetMapping("/Transactions")
 	public String getTransactions(Model m, @PathParam(value = "categoryId") String categoryId,
 			@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int size,
@@ -69,7 +68,7 @@ public class TransactionUIController {
 		if (month == null || month == 0) {
 			month = YearMonth.now().getMonthValue();
 		}
-		logger.info("keyword ="+keyword+", pageable="+pageable);
+		logger.info("keyword =" + keyword + ", pageable=" + pageable);
 		Page<Transaction> pageTansactions = transactionService.getTransactionsByCategoryInYearAndMonth(keyword,
 				pageable, categoryId, year, month);
 		previousMonthYear = YearMonth.of(year, month).minusMonths(1).getYear();
@@ -96,7 +95,19 @@ public class TransactionUIController {
 
 	@GetMapping("/addnewTransaction")
 	public String addNewTransaction(Model m) {
-		Page<Transaction> pageTansactions = transactionService.getLatestTransaction(10);
+		String sortField = "date";
+		String sortDirection = "desc";
+		Direction direction = sortDirection.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+		Order order = new Order(direction, sortField);
+		Pageable pageable = PageRequest.of(0, 25, Sort.by(order));
+		Integer year = null, month = null;
+		if (year == null || year == 0) {
+			year = YearMonth.now().getYear();
+		}
+		if (month == null || month == 0) {
+			month = YearMonth.now().getMonthValue();
+		}
+		Page<Transaction> pageTansactions = transactionService.findAllTransactionsByMonth(pageable, year, month);
 		m.addAttribute("transactions", pageTansactions.getContent());
 		List<Category> categorys = categoryService.getAllCategorys();
 		m.addAttribute("categoryList", categorys);
@@ -109,7 +120,7 @@ public class TransactionUIController {
 		m.addAttribute("currentPage", pageTansactions.getNumber() + 1);
 		m.addAttribute("totalItems", pageTansactions.getTotalElements());
 		m.addAttribute("totalPages", pageTansactions.getTotalPages());
-		m.addAttribute("pageSize", 1);
+		m.addAttribute("pageSize", 25);
 		m.addAttribute("sortField", "date");
 		m.addAttribute("sortDirection", "desc");
 		m.addAttribute("reverseSortDirection", "asc");
