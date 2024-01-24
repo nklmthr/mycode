@@ -1,6 +1,9 @@
 package com.nklmthr.finance.personal.ui.controller;
 
+import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
 
@@ -114,7 +117,7 @@ public class TransactionUIController {
 		List<Account> accounts = accountService.getAllAccounts();
 		m.addAttribute("accountList", accounts);
 		Transaction transaction = new Transaction();
-		transaction.setDate(new Date());
+		transaction.setDate(Date.from(LocalDateTime.now().toInstant(ZoneOffset.of("+05:30"))));
 		m.addAttribute("transaction", transaction);
 		m.addAttribute("transactionTypes", transactionService.getTransactionTypes());
 		m.addAttribute("currentPage", pageTansactions.getNumber() + 1);
