@@ -42,11 +42,7 @@ public class TransactionUIController {
 
 	@Autowired
 	private TransactionService transactionService;
-	
-	@GetMapping("transactions/ListTransactionsFragment")
-	public String getListTransactionsFragment() {
-		return "transactions/ListTransactionsFragment";
-	}
+
 	
 	@GetMapping("/Transactions")
 	public String getTransactions(Model m, @RequestParam(required = false) String keyword,
@@ -80,6 +76,7 @@ public class TransactionUIController {
 		nextMonthYear = YearMonth.of(year, month).plusMonths(1).getYear();
 		previousMonth = YearMonth.of(year, month).minusMonths(1).getMonth().getValue();
 		nextMonth = YearMonth.of(year, month).plusMonths(1).getMonth().getValue();
+		m.addAttribute("categoryId", categoryId);
 		m.addAttribute("previousMonth", previousMonth);
 		m.addAttribute("previousMonthYear", previousMonthYear);
 		m.addAttribute("nextMonth", nextMonth);
