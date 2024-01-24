@@ -38,7 +38,7 @@ public class InstitutionUIController {
 		m.addAttribute("institutionList", institutions);
 		Institution institution = new Institution();
 		m.addAttribute("institution", institution);
-		return "institutions/addnewInstitution";
+		return "institutions/AddnewInstitution";
 	}
 
 	@PostMapping("/saveInstitution")

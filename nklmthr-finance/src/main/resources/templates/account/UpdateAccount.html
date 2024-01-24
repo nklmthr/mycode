@@ -12,7 +12,7 @@
 
 			<!-- Add hidden form field to handle update -->
 			<input type="hidden" th:field="*{id}" />
-			<label>Name<input type="text" th:field="*{name}" class="form-control mb-4 col-4"></label>
+			<label>Name<input type="text" th:field="*{name}" ></label>
 			<label>Account Type<select th:field="*{accountType}">
 					<option th:each="accountType : ${accountTypeList}" th:value="${accountType.id}"
 						th:text="${accountType.name}"></option>
@@ -21,7 +21,7 @@
 					<option th:each="institution : ${institutionList}" th:value="${institution.id}"
 						th:text="${institution.name}"></option>
 				</select></label><label>Balance
-				<input type="text" th:field="*{transactionBalance}" class="form-control mb-4 col-4"></label>
+				<input type="text" th:field="*{transactionBalance}" ></label>
 			<button type="submit" class="addButtonClass">Update account</button>
 		</form>
 		<br><br>

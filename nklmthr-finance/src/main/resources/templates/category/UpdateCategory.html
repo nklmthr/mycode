@@ -14,7 +14,7 @@
 
 						<!-- Add hidden form field to handle update -->
 						<input type="hidden" th:field="*{id}" />
-						<input type="text" width="80%" th:field="*{name}" class="form-control mb-4 col-4">
+						<input type="text" width="80%" th:field="*{name}" >
 						<select th:field="*{parentCategory}">
 							<option th:value="0" text="Please Select">Please Select</option>
 							<option th:each="category1 : ${categorys}" th:value="${category1.id}"

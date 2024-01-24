@@ -43,7 +43,7 @@ public class CategoryUIController {
 		logger.info("addnewCategory");
 		Category category = new Category();
 		m.addAttribute("category", category);
-		return "category/addnewCategory";
+		return "category/AddnewCategory";
 	}
 
 	@PostMapping("/saveCategory")

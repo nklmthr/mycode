@@ -10,9 +10,9 @@
 	<br>
 	<form action="#" th:action="@{/saveInstitution}" th:object="${institution}" method="POST">
 		<label>Name of Institution
-			<input type="text" th:field="*{name}" placeholder="Insitution Name" class="form-control mb-4 col-4">
+			<input type="text" th:field="*{name}" placeholder="Insitution Name" >
 		</label><label>Description<input type="text" th:field="*{description}" placeholder="Description"
-				class="form-control mb-4 col-4">
+				>
 		</label>
 		<button type="submit" class="addButtonClass">Save
 			Institution</button>

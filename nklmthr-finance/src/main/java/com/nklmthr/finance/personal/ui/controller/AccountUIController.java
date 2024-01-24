@@ -51,7 +51,7 @@ public class AccountUIController {
 		logger.info("addnewAccount ");
 		Account account = new Account();
 		m.addAttribute("account", account);
-		return "account/addnewAccount";
+		return "account/AddnewAccount";
 	}
 
 	@PostMapping("/saveAccount")

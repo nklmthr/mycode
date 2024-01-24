@@ -51,7 +51,7 @@
 
 	<br />
 	<h3>Recent Transactions</h3>
-	<div th:insert="transactions/ListTransactionsFragment ::transactionListFragment(false)"></div>
+	<div th:insert="transactions/ListTransactionsFragment ::transactionListFragment(false, ${categoryId}, ${currentMonthYear}, ${currentMonth})"></div>
 </body>
 
 </html>

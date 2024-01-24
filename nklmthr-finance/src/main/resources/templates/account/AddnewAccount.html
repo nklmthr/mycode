@@ -1,5 +1,7 @@
 <html>
+
 <head th:include="header.html ::header"></head>
+
 <body>
 	<div>
 		<div th:insert="TopNavigation.html ::topNavigation('Accounts')"></div>
@@ -8,8 +10,7 @@
 	<h2>Add Account</h2>
 	<br><br>
 	<form action="#" th:action="@{/saveAccount}" th:object="${account}" method="POST">
-		<label>Name<input type="text" th:field="*{name}" placeholder="Account Name"
-				class="form-control mb-4 col-4"></label>
+		<label>Name<input type="text" th:field="*{name}" placeholder="My Savings Bank Account"></label>
 		<label>Account type<select th:field="*{accountType}">
 				<option th:each="accountType : ${accountTypeList}" th:value="${accountType.id}"
 					th:text="${accountType.name}"></option>
@@ -20,8 +21,7 @@
 					th:text="${institution.name}"></option>
 			</select></label>
 		<label>Balance
-			<input type="text" th:field="*{transactionBalance}" placeholder="transactionBalance"
-				class="form-control mb-4 col-4">
+			<input type="text" th:field="*{transactionBalance}" placeholder="transactionBalance">
 		</label>
 		<button type="submit" class="addButtonClass">Save Account</button>
 

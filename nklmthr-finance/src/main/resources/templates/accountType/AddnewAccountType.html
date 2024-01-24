@@ -1,5 +1,7 @@
 <html>
+
 <head th:include="header.html ::header"></head>
+
 <body>
 	<div>
 		<div th:insert="TopNavigation.html ::topNavigation('AccountTypes')"></div>
@@ -9,9 +11,9 @@
 	<h2>Add AccountType</h2>
 	<br>
 	<form action="#" th:action="@{/saveAccountType}" th:object="${accountType}" method="POST">
-		<input type="text" th:field="*{name}" placeholder="Account Type Name">
-		<input type="text" th:field="*{description}" placeholder="Description">
-		<input type="text" th:field="*{classification}" placeholder="Description">
+		<label>Name: <input type="text" th:field="*{name}" placeholder="Account Type Name"></label>
+		<label>Description<input type="text" th:field="*{description}" placeholder="Description"></label>
+		<label>Classification<input type="text" th:field="*{classification}" placeholder="Classification"></label>
 		<button type="submit" class="addButtonClass">Save AccountType</button>
 	</form>
 	<br>

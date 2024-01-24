@@ -38,7 +38,7 @@ public class AccountTypeUIController {
 		AccountType accountType = new AccountType();
 		m.addAttribute("accountType", accountType);
 		logger.info("addnewAccountType existing size:" + accountTypeList.size());
-		return "accountType/addnewAccountType";
+		return "accountType/AddnewAccountType";
 	}
 
 	@PostMapping("/saveAccountType")

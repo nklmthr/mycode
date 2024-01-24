@@ -9,7 +9,7 @@
 	<br>
 	<br>
 	<form action="#" th:action="@{/saveCategory}" th:object="${category}" method="POST">
-		<input type="text" th:field="*{name}" placeholder="Category Name" class="form-control mb-4 col-4">
+		<input type="text" th:field="*{name}" placeholder="Category Name" >
 		<select th:field="*{parentCategory}">
 				<option th:value="0" selected value=" " text="Please Select">Please Select</option>
 				<option th:each="category1 : ${categorys}" th:value="${category1.id}"
