@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
+
 <head th:include="header.html ::header"></head>
+
 <body>
 	<div th:insert="TopNavigation.html ::topNavigation('home')"></div>
 	<br />
@@ -28,6 +30,12 @@
 	<br />
 	<hr>
 	<br />
+
+	<button class="addButtonClass" type="button" th:onclick="|window.location.href='/addnewTransaction'|">Add
+		Transaction</button> <br />
+	<br />
+	<br />
+
 	<div id="catSpendsDiv">
 		<section th:include="@{CategorySpendsFragment} :: fragment" th:with="maincategories=${categorySpends}">
 		</section>
