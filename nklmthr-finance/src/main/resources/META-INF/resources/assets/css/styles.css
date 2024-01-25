@@ -2,7 +2,7 @@
 .topnav {
 	background-color: steelblue;
 	overflow: hidden;
-	
+
 }
 
 /* Style the links inside the navigation bar */
@@ -117,14 +117,27 @@ label :focus-within {
 }
 
 .update-delete-button {
-    display: block;
-    width: 85px;
-    height: 10px;
-    background: #4E9CAF;
-    padding: 12px;
-    text-align: center;
-    border-radius: 5px;
-    color: white;
-    font-weight: normal;
-    line-height: 1px;
+	display: block;
+	width: 85px;
+	height: 10px;
+	background: #4E9CAF;
+	padding: 12px;
+	text-align: center;
+	border-radius: 5px;
+	color: white;
+	font-weight: normal;
+	line-height: 1px;
+}
+
+.addMore-button {
+	display: block;
+	width: 200px;
+	height: 10px;
+	background: #4E9CAF;
+	padding: 12px;
+	text-align: center;
+	border-radius: 5px;
+	color: white;
+	font-weight: normal;
+	line-height: 1px;
 }

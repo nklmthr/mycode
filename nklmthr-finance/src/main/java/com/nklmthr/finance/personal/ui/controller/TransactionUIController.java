@@ -102,7 +102,7 @@ public class TransactionUIController {
 		String sortDirection = "desc";
 		Direction direction = sortDirection.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
 		Order order = new Order(direction, sortField);
-		Pageable pageable = PageRequest.of(0, 25, Sort.by(order));
+		Pageable pageable = PageRequest.of(0, 15, Sort.by(order));
 		Integer year = null, month = null;
 		if (year == null || year == 0) {
 			year = YearMonth.now().getYear();
@@ -119,6 +119,46 @@ public class TransactionUIController {
 		Transaction transaction = new Transaction();
 		transaction.setDate(new Date());
 		m.addAttribute("transaction", transaction);
+		m.addAttribute("currentMonth", YearMonth.now().getMonthValue());
+		m.addAttribute("currentMonthYear", YearMonth.now().getYear());
+		m.addAttribute("transactionTypes", transactionService.getTransactionTypes());
+		m.addAttribute("currentPage", pageTansactions.getNumber() + 1);
+		m.addAttribute("totalItems", pageTansactions.getTotalElements());
+		m.addAttribute("totalPages", pageTansactions.getTotalPages());
+		m.addAttribute("pageSize", 15);
+		m.addAttribute("sortField", "date");
+		m.addAttribute("sortDirection", "desc");
+		m.addAttribute("reverseSortDirection", "asc");
+		logger.info("addNewTransaction ");
+		return "transactions/AddNewTransaction";
+	}
+	
+	@GetMapping("/saveAndAddnewTransaction")
+	public String saveAndAddnewTransaction(@ModelAttribute("transaction") Transaction transaction, Model m) {
+		saveTransaction(transaction);
+		String sortField = "date";
+		String sortDirection = "desc";
+		Direction direction = sortDirection.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+		Order order = new Order(direction, sortField);
+		Pageable pageable = PageRequest.of(0, 25, Sort.by(order));
+		Integer year = null, month = null;
+		if (year == null || year == 0) {
+			year = YearMonth.now().getYear();
+		}
+		if (month == null || month == 0) {
+			month = YearMonth.now().getMonthValue();
+		}
+		Page<Transaction> pageTansactions = transactionService.findAllTransactionsByMonth(pageable, year, month);
+		m.addAttribute("transactions", pageTansactions.getContent());
+		List<Category> categorys = categoryService.getAllCategorys();
+		m.addAttribute("categoryList", categorys);
+		List<Account> accounts = accountService.getAllAccounts();
+		m.addAttribute("accountList", accounts);
+		Transaction newTransaction = new Transaction();
+		newTransaction.setDate(new Date());
+		m.addAttribute("transaction", newTransaction);
+		m.addAttribute("currentMonth", YearMonth.now().getMonthValue());
+		m.addAttribute("currentMonthYear", YearMonth.now().getYear());
 		m.addAttribute("transactionTypes", transactionService.getTransactionTypes());
 		m.addAttribute("currentPage", pageTansactions.getNumber() + 1);
 		m.addAttribute("totalItems", pageTansactions.getTotalElements());

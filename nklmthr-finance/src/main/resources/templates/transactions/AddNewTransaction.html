@@ -1,5 +1,7 @@
 <html>
+
 <head th:include="header.html ::header"></head>
+
 <body>
 	<div>
 		<div th:insert="TopNavigation.html ::topNavigation('Transactions')"></div>
@@ -9,40 +11,69 @@
 	<br />
 	<br />
 	<form action="#" th:action="@{/saveTransaction}" th:object="${transaction}" method="POST">
-
 		<!-- Add hidden form field to handle update -->
 		<input type="hidden" th:field="*{id}" />
-		<label>Date
-			<input type="datetime-local" th:field="*{date}">
-		</label>
-		<label>
-			Description
-			<input type="text" size="100" placeholder="Groceries..." required="true" th:field="*{description}">
-		</label>
-		<br />
-		<label>Category
-			<select th:field="*{category}">
-				<option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${category.name}">
-				</option>
-			</select>
-		</label>
-		<label>Account
-			<select th:field="*{account}">
-				<option th:each="account : ${accountList}" th:value="${account.id}" th:text="${account.name}"></option>
-			</select>
-		</label>
-		<br />
-		<label>Amount
-			<input type="text" size="15" inputmode="numeric" th:field="*{amount}" required="true" placeholder="0.0" />
-		</label>
-		<label>Type
-			<select th:field="*{transactionType}">
-				<option th:each="transactionType:${transactionTypes}" th:value="${transactionType.name}"
-					th:text="${transactionType.name}" />
-			</select>
-		</label>
-		<br /><br />
-		<button class="update-delete-button" type="submit">Save</button>
+		<table width="100%">
+			<tr>
+				<td align="right" padding-right="40px">
+					<label>Date
+						<input type="datetime-local" th:field="*{date}">
+					</label>
+				</td>
+				<td>
+					<label>
+						Description
+						<input type="text" size="100" placeholder="Groceries..." required="true"
+							th:field="*{description}">
+					</label>
+
+				</td>
+			</tr>
+			<tr>
+				<td align="right">
+					<label>Category
+						<select th:field="*{category}">
+							<option th:each="category : ${categoryList}" th:value="${category.id}"
+								th:text="${category.name}">
+							</option>
+						</select>
+					</label>
+				</td>
+				<td>
+					<label>Account
+						<select th:field="*{account}">
+							<option th:each="account : ${accountList}" th:value="${account.id}"
+								th:text="${account.name}"></option>
+						</select>
+					</label>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">
+					<label>Amount
+						<input type="text" size="15" inputmode="numeric" th:field="*{amount}" required="true"
+							placeholder="0.0" />
+					</label>
+				</td>
+				<td>
+					<label>Type
+						<select th:field="*{transactionType}">
+							<option th:each="transactionType:${transactionTypes}" th:value="${transactionType.name}"
+								th:text="${transactionType.name}" />
+						</select>
+					</label>
+				</td>
+			</tr>
+			<tr>
+				<td align="center">
+					<button class="update-delete-button" type="submit">Save</button>
+				</td>
+				<td align="center">
+					<button th:action="@{/saveAndAddnewTransaction}" class="addMore-button" type="submit">Add
+						More</button>
+				</td>
+			</tr>
+		</table>
 		<br />
 	</form>
 	<br />
@@ -51,7 +82,9 @@
 
 	<br />
 	<h3>Recent Transactions</h3>
-	<div th:insert="transactions/ListTransactionsFragment ::transactionListFragment(false, ${categoryId}, ${currentMonthYear}, ${currentMonth})"></div>
+	<div
+		th:insert="transactions/ListTransactionsFragment ::transactionListFragment(false, ${categoryId}, ${currentMonthYear}, ${currentMonth})">
+	</div>
 </body>
 
 </html>
