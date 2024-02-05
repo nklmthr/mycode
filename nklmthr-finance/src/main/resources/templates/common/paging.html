@@ -1,7 +1,7 @@
 <a
-	th:fragment="paging(pageNum, label, tooltip,categoryId, currentMonthYear, currentMonth)"
+	th:fragment="paging(pageNum, label, tooltip,categoryId, monthYear, month)"
 	class="page-link"
-	th:href="@{'/Transactions/'+ ${currentMonthYear} +'/'+${currentMonth}+'?' + ${categoryId!=null && categoryId!=''? 'categoryId=' + categoryId + '&' : ''}
+	th:href="@{'/Transactions/'+ ${monthYear} +'/'+${month}+'?' + ${categoryId!=null && categoryId!=''? 'categoryId=' + categoryId + '&' : ''}
                            + 'page=' + ${pageNum} + '&size=' + ${pageSize}
                            + ${sortField!=null ? '&sort=' + sortField + ',' + sortDirection : ''}}"
 	th:title="${tooltip}" rel="tooltip"> [[${label}]] </a>

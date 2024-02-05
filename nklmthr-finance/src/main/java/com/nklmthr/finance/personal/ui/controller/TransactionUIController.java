@@ -1,5 +1,7 @@
 package com.nklmthr.finance.personal.ui.controller;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.ZoneId;
@@ -58,7 +60,7 @@ public class TransactionUIController {
 			@PathVariable(value = "month") Integer month, @PathParam(value = "categoryId") String categoryId,
 			@RequestParam(required = false) String keyword, @RequestParam(defaultValue = "1") int page,
 			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "date,desc") String[] sort) {
-
+		logger.info("Recieved year =" + year + ", month=" + month);
 		String sortField = sort[0];
 		String sortDirection = sort[1];
 		Direction direction = sortDirection.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
@@ -71,7 +73,7 @@ public class TransactionUIController {
 		if (month == null || month == 0) {
 			month = YearMonth.now().getMonthValue();
 		}
-		logger.info("keyword =" + keyword + ", pageable=" + pageable);
+		logger.info("year =" + year + ", month=" + month);
 		Page<Transaction> pageTansactions = transactionService.getTransactionsByCategoryInYearAndMonth(keyword,
 				pageable, categoryId, year, month);
 		previousMonthYear = YearMonth.of(year, month).minusMonths(1).getYear();
@@ -84,7 +86,9 @@ public class TransactionUIController {
 		m.addAttribute("nextMonth", nextMonth);
 		m.addAttribute("nextMonthYear", nextMonthYear);
 		m.addAttribute("currentMonth", YearMonth.now().getMonthValue());
-		m.addAttribute("currentMonthYear", YearMonth.now().getYear());
+		m.addAttribute("currentMonthYear",  YearMonth.now().getYear());
+		m.addAttribute("month", month);
+		m.addAttribute("monthYear", year);
 		m.addAttribute("transactions", pageTansactions.getContent());
 		m.addAttribute("currentPage", pageTansactions.getNumber() + 1);
 		m.addAttribute("totalItems", pageTansactions.getTotalElements());
@@ -132,7 +136,7 @@ public class TransactionUIController {
 		logger.info("addNewTransaction ");
 		return "transactions/AddNewTransaction";
 	}
-	
+
 	@GetMapping("/saveAndAddnewTransaction")
 	public String saveAndAddnewTransaction(@ModelAttribute("transaction") Transaction transaction, Model m) {
 		saveTransaction(transaction);
@@ -195,6 +199,24 @@ public class TransactionUIController {
 	public String deleteTransaction(@PathVariable(value = "id") String id, Model model) {
 		transactionService.deleteTransactionById(id);
 		logger.info("deleteTransaction " + id);
+		return "redirect:/Transactions";
+	}
+
+	@GetMapping("/splitTransaction/{id}")
+	public String splitTransaction(@PathVariable(value = "id") String id, Model m) {
+		Transaction parentTransaction = transactionService.findTransactioById(id);
+		m.addAttribute("parentTransaction", parentTransaction);
+		List<Category> categorys = categoryService.getAllCategorys();
+		m.addAttribute("categoryList", categorys);
+		List<Account> accounts = accountService.getAllAccounts();
+		m.addAttribute("accountList", accounts);
+		m.addAttribute("transactionTypes", transactionService.getTransactionTypes());		
+		return "transactions/SplitTransaction";
+	}
+
+	@GetMapping("/saveSplitTransaction/{id}")
+	public String saveSplitTransaction( Model m, @PathVariable(value = "id") String id) {
+		
 		return "redirect:/Transactions";
 	}
 }
