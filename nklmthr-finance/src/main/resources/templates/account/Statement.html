@@ -1,0 +1,23 @@
+<html>
+<head th:include="header.html ::header"></head>
+<body>
+	<div>
+		<div th:insert="TopNavigation.html ::topNavigation('Account')"></div>
+	</div>
+	<br />
+
+
+
+	<div class="container my-2" align="left">
+
+		<h3>Account Statement</h3>
+		<br />
+		<hr>
+		<br />
+		<div
+			th:insert="transactions/ListTransactionsFragment ::transactionListFragment(true, null, ${monthYear}, ${month})">
+		</div>
+	</div>
+</body>
+
+</html>

@@ -28,6 +28,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
 	@Query("select year(t.date) as year, month(t.date) as month, t.category.name as category, sum(t.amount) as amount from Transaction t "
 			+ " where t.category.level =?1 "
 			+ "group by year, month, category order by  year, month, category ")
-	List<Object[]> findCummulativeSumOfTransactionsByMonthAndCategoryLevel(Integer level);	
+	List<Object[]> findCummulativeSumOfTransactionsByMonthAndCategoryLevel(Integer level);
+
+	@Query("select t from Transaction t where t.account = ?1")
+	Page<Transaction> findByAccount_Id(Pageable pageable, Account account);	
 
 }

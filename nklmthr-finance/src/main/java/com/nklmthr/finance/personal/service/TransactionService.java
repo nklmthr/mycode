@@ -18,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.nklmthr.finance.personal.dao.Account;
 import com.nklmthr.finance.personal.dao.Category;
 import com.nklmthr.finance.personal.dao.CategoryRepository;
 import com.nklmthr.finance.personal.dao.Transaction;
@@ -144,6 +145,10 @@ public class TransactionService {
 		transactionRepository.save(parent);
 		logger.info("deleteTransaction " + id);
 		
+	}
+
+	public Page<Transaction> findAllTransactionsByAccount(Pageable pageable, Account account) {
+		return transactionRepository.findByAccount_Id(pageable, account);		
 	}
 
 }
