@@ -6,6 +6,8 @@
 <body>
 	<div th:insert="TopNavigation.html ::topNavigation('home')"></div>
 	<br />
+	<h1>Category Spends</h1>
+	<br />
 	<div id="monthNav">
 		<table width="100%">
 			<tr>
@@ -30,7 +32,6 @@
 	<br />
 	<hr>
 	<br />
-
 	<button class="addButtonClass" type="button" th:onclick="|window.location.href='/addnewTransaction'|">Add
 		Transaction</button> <br />
 	<br />

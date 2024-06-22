@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Category{
 	@Id
@@ -26,11 +28,16 @@ public class Category{
 
 	@Column
 	private int level;
+	
+	@Column
+	private boolean hidden;
+	
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "category", referencedColumnName = "id")
 	private Category parentCategory;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
 	private Set<Category> childCategorys;
 
@@ -74,12 +81,12 @@ public class Category{
 		this.childCategorys = childCategorys;
 	}
 
-	public Object clone() {
-		try {
-			return super.clone();
-		} catch (Exception e) {
-			return null;
-		}
+	public boolean isHidden() {
+		return hidden;
+	}
+
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
 	}
 
 	@Override

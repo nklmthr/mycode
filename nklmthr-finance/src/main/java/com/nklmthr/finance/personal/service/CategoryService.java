@@ -3,6 +3,7 @@ package com.nklmthr.finance.personal.service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,17 @@ public class CategoryService {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
+	
+	public Category getHomeCategory() {
+		Category home = categoryRepository.findHomeCategory();
+		home.getChildCategorys().remove(findTransactionSplitCategory());
+		return home;
+	}
 
 	public List<Category> getAllCategorys() {
-		List<Category> categoryList = categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "level").and(Sort.by(Sort.Direction.ASC, "name")));
+		List<Category> categoryList = categoryRepository
+				.findAll(Sort.by(Sort.Direction.ASC, "level").and(Sort.by(Sort.Direction.ASC, "name"))).stream()
+				.filter(s -> s.isHidden() == Boolean.FALSE).collect(Collectors.toList());
 		return categoryList;
 	}
 
@@ -33,6 +42,7 @@ public class CategoryService {
 			level++;
 		}
 		category.setLevel(level);
+		category.setHidden(false);
 		return categoryRepository.save(category);
 	}
 
@@ -51,6 +61,11 @@ public class CategoryService {
 
 	public Category getRootCategory() {
 		return categoryRepository.findAllCategorysAtLevel(0).get(0);
+	}
+
+	public Category findTransactionSplitCategory() {
+		Category category = categoryRepository.findTransactionSplitCategory();
+		return category;
 	}
 
 }

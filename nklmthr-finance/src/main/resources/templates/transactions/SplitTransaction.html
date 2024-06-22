@@ -1,141 +1,160 @@
 <html>
 
 <head>
-	<div th:replace="header.html ::header"></div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-	<script th:inline="javascript">
-		var items = new Map();
-		var parentTransactionId;
-		/*[# th:each="n : ${categoryList}"]*/
-		items.set("[(${n.id})]", "[(${n.name})]");
-		/*[/]*/
+<div th:replace="header.html ::header"></div>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script th:inline="javascript">
+	var items = new Map();
+	var parentTransactionId;
+	/*[# th:each="n : ${categoryList}"]*/
+	items.set("[(${n.id})]", "[(${n.name})]");
+	/*[/]*/
 
-		parentTransactionId = /*[[${parentTransaction.id}]]*/'';
+	parentTransactionId = /*[[${parentTransaction.id}]]*/'';
 
-		var newRowId = 2;
+	var newRowId = 2;
 
-		$(document).ready(function () {
-			$("#splitMoreButton").bind("click", function () {
-				var newRow = $("<tr id=splitRow_" + newRowId + ">");
-				newRow.append("<td><input type='text' /></td>");
-				var selectHTML = "<td><select name='category' id='categoryTrans'>";
-				items.forEach(function (value, key) {
-					selectHTML = selectHTML.concat("<option value='" + key + "'>" + value + "</option>");
-				});
-				selectHTML = selectHTML.concat("</select></td>");
-				//alert(selectHTML);
-				newRow.append(selectHTML);
-				newRow.append("<td><input type='number' step='.01' name='amount'></input></td>");
-				$("#splitTransactionTable").append(newRow);
-				newRowId++;
-			});
-		});
+	$(document)
+			.ready(
+					function() {
+						$("#splitMoreButton")
+								.bind(
+										"click",
+										function() {
+											var newRow = $("<tr id=splitRow_" + newRowId + ">");
 
-		$(document).on('click', '#saveSplit', function () {
-			var splitTranJson = [];
-			$("#splitTransactionTable tbody tr").each(function () {
-				var trRow = $(this);
-				var id = trRow.attr('id');
-				var desc = trRow.find("td:eq(0) input[type='text']").val();
-				var amount = trRow.find("td:eq(2) input[type='number']").val();
-				var cat = trRow.find("td:eq(1) option:selected").val();
-				var splitTransaction = {};
-				var category = {};
-				category["id"] = cat;
-				splitTransaction["category"] = category;
-				splitTransaction["description"] = desc;
-				splitTransaction["amount"] = amount;
-				splitTranJson.push(splitTransaction);
-			})
+											var selectHTML = "<td  width='20%''><select name='category' id='categoryTrans'>";
+											items
+													.forEach(function(value,
+															key) {
+														selectHTML = selectHTML
+																.concat("<option value='" + key + "'>"
+																		+ value
+																		+ "</option>");
+													});
+											selectHTML = selectHTML
+													.concat("</select></td>");
+											newRow.append(selectHTML);
+											newRow
+													.append("<td  width='40%'><input type='text'  size='100' /></td>");
+											//alert(selectHTML);											
+											newRow
+													.append("<td  width='20%''><input type='number' step='.01' name='amount'></input></td>");
+											$("#splitTransactionTable").append(
+													newRow);
+											newRowId++;
+										});
+					});
 
-			$.post({
-				url: "/api/saveSplitTransaction/" + parentTransactionId,
-				data: JSON.stringify(splitTranJson),// now data come in this function
-				contentType: 'application/json; charset=utf-8'
-			}).done(
-				function (response) {
-					alert(response);
-				})
-				.fail(
-					function (response) {
-						alert('Error: ' + response.responseText);
-					})
-		});
-	</script>
-	</div>
+	$(document).on('click', '#saveSplit', function() {
+		var splitTranJson = [];
+		$("#splitTransactionTable tbody tr").each(function() {
+			var trRow = $(this);
+			var id = trRow.attr('id');
+			var desc = trRow.find("td:eq(1) input[type='text']").val();
+			var amount = trRow.find("td:eq(2) input[type='number']").val();
+			var cat = trRow.find("td:eq(0) option:selected").val();
+			var splitTransaction = {};
+
+			var category = {};
+			category["id"] = cat;
+			splitTransaction["id"] = "";
+			var account = {};
+			account["id"] = "";
+			splitTransaction["account"]=account;
+
+			splitTransaction["category"] = category;
+			splitTransaction["description"] = desc;
+			splitTransaction["amount"] = amount;
+			splitTranJson.push(splitTransaction);
+
+		})
+		$.post({			
+			url : "/api/saveSplitTransaction/" + parentTransactionId,
+			data : JSON.stringify(splitTranJson),// now data come in this function
+			contentType : 'application/json; charset=utf-8'
+		}).done(function(response) {
+			alert(response);
+			window.location.href = "/Transactions";
+		}).fail(function(response) {
+			alert('Error: ' + response.responseText);
+		})
+	});
+</script>
+</div>
 </head>
 
 <body>
 	<div>
 		<div th:insert="TopNavigation.html ::topNavigation('Transactions')"></div>
 	</div>
-	<br /><br />
+	<br />
+	<br />
 	<h2>Split Transaction</h2>
 	<br />
 	<br />
-	<form action="#" th:action="@{/saveSplitTransaction}" th:object="${parentTransaction}" method="POST">
+	<form action="#" th:action="@{/saveSplitTransaction}"
+		th:object="${parentTransaction}" method="POST">
 		<!-- Add hidden form field to handle update -->
 		<input type="hidden" th:field="*{id}" />
 		<table id="parentTransactionTable" width="100%" class="table">
 			<tr>
 				<td align="right"><label>Date: </label></td>
-				<td align="left">
-					<span id="parentTransactionDateSpan"
-						th:text="${#dates.format(parentTransaction.date, 'dd-MMM-yyyy HH:mm')}" /></label>
+				<td align="left"><span id="parentTransactionDateSpan"
+					th:text="${#dates.format(parentTransaction.date, 'dd-MMM-yyyy HH:mm')}" /></label>
 				</td>
 				<td align="right"><label>Category: </label></td>
-				<td align="left">
-					<span id="parentTransactionCategory" th:text="${parentTransaction.category.name}" /></label>
-				</td>
-				<td align="right">
-					<label>Account</label>
-				</td>
-				<td align="left">
-					<select th:field="*{account}">
-						<option th:each="account : ${accountList}" th:value="${account.id}" th:text="${account.name}">
-						</option>
-					</select>
-				</td>
-				<td>
-					<label>Transaction Type</label>
-				</td>
-				<td>
-					<select th:field="*{transactionType}">
-						<option th:each="transactionType:${transactionTypes}" th:value="${transactionType.name}"
+				<td align="left"><span id="parentTransactionCategory"
+					th:text="${parentTransaction.category.name}" /></label></td>
+				<td align="right"><label>Account</label></td>
+				<td align="left"><select th:field="*{account}">
+						<option th:each="account : ${accountList}"
+							th:value="${account.id}" th:text="${account.name}"></option>
+				</select></td>
+				<td><label>Transaction Type</label></td>
+				<td><select th:field="*{transactionType}">
+						<option th:each="transactionType:${transactionTypes}"
+							th:value="${transactionType.name}"
 							th:text="${transactionType.name}" />
-					</select>
-				</td>
+				</select></td>
 			</tr>
 			<tr>
-				<td colspan="4" align="right">Amount: </td>
+				<td colspan="4" align="right">Amount:</td>
 				<td colspan="4" align="left" th:text="${parentTransaction.amount}"></td>
 			</tr>
 		</table>
-		<button type="button" id="splitMoreButton" class="addMore-button" name="splitMore">Split More</button>
-		<button type="button" id="saveSplit" class="addMore-button" name="saveSplit">Save Split</button>
+		<table width="100%">
+			<tr>
+				<td>
+					<button type="button" id="saveSplit" class="addMore-button"
+						name="saveSplit">Save Split</button>
+				</td>
+				<td>
+					<button type="button" id="splitMoreButton" class="addMore-button"
+						name="splitMore">Split More</button>
+				</td>
+			</tr>
+		</table>
 		<table id="splitTransactionTable" class="table">
 			<thead>
 				<tr>
-					<th>Description</th>
 					<th>Category</th>
+					<th>Description</th>
 					<th>Amount</th>
+
 				</tr>
 			</thead>
 			<tbody>
 				<tr id="splitRow_1">
-					<td>
-						<input type="text" name="description">
-					</td>
-					<td>
-						<select id="categoryTrans" th:field="*{category}">
-							<option th:each="category : ${categoryList}" th:value="${category.id}"
-								th:text="${category.name}">
-							</option>
-						</select>
-					</td>
-					<td>
-						<input type="number" step=".01" name="amount">
-					</td>
+					<td width="20%"><select id="categoryTrans"
+						th:field="*{category}">
+							<option th:each="category : ${categoryList}"
+								th:value="${category.id}" th:text="${category.name}"></option>
+					</select></td>
+					<td width="60%"><input type="text" size="100"
+						name="description"></td>
+					<td width="40%"><input type="number" step=".01" name="amount"></td>
 				</tr>
 			</tbody>
 		</table>

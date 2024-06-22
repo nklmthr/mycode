@@ -1,11 +1,11 @@
 package com.nklmthr.finance.personal;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nklmthr.finance.personal.dao.Transaction;
+import com.nklmthr.finance.personal.dao.TransactionRepository;
+import com.nklmthr.finance.personal.exception.SaveSplitTransactionException;
+import com.nklmthr.finance.personal.service.CategoryService;
 import com.nklmthr.finance.personal.service.TransactionService;
 import com.nklmthr.finance.personal.ui.controller.TransactionUIController;
 
@@ -24,27 +27,26 @@ public class FinanceRestController {
 	@Autowired
 	private TransactionService transactionService;
 
+
+	@Autowired
+	private CategoryService categoryService;
+	
 	@PostMapping("/saveSplitTransaction/{id}")
 	public ResponseEntity<String> saveSplitTransaction(@PathVariable(name = "id") String id,
 			@RequestBody List<Transaction> transactions) {
 		logger.info("id=" + id + " trans = " + transactions);
-		Transaction parent = transactionService.findTransactioById(id);
-		BigDecimal sum = new BigDecimal(0);
-		for (Transaction t : transactions) {
-			sum = sum.add(t.getAmount());
-		}
-		if(sum.compareTo(parent.getAmount())!=0) {
+		try {
+			String message = transactionService.saveSplitTransactions(id, transactions);
+		} catch(SaveSplitTransactionException e) {
 			return ResponseEntity.badRequest().body("The Sum of Split Transactions must be equal to Parent");
 		}
 		
-		for (Transaction t : transactions) {
-			t.setDate(parent.getDate());
-			t.setAccount(parent.getAccount());
-			t.setParentTransaction(parent);
-			t.setTransactionType(parent.getTransactionType());
-			transactionService.saveTransaction(t);
-		}
 
 		return ResponseEntity.ok("success");
+	}
+	
+	@GetMapping("/transactions")
+	public ResponseEntity<List<Transaction>> getTransactions(){
+		return ResponseEntity.ok(transactionService.findAllTransactions());
 	}
 }

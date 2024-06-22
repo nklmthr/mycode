@@ -15,7 +15,7 @@
 	<br />
 	<div id="categoriesDiv">
 		<section th:include="@{category/categoryFragment} :: categoryFragment"
-			th:with="headerCategories=${categoryList}"></section>
+			th:with="headerCategories=${homeCategory}"></section>
 	</div>
 	<hr>
 	<a th:href="@{/Categorys}">Back to Category List</a>

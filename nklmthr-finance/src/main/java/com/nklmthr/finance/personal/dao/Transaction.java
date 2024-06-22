@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nklmthr.finance.personal.service.TransactionType;
 
 @Entity
@@ -41,18 +42,20 @@ public class Transaction {
 
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "category", referencedColumnName = "id")
-	private Category category;
 
+	private Category category;
 	@Column
 	private BigDecimal amount;
 
 	@Column
 	private TransactionType transactionType;
 
-	@ManyToOne(cascade = CascadeType.MERGE)
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JsonIgnore
 	@JoinColumn(name = "parentTransaction", referencedColumnName = "id")
 	private Transaction parentTransaction;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "parentTransaction", cascade = CascadeType.ALL)
 	private Set<Transaction> childTransactions;
 

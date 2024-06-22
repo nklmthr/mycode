@@ -1,5 +1,6 @@
 package com.nklmthr.finance.personal.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -8,18 +9,20 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.nklmthr.finance.personal.dao.Category;
 import com.nklmthr.finance.personal.dao.CategoryRepository;
 import com.nklmthr.finance.personal.dao.Transaction;
 import com.nklmthr.finance.personal.dao.TransactionRepository;
+import com.nklmthr.finance.personal.exception.SaveSplitTransactionException;
 
 @Service
 public class TransactionService {
@@ -73,7 +76,7 @@ public class TransactionService {
 		transactionRepository.save(transaction);
 	}
 
-	public Transaction findTransactioById(String id) {
+	public Transaction findTransactionById(String id) {
 		Optional<Transaction> transaction = transactionRepository.findById(id);
 		if (transaction.isPresent()) {
 			return transaction.get();
@@ -92,6 +95,55 @@ public class TransactionService {
 
 	public List<TransactionType> getTransactionTypes() {
 		return Arrays.asList(TransactionType.DEBIT, TransactionType.CREDIT);
+	}
+
+	@Transactional
+	public String saveSplitTransactions(String id, List<Transaction> transactions)
+			throws SaveSplitTransactionException {
+		Transaction parent = transactionRepository.findById(id).get();
+		BigDecimal sum = new BigDecimal(0);
+		for (Transaction t : transactions) {
+			sum = sum.add(t.getAmount());
+		}
+		if (sum.compareTo(parent.getAmount()) != 0) {
+			throw new SaveSplitTransactionException("Sum of Child transactions not equal to Parent");
+		}
+		for (Transaction t : transactions) {
+			t.setDate(parent.getDate());
+			t.setAccount(parent.getAccount());
+			t.setParentTransaction(parent);
+			t.setCategory(categoryRepository.findById(t.getCategory().getId()).get());
+			t.setTransactionType(parent.getTransactionType());
+			parent.setDescription("[Orig:"+parent.getCategory().getName()+"/"+parent.getAmount()+"] "+parent.getDescription());
+			parent.setAmount(parent.getAmount().subtract(t.getAmount()));
+			Category splitCat = categoryRepository.findTransactionSplitCategory();			
+			parent.setCategory(splitCat);		
+			transactionRepository.save(t);
+		}
+
+		transactionRepository.save(parent);
+		return "Successfully Saved Split Transaction";
+
+	}
+
+	public List<Transaction> findAllTransactions() {
+		return transactionRepository.findAll();
+	}
+
+	public void deleteTransaction(String id) {
+		Transaction child = transactionRepository.findById(id).get();
+		Transaction parent = child.getParentTransaction();
+		if (parent != null) {
+			parent.setAmount(parent.getAmount().add(child.getAmount()));
+			if (parent.getChildTransactions().size() > 0) {
+				parent.setCategory(child.getCategory());
+			}
+		}
+		parent.getChildTransactions().remove(child);
+		transactionRepository.delete(child);		
+		transactionRepository.save(parent);
+		logger.info("deleteTransaction " + id);
+		
 	}
 
 }

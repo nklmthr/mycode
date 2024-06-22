@@ -29,10 +29,10 @@ public class CategoryUIController {
 	}
 
 	@GetMapping("/Categorys")
-	public String getCategorys(Model m) {
-		List<Category> categoryList = categoryService.getAllCategorys();				
-		m.addAttribute("categoryList", categoryList.get(0));
-		logger.info("getCategorys size:" + categoryList.size());
+	public String getHomeCategory(Model m) {
+		Category homeCategory = categoryService.getHomeCategory();		
+		m.addAttribute("homeCategory", homeCategory);
+		logger.info("getCategorys homeCategory" + homeCategory.getChildCategorys());
 		return "category/Categorys";
 	}
 

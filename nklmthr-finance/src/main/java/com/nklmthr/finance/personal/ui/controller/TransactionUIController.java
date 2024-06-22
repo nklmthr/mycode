@@ -86,7 +86,7 @@ public class TransactionUIController {
 		m.addAttribute("nextMonth", nextMonth);
 		m.addAttribute("nextMonthYear", nextMonthYear);
 		m.addAttribute("currentMonth", YearMonth.now().getMonthValue());
-		m.addAttribute("currentMonthYear",  YearMonth.now().getYear());
+		m.addAttribute("currentMonthYear", YearMonth.now().getYear());
 		m.addAttribute("month", month);
 		m.addAttribute("monthYear", year);
 		m.addAttribute("transactions", pageTansactions.getContent());
@@ -137,7 +137,7 @@ public class TransactionUIController {
 		return "transactions/AddNewTransaction";
 	}
 
-	@GetMapping("/saveAndAddnewTransaction")
+	@PostMapping("/saveAndAddnewTransaction")
 	public String saveAndAddnewTransaction(@ModelAttribute("transaction") Transaction transaction, Model m) {
 		saveTransaction(transaction);
 		String sortField = "date";
@@ -188,7 +188,7 @@ public class TransactionUIController {
 		m.addAttribute("CategoryList", categorys);
 		List<Account> accounts = accountService.getAllAccounts();
 		m.addAttribute("accountList", accounts);
-		Transaction transaction = transactionService.findTransactioById(id);
+		Transaction transaction = transactionService.findTransactionById(id);
 		m.addAttribute("transaction", transaction);
 		m.addAttribute("transactionTypes", transactionService.getTransactionTypes());
 		logger.info("showFormForTransactionUpdate ");
@@ -197,26 +197,24 @@ public class TransactionUIController {
 
 	@GetMapping("/deleteTransaction/{id}")
 	public String deleteTransaction(@PathVariable(value = "id") String id, Model model) {
-		transactionService.deleteTransactionById(id);
-		logger.info("deleteTransaction " + id);
+		transactionService.deleteTransaction(id);
 		return "redirect:/Transactions";
 	}
 
 	@GetMapping("/splitTransaction/{id}")
 	public String splitTransaction(@PathVariable(value = "id") String id, Model m) {
-		Transaction parentTransaction = transactionService.findTransactioById(id);
+		Transaction parentTransaction = transactionService.findTransactionById(id);
 		m.addAttribute("parentTransaction", parentTransaction);
 		List<Category> categorys = categoryService.getAllCategorys();
 		m.addAttribute("categoryList", categorys);
 		List<Account> accounts = accountService.getAllAccounts();
 		m.addAttribute("accountList", accounts);
-		m.addAttribute("transactionTypes", transactionService.getTransactionTypes());		
+		m.addAttribute("transactionTypes", transactionService.getTransactionTypes());
 		return "transactions/SplitTransaction";
 	}
 
 	@GetMapping("/saveSplitTransaction/{id}")
-	public String saveSplitTransaction( Model m, @PathVariable(value = "id") String id) {
-		
+	public String saveSplitTransaction(Model m, @PathVariable(value = "id") String id) {
 		return "redirect:/Transactions";
 	}
 }
