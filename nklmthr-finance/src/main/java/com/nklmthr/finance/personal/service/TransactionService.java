@@ -115,9 +115,11 @@ public class TransactionService {
 			t.setParentTransaction(parent);
 			t.setCategory(categoryRepository.findById(t.getCategory().getId()).get());
 			t.setTransactionType(parent.getTransactionType());
-			parent.setDescription("[Orig:"+parent.getCategory().getName()+"/"+parent.getAmount()+"] "+parent.getDescription());
-			parent.setAmount(parent.getAmount().subtract(t.getAmount()));
-			Category splitCat = categoryRepository.findTransactionSplitCategory();			
+			Category splitCat = categoryRepository.findTransactionSplitCategory();
+			if(parent.getCategory().getName().equals(splitCat.getName()){
+				parent.setDescription("[Orig:"+parent.getCategory().getName()+"/"+parent.getAmount()+"] "+parent.getDescription());	
+			}
+			parent.setAmount(parent.getAmount().subtract(t.getAmount()));									
 			parent.setCategory(splitCat);		
 			transactionRepository.save(t);
 		}
@@ -141,14 +143,14 @@ public class TransactionService {
 			}
 		}
 		parent.getChildTransactions().remove(child);
-		transactionRepository.delete(child);		
+		transactionRepository.delete(child);
 		transactionRepository.save(parent);
 		logger.info("deleteTransaction " + id);
-		
+
 	}
 
 	public Page<Transaction> findAllTransactionsByAccount(Pageable pageable, Account account) {
-		return transactionRepository.findByAccount_Id(pageable, account);		
+		return transactionRepository.findByAccount_Id(pageable, account);
 	}
 
 }
