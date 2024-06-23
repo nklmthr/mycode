@@ -47,7 +47,7 @@ public class AccountUIController {
 	private InstitutionService institutionService;
 
 	@GetMapping("/account/statement/{id}")
-	public String getAccountStatement(@PathVariable(value = "id") String id, Model m, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int size,
+	public String getAccountStatement(@PathVariable(value = "id") String id, Model m, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "150") int size,
 			@RequestParam(defaultValue = "date,desc") String[] sort) {
 		return getAccountStatementByParams(id, m, null, null, null, page, size, sort);
 	}
@@ -56,7 +56,7 @@ public class AccountUIController {
 	public String getAccountStatementByParams(@PathVariable(value = "id") String id, Model m,
 			@PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month,
 			@RequestParam(required = false) String keyword, @RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "date,desc") String[] sort) {
+			@RequestParam(defaultValue = "150") int size, @RequestParam(defaultValue = "date,desc") String[] sort) {
 		Account account = accountService.findAccountById(id);
 		
 

@@ -11,13 +11,17 @@
 	<div class="container my-2" align="left">
 
 		<h3>Account Statement</h3>
-		<br />
+		<br /><a th:href="@{/Accounts}">Back to Accounts List</a>
 		<hr>
 		<br />
 		<div
 			th:insert="transactions/ListTransactionsFragment ::transactionListFragment(true, null, ${monthYear}, ${month})">
 		</div>
+		<br><a th:href="@{/Accounts}">Back to Accounts List</a>
 	</div>
+	<br>
+	
+	
 </body>
 
 </html>

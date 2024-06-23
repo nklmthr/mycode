@@ -115,6 +115,7 @@ public class TransactionService {
 			t.setParentTransaction(parent);
 			t.setCategory(categoryRepository.findById(t.getCategory().getId()).get());
 			t.setTransactionType(parent.getTransactionType());
+			t.setDescription("["+parent.getDescription()+":"+parent.getAmount()+"]"+t.getDescription()+"Parent:"+parent.getId());
 			Category splitCat = categoryRepository.findTransactionSplitCategory();
 			if(!parent.getCategory().getName().equals(splitCat.getName())){
 				parent.setDescription("[Orig:"+parent.getCategory().getName()+"/"+parent.getAmount()+"] "+parent.getDescription());	
