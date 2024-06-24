@@ -9,13 +9,10 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.nklmthr.finance.personal.dao.Account;
@@ -24,6 +21,8 @@ import com.nklmthr.finance.personal.dao.CategoryRepository;
 import com.nklmthr.finance.personal.dao.Transaction;
 import com.nklmthr.finance.personal.dao.TransactionRepository;
 import com.nklmthr.finance.personal.exception.SaveSplitTransactionException;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class TransactionService {

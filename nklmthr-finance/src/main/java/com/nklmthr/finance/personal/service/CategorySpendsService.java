@@ -48,6 +48,8 @@ public class CategorySpendsService {
 			for (Transaction t : catTransactions) {
 				if (t.getTransactionType().equals(TransactionType.DEBIT)) {
 					catSpend.setAmount(catSpend.getAmount().add(t.getAmount()));
+				} else {
+					catSpend.setAmount(catSpend.getAmount().subtract(t.getAmount()));
 				}
 			}
 			map.put(catSpend.getId(), catSpend);

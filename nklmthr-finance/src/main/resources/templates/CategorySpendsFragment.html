@@ -2,7 +2,7 @@
 	<ul>
 		<li th:each="categorySpend : ${maincategories}">
 			<a th:href="'/Transactions/'+${currentYear}+'/'+${currentMonth}+'?categoryId='+${categorySpend.id}+'&page=1&size=10&sort=date,desc'"><span th:text="${categorySpend.name}+' = '+${#numbers.formatDecimal(categorySpend.amount,1,'COMMA', 2, 'POINT')}"></span></a>
-			<section th:include="@{CategorySpendsFragment}:: fragment"
+			<section th:insert="~{@{CategorySpendsFragment}:: fragment}"
 				th:with="maincategories=${categorySpend.childCategorySpends}"></section>
 		</li>
 	</ul>

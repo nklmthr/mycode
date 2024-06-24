@@ -49,4 +49,9 @@ public class FinanceRestController {
 	public ResponseEntity<List<Transaction>> getTransactions(){
 		return ResponseEntity.ok(transactionService.findAllTransactions());
 	}
+	
+	@GetMapping("/hint/{q}")
+	public ResponseEntity<String> getHint(@PathVariable("q") String q){
+		return ResponseEntity.ok("Health Ok"+q);
+	}
 }

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 
-<head th:include="header.html ::header"></head>
+<head th:insert="~{header.html ::header}"></head>
 
 <body>
-	<div th:insert="TopNavigation.html ::topNavigation('home')"></div>
+	<div th:insert="~{TopNavigation.html ::topNavigation('home')}"></div>
 	<br />
 	<h1>Category Spends</h1>
 	<br />
@@ -38,7 +38,7 @@
 	<br />
 
 	<div id="catSpendsDiv">
-		<section th:include="@{CategorySpendsFragment} :: fragment" th:with="maincategories=${categorySpends}">
+		<section th:insert="~{@{CategorySpendsFragment} :: fragment}" th:with="maincategories=${categorySpends}">
 		</section>
 	</div>
 </body>

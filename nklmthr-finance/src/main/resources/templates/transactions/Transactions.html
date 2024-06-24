@@ -1,10 +1,10 @@
 <html>
 
-<head th:include="header.html ::header"></head>
+<head th:insert="~{header.html ::header}"></head>
 
 <body>
 	<div>
-		<div th:insert="TopNavigation.html ::topNavigation('Transactions')"></div>
+		<div th:insert="~{TopNavigation.html ::topNavigation('Transactions')}"></div>
 	</div>
 	<br />
 	<br />
@@ -85,7 +85,7 @@
 			<tr>
 				<td colspan="3">
 					<div
-						th:insert="transactions/ListTransactionsFragment ::transactionListFragment(true, null, ${monthYear}, ${month})">
+						th:insert="~{transactions/ListTransactionsFragment ::transactionListFragment(true, null, ${monthYear}, ${month})}">
 					</div>
 				</td>
 			</tr>
