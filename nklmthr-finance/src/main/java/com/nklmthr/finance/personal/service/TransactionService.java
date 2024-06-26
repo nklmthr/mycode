@@ -100,7 +100,7 @@ public class TransactionService {
 	@Transactional
 	public String saveSplitTransactions(String id, List<Transaction> transactions)
 			throws SaveSplitTransactionException {
-		Transaction parent = transactionRepository.findById(id).get();
+		Transaction parent = transactionRepository.findById(id).get();	
 		BigDecimal sum = new BigDecimal(0);
 		for (Transaction t : transactions) {
 			sum = sum.add(t.getAmount());
@@ -108,19 +108,19 @@ public class TransactionService {
 		if (sum.compareTo(parent.getAmount()) != 0) {
 			throw new SaveSplitTransactionException("Sum of Child transactions not equal to Parent");
 		}
+		BigDecimal origParentAmount = parent.getAmount();
+		Category originalParentCategory = parent.getCategory();
+		Category splitCat = categoryRepository.findTransactionSplitCategory();
+		parent.setCategory(splitCat);		
 		for (Transaction t : transactions) {
 			t.setDate(parent.getDate());
 			t.setAccount(parent.getAccount());
 			t.setParentTransaction(parent);
 			t.setCategory(categoryRepository.findById(t.getCategory().getId()).get());
 			t.setTransactionType(parent.getTransactionType());
-			t.setDescription("["+parent.getDescription()+":"+parent.getAmount()+"]"+t.getDescription()+"Parent:"+parent.getId());
-			Category splitCat = categoryRepository.findTransactionSplitCategory();
-			if(!parent.getCategory().getName().equals(splitCat.getName())){
-				parent.setDescription("[Orig:"+parent.getCategory().getName()+"/"+parent.getAmount()+"] "+parent.getDescription());	
-			}
+			//t.setDescription("["+parent.getDescription()+":"+parent.getAmount()+"]"+t.getDescription()+"Parent:"+parent.getId());
+			t.setDescription("[Orig:"+originalParentCategory.getId()+" / "+origParentAmount+" ] "+t.getDescription());	
 			parent.setAmount(parent.getAmount().subtract(t.getAmount()));									
-			parent.setCategory(splitCat);		
 			transactionRepository.save(t);
 		}
 
@@ -141,8 +141,8 @@ public class TransactionService {
 			if (parent.getChildTransactions().size() > 0) {
 				parent.setCategory(child.getCategory());
 			}
+			parent.getChildTransactions().remove(child);
 		}
-		parent.getChildTransactions().remove(child);
 		transactionRepository.delete(child);
 		transactionRepository.save(parent);
 		logger.info("deleteTransaction " + id);

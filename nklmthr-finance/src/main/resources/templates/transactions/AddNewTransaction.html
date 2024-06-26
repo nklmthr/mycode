@@ -1,10 +1,10 @@
 <html>
 
-<head th:include="header.html ::header"></head>
+<head th:insert="~{header.html ::header}"></head>
 
 <body>
 	<div>
-		<div th:insert="TopNavigation.html ::topNavigation('Transactions')"></div>
+		<div th:insert="~{TopNavigation.html ::topNavigation('Transactions')}"></div>
 	</div>
 	<br /><br />
 	<h2>Add Transactions</h2>
@@ -82,7 +82,7 @@
 	<br />
 	<h3>Recent Transactions</h3>
 	<div
-		th:insert="transactions/ListTransactionsFragment ::transactionListFragment(false, ${categoryId}, ${currentMonthYear}, ${currentMonth})">
+		th:insert="~{transactions/ListTransactionsFragment ::transactionListFragment(false, ${categoryId}, ${currentMonthYear}, ${currentMonth})}">
 	</div>
 </body>
 
