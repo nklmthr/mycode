@@ -1,8 +1,8 @@
 <html>
-<head th:include="header.html ::header"></head>
+<head th:insert="~{header.html ::header}"></head>
 <body>
 	<div>
-		<div th:insert="TopNavigation.html ::topNavigation('Accounts')"></div>
+		<div th:insert="~{TopNavigation.html ::topNavigation('Accounts')}"></div>
 	</div>
 
 

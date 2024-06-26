@@ -1,9 +1,9 @@
 <html>
-<head th:include="header.html ::header"></head>
+<head th:insert="~{header.html ::header}"></head>
 
 <body>
 	<div>
-		<div th:insert="TopNavigation.html ::topNavigation('Categorys')"></div>
+		<div th:insert="~{TopNavigation.html ::topNavigation('Categorys')}"></div>
 	</div>
 	<h3>Category List</h3>
 	<br />
@@ -14,7 +14,7 @@
 	<br />
 	<br />
 	<div id="categoriesDiv">
-		<section th:include="@{category/categoryFragment} :: categoryFragment"
+		<section th:insert="~{@{category/categoryFragment} :: categoryFragment}"
 			th:with="headerCategories=${homeCategory}"></section>
 	</div>
 	<hr>
