@@ -47,7 +47,7 @@ public class Transaction {
 	@Column
 	private TransactionType transactionType;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
 	@JsonIgnore
 	@JoinColumn(name = "parentTransaction", referencedColumnName = "id")
 	private Transaction parentTransaction;

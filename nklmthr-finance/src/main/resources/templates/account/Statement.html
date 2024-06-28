@@ -1,8 +1,8 @@
 <html>
-<head th:include="header.html ::header"></head>
+<head th:insert="~{header.html ::header}"></head>
 <body>
 	<div>
-		<div th:insert="TopNavigation.html ::topNavigation('Account')"></div>
+		<div th:insert="~{TopNavigation.html ::topNavigation('Account')}"></div>
 	</div>
 	<br />
 
@@ -15,7 +15,7 @@
 		<hr>
 		<br />
 		<div
-			th:insert="transactions/ListTransactionsFragment ::transactionListFragment(true, null, ${monthYear}, ${month})">
+			th:insert="~{transactions/ListTransactionsFragment ::transactionListFragment(true, null, ${monthYear}, ${month})}">
 		</div>
 		<br><a th:href="@{/Accounts}">Back to Accounts List</a>
 	</div>

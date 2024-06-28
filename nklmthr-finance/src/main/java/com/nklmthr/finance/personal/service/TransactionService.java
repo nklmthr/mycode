@@ -84,11 +84,6 @@ public class TransactionService {
 		return null;
 	}
 
-	public void deleteTransactionById(String id) {
-		transactionRepository.deleteById(id);
-
-	}
-
 	public List<Transaction> getTransactionsByCategoryInMonth(Integer year, Integer month, String categoryId) {
 		return transactionRepository.findAllTransactionsInCategoryByMonth(year, month, categoryId);
 	}
@@ -100,7 +95,7 @@ public class TransactionService {
 	@Transactional
 	public String saveSplitTransactions(String id, List<Transaction> transactions)
 			throws SaveSplitTransactionException {
-		Transaction parent = transactionRepository.findById(id).get();	
+		Transaction parent = transactionRepository.findById(id).get();
 		BigDecimal sum = new BigDecimal(0);
 		for (Transaction t : transactions) {
 			sum = sum.add(t.getAmount());
@@ -109,18 +104,21 @@ public class TransactionService {
 			throw new SaveSplitTransactionException("Sum of Child transactions not equal to Parent");
 		}
 		BigDecimal origParentAmount = parent.getAmount();
+		parent.setDescription(
+				parent.getDescription() + "|" + parent.getCategory().getName() + "|" + parent.getAmount());
 		Category originalParentCategory = parent.getCategory();
 		Category splitCat = categoryRepository.findTransactionSplitCategory();
-		parent.setCategory(splitCat);		
+		parent.setCategory(splitCat);
 		for (Transaction t : transactions) {
 			t.setDate(parent.getDate());
 			t.setAccount(parent.getAccount());
 			t.setParentTransaction(parent);
 			t.setCategory(categoryRepository.findById(t.getCategory().getId()).get());
 			t.setTransactionType(parent.getTransactionType());
-			//t.setDescription("["+parent.getDescription()+":"+parent.getAmount()+"]"+t.getDescription()+"Parent:"+parent.getId());
-			t.setDescription("[Orig:"+originalParentCategory.getId()+" / "+origParentAmount+" ] "+t.getDescription());	
-			parent.setAmount(parent.getAmount().subtract(t.getAmount()));									
+			// t.setDescription("["+parent.getDescription()+":"+parent.getAmount()+"]"+t.getDescription()+"Parent:"+parent.getId());
+			t.setDescription(
+					"[Orig:" + originalParentCategory.getId() + " / " + origParentAmount + " ] " + t.getDescription());
+			parent.setAmount(parent.getAmount().subtract(t.getAmount()));
 			transactionRepository.save(t);
 		}
 
@@ -135,6 +133,15 @@ public class TransactionService {
 
 	public void deleteTransaction(String id) {
 		Transaction child = transactionRepository.findById(id).get();
+		logger.info("deleting Transaction..." + child.getDescription() + child.getAmount()); 
+		if(child.getChildTransactions() !=null) {
+			logger.info("children..."
+					+ child.getChildTransactions().stream().map(s -> s.getDescription() + "|" + s.getAmount())
+					.collect(Collectors.joining(";")));
+		}
+		if(child.getParentTransaction()!=null) {
+			logger.info("| Parent =" +child.getParentTransaction().getDescription() + child.getParentTransaction().getAmount());
+		}
 		Transaction parent = child.getParentTransaction();
 		if (parent != null) {
 			parent.setAmount(parent.getAmount().add(child.getAmount()));
@@ -142,9 +149,9 @@ public class TransactionService {
 				parent.setCategory(child.getCategory());
 			}
 			parent.getChildTransactions().remove(child);
+			transactionRepository.save(parent);
 		}
 		transactionRepository.delete(child);
-		transactionRepository.save(parent);
 		logger.info("deleteTransaction " + id);
 
 	}

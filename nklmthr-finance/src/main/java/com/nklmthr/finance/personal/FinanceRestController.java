@@ -35,14 +35,13 @@ public class FinanceRestController {
 	public ResponseEntity<String> saveSplitTransaction(@PathVariable(name = "id") String id,
 			@RequestBody List<Transaction> transactions) {
 		logger.info("id=" + id + " trans = " + transactions);
+		String message = null;
 		try {
-			String message = transactionService.saveSplitTransactions(id, transactions);
+			message = transactionService.saveSplitTransactions(id, transactions);
 		} catch(SaveSplitTransactionException e) {
-			return ResponseEntity.badRequest().body("The Sum of Split Transactions must be equal to Parent");
+			return ResponseEntity.badRequest().body(message);
 		}
-		
-
-		return ResponseEntity.ok("success");
+		return ResponseEntity.ok(message);
 	}
 	
 	@GetMapping("/transactions")
