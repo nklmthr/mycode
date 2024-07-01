@@ -104,9 +104,11 @@ public class TransactionService {
 			throw new SaveSplitTransactionException("Sum of Child transactions not equal to Parent");
 		}
 		BigDecimal origParentAmount = parent.getAmount();
+		String originalParentDescription = parent.getDescription();
+
 		parent.setDescription(
-				parent.getDescription() + "|" + parent.getCategory().getName() + "|" + parent.getAmount());
-		Category originalParentCategory = parent.getCategory();
+				parent.getCategory().getName() + "|" + parent.getDescription() + "|" + parent.getAmount());
+		String originalParentCategory = parent.getCategory().getName();
 		Category splitCat = categoryRepository.findSplitCategory();
 		parent.setCategory(splitCat);
 		for (Transaction t : transactions) {
@@ -115,7 +117,8 @@ public class TransactionService {
 			t.setParentTransaction(parent);
 			t.setCategory(categoryRepository.findById(t.getCategory().getId()).get());
 			t.setTransactionType(parent.getTransactionType());
-			t.setDescription(parent.getDescription());
+			t.setDescription("[" + originalParentCategory + "|" + originalParentDescription + "|" + origParentAmount
+					+ "] " + t.getDescription());
 			parent.setAmount(parent.getAmount().subtract(t.getAmount()));
 			transactionRepository.save(t);
 		}
@@ -130,14 +133,14 @@ public class TransactionService {
 
 	public void deleteTransaction(String id) {
 		Transaction child = transactionRepository.findById(id).get();
-		logger.info("deleting Transaction..." + child.getDescription() + child.getAmount()); 
-		if(child.getChildTransactions() !=null) {
-			logger.info("children..."
-					+ child.getChildTransactions().stream().map(s -> s.getDescription() + "|" + s.getAmount())
-					.collect(Collectors.joining(";")));
+		logger.info("deleting Transaction..." + child.getDescription() + child.getAmount());
+		if (child.getChildTransactions() != null) {
+			logger.info("children..." + child.getChildTransactions().stream()
+					.map(s -> s.getDescription() + "|" + s.getAmount()).collect(Collectors.joining(";")));
 		}
-		if(child.getParentTransaction()!=null) {
-			logger.info("| Parent =" +child.getParentTransaction().getDescription() + child.getParentTransaction().getAmount());
+		if (child.getParentTransaction() != null) {
+			logger.info("| Parent =" + child.getParentTransaction().getDescription()
+					+ child.getParentTransaction().getAmount());
 		}
 		Transaction parent = child.getParentTransaction();
 		if (parent != null) {
@@ -157,10 +160,10 @@ public class TransactionService {
 		return transactionRepository.findByAccount_Id(pageable, account);
 	}
 
-	public Transaction findTransactionsBySource(String source, Long sourceTime) {		
+	public Transaction findTransactionsBySource(String source, Long sourceTime) {
 		Transaction transaction = transactionRepository.findBySource(source, sourceTime);
 		return transaction;
-		
+
 	}
 
 }
