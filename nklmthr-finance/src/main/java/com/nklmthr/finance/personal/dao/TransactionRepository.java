@@ -31,6 +31,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, String
 	List<Object[]> findCummulativeSumOfTransactionsByMonthAndCategoryLevel(Integer level);
 
 	@Query("select t from Transaction t where t.account = ?1")
-	Page<Transaction> findByAccount_Id(Pageable pageable, Account account);	
+	Page<Transaction> findByAccount_Id(Pageable pageable, Account account);
+
+	@Query("select t from Transaction t where source = ?1 and (sourceTime - ?2) between -30000 and 30000")
+	Transaction findBySource(String source, long sourceTime);	
 
 }

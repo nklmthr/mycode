@@ -23,14 +23,14 @@ public class CategoryService {
 	
 	public Category getHomeCategory() {
 		Category home = categoryRepository.findHomeCategory();
-		home.getChildCategorys().remove(findTransactionSplitCategory());
+		home.getChildCategorys().removeAll(getHiddenCategories());
 		return home;
 	}
 
 	public List<Category> getAllCategorys() {
 		List<Category> categoryList = categoryRepository
 				.findAll(Sort.by(Sort.Direction.ASC, "level").and(Sort.by(Sort.Direction.ASC, "name"))).stream()
-				.filter(s -> s.isHidden() == Boolean.FALSE).collect(Collectors.toList());
+				.filter(s -> !s.isHidden()).collect(Collectors.toList());
 		return categoryList;
 	}
 
@@ -63,8 +63,13 @@ public class CategoryService {
 		return categoryRepository.findAllCategorysAtLevel(0).get(0);
 	}
 
-	public Category findTransactionSplitCategory() {
-		Category category = categoryRepository.findTransactionSplitCategory();
+	public List<Category> getHiddenCategories() {
+		List<Category> categories = categoryRepository.findHiddenCategory();
+		return categories;
+	}
+
+	public Category findCategoryByName(String name) {
+		Category category = categoryRepository.findByName(name);
 		return category;
 	}
 

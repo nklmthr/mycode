@@ -39,4 +39,8 @@ public class AccountService {
 		accountRepository.deleteById(id);
 	}
 
+	public Account findAccountByName(String name) {
+		return accountRepository.findByName(name);
+	}
+
 }

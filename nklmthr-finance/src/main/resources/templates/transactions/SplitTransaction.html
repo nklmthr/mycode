@@ -52,7 +52,7 @@
 		$("#splitTransactionTable tbody tr").each(function() {
 			var trRow = $(this);
 			var id = trRow.attr('id');
-			var desc = trRow.find("td:eq(1) input[type='text']").val();
+			var explanation = trRow.find("td:eq(1) input[type='text']").val();
 			var amount = trRow.find("td:eq(2) input[type='number']").val();
 			var cat = trRow.find("td:eq(0) option:selected").val();
 			var splitTransaction = {};
@@ -65,7 +65,7 @@
 			splitTransaction["account"]=account;
 
 			splitTransaction["category"] = category;
-			splitTransaction["description"] = desc;
+			splitTransaction["explanation"] = explanation;
 			splitTransaction["amount"] = amount;
 			splitTranJson.push(splitTransaction);
 
@@ -120,8 +120,10 @@
 				</select></td>
 			</tr>
 			<tr>
-				<td colspan="4" align="right">Amount:</td>
-				<td colspan="4" align="left" th:text="${parentTransaction.amount}"></td>
+				<td colspan="1" align="right">Amount:</td>
+				<td colspan="1" align="left" th:text="${parentTransaction.amount}"></td>
+				<td colspan="3" align="right">Description:</td>
+				<td colspan="3" align="left" th:text="${parentTransaction.description}"></td>
 			</tr>
 		</table>
 		<table width="100%">
@@ -140,7 +142,7 @@
 			<thead>
 				<tr>
 					<th>Category</th>
-					<th>Description</th>
+					<th>explanation</th>
 					<th>Amount</th>
 
 				</tr>
@@ -153,7 +155,7 @@
 								th:value="${category.id}" th:text="${category.name}"></option>
 					</select></td>
 					<td width="60%"><input type="text" size="100"
-						name="description"></td>
+						name="explanation"></td>
 					<td width="40%"><input type="number" step=".01" name="amount"></td>
 				</tr>
 			</tbody>

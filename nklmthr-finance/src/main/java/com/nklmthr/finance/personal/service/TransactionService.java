@@ -107,7 +107,7 @@ public class TransactionService {
 		parent.setDescription(
 				parent.getDescription() + "|" + parent.getCategory().getName() + "|" + parent.getAmount());
 		Category originalParentCategory = parent.getCategory();
-		Category splitCat = categoryRepository.findTransactionSplitCategory();
+		Category splitCat = categoryRepository.findSplitCategory();
 		parent.setCategory(splitCat);
 		for (Transaction t : transactions) {
 			t.setDate(parent.getDate());
@@ -115,13 +115,10 @@ public class TransactionService {
 			t.setParentTransaction(parent);
 			t.setCategory(categoryRepository.findById(t.getCategory().getId()).get());
 			t.setTransactionType(parent.getTransactionType());
-			// t.setDescription("["+parent.getDescription()+":"+parent.getAmount()+"]"+t.getDescription()+"Parent:"+parent.getId());
-			t.setDescription(
-					"[Orig:" + originalParentCategory.getId() + " / " + origParentAmount + " ] " + t.getDescription());
+			t.setDescription(parent.getDescription());
 			parent.setAmount(parent.getAmount().subtract(t.getAmount()));
 			transactionRepository.save(t);
 		}
-
 		transactionRepository.save(parent);
 		return "Successfully Saved Split Transaction";
 
@@ -158,6 +155,12 @@ public class TransactionService {
 
 	public Page<Transaction> findAllTransactionsByAccount(Pageable pageable, Account account) {
 		return transactionRepository.findByAccount_Id(pageable, account);
+	}
+
+	public Transaction findTransactionsBySource(String source, Long sourceTime) {		
+		Transaction transaction = transactionRepository.findBySource(source, sourceTime);
+		return transaction;
+		
 	}
 
 }

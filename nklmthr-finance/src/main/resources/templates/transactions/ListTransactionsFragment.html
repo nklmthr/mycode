@@ -1,14 +1,22 @@
-<section th:fragment="transactionListFragment(showUpdateDelete, categoryId, monthYear, month)">
-	<section th:insert="~{common/Navigation :: navigation}" />
-	<table style="width:100%" border="1" class="table table-striped table-responsive-md">
+
+<section
+	th:fragment="transactionListFragment(showUpdateDelete, categoryId, monthYear, month)">
+	<div>
+		<section th:insert="~{common/Navigation :: navigation}" />
+	</div>
+	<table style="width: 100%" border="1">
 		<thead>
 			<tr>
 				<th th:replace="~{common/sorting :: sorting('date','Date')}"></th>
-				<th th:replace="~{common/sorting :: sorting('description','Description')}"></th>
+				<th
+					th:replace="~{common/sorting :: sorting('description','Description')}"></th>
+				<th th:replace="~{common/sorting :: sorting('explanation','Explanation')}"></th>
 				<th th:replace="~{common/sorting :: sorting('account','Account')}"></th>
 				<th th:replace="~{common/sorting :: sorting('category','Category')}"></th>
+				<th th:replace="~{common/sorting :: sorting('currency','Currency')}"></th>
 				<th th:replace="~{common/sorting :: sorting('amount','Amount')}"></th>
-				<th th:replace="~{common/sorting :: sorting('transactionType','Type')}"></th>
+				<th
+					th:replace="~{common/sorting :: sorting('transactionType','Type')}"></th>				
 				<th th:if=${showUpdateDelete}>Update</th>
 				<th th:if=${showUpdateDelete}>Delete</th>
 				<th th:if=${showUpdateDelete}>Split</th>
@@ -16,24 +24,25 @@
 		</thead>
 		<tbody>
 			<tr th:each="transaction : ${transactions}">
-				<td width="10%" th:text="${#dates.format(transaction.date, 'dd/MM/yyyy HH:mm')}"></td>
-				<td width="30%" th:text="${transaction.description}"></td>
-				<td width="15%" th:text="${transaction.account.name}"></td>
-				<td width="15%" th:text="${transaction.category.name}"></td>
-				<td width="10%" align="right" th:text="${#numbers.formatDecimal(transaction.amount,1,'COMMA', 2, 'POINT')}">
+				<td th:text="${#dates.format(transaction.date, 'dd/MM/yyyy HH:mm')}"></td>
+				<td th:text="${transaction.description}"></td>
+				<td th:text="${transaction.explanation}"></td>
+				<td th:text="${transaction.account.name}"></td>
+				<td th:text="${transaction.category.name}"></td>
+				<td th:text="${transaction.currency}"></td>
+				<td align="right"
+					th:text="${#numbers.formatDecimal(transaction.amount,1,'COMMA', 2, 'POINT')}">
 				</td>
-				<td width="5%" th:text="${transaction.transactionType}"></td>
-				<td width="5%" th:if=${showUpdateDelete} align="center"> <a
-						th:href="@{/showFormForTransactionUpdate/{id}(id=${transaction.id})}"
-						class="update-delete-button">Update</a></td>
-				<td width="5%" th:if=${showUpdateDelete} align="center"><a
-						th:href="@{/deleteTransaction/{id}(id=${transaction.id})}"
-						class="update-delete-button">Delete</a>
-				</td>
-				<td width="5%" th:if=${showUpdateDelete} align="center"><a
-						th:href="@{/splitTransaction/{id}(id=${transaction.id})}"
-						class="update-delete-button">Split</a>
-				</td>
+				<td th:text="${transaction.transactionType}"></td>
+				<td th:if=${showUpdateDelete} align="center"><a
+					th:href="@{/showFormForTransactionUpdate/{id}(id=${transaction.id})}"
+					class="update-delete-button">Update</a></td>
+				<td th:if=${showUpdateDelete} align="center"><a
+					th:href="@{/deleteTransaction/{id}(id=${transaction.id})}"
+					class="update-delete-button">Delete</a></td>
+				<td th:if=${showUpdateDelete} align="center"><a
+					th:href="@{/splitTransaction/{id}(id=${transaction.id})}"
+					class="update-delete-button">Split</a></td>
 			</tr>
 		</tbody>
 	</table>

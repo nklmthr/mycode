@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,9 @@ public class CategorySpendsService {
 	public CategorySpends getCategorySpendsTree(Integer year, Integer month) {
 		CategorySpends rootCatSpend = new CategorySpends();
 		Map<String, CategorySpends> map = new HashMap<>();
-		Category category = categoryService.getRootCategory();
+		Category rootCategory = categoryService.getRootCategory();
 		Queue<Category> queue = new LinkedList<Category>();
-		queue.add(category);
+		queue.add(rootCategory);
 		while (!queue.isEmpty()) {
 			Category cat = queue.poll();
 			CategorySpends catSpend = null;
@@ -46,6 +47,9 @@ public class CategorySpendsService {
 			List<Transaction> catTransactions = transactionService.getTransactionsByCategoryInMonth(year, month,
 					cat.getId());
 			for (Transaction t : catTransactions) {
+				if(t.getCategory().isHidden()) {
+					continue;
+				}
 				if (t.getTransactionType().equals(TransactionType.DEBIT)) {
 					catSpend.setAmount(catSpend.getAmount().add(t.getAmount()));
 				} else {
@@ -55,19 +59,20 @@ public class CategorySpendsService {
 			map.put(catSpend.getId(), catSpend);
 			logger.debug("Current CatSpend:" + catSpend + " transactions size:" + catTransactions + " amount ="
 					+ catSpend.getAmount() + " map.size:" + map.size());
-			queue.addAll(cat.getChildCategorys());
+			queue.addAll(cat.getChildCategorys().stream().filter((s -> !s.isHidden())).collect(Collectors.toSet()));
 		}
 
-		queue.add(category);
+		queue.add(rootCategory);
 		while (!queue.isEmpty()) {
 			Category cat = queue.poll();
 			CategorySpends catSpend = map.get(cat.getId());
-			for (Category childCats : cat.getChildCategorys()) {
+			for (Category childCats : cat.getChildCategorys().stream().filter(s -> !s.isHidden())
+					.collect(Collectors.toSet())) {
 				CategorySpends childCategorySpend = map.get(childCats.getId());
 				logger.debug("Adding child category Spend:" + childCategorySpend);
 				catSpend.getChildCategorySpends().add(childCategorySpend);
 			}
-			queue.addAll(cat.getChildCategorys());
+			queue.addAll(cat.getChildCategorys().stream().filter((s -> !s.isHidden())).collect(Collectors.toSet()));
 		}
 		List<Category> categorys = categoryService.getAllCategorys();
 		int highestLevel = findHighestCategoryLevel(categorys);

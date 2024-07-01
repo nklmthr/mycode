@@ -31,6 +31,17 @@ public class Transaction {
 	private Date date;
 
 	@Column
+	private String explanation;
+	
+	public String getExplanation() {
+		return explanation;
+	}
+
+	public void setExplanation(String explanation) {
+		this.explanation = explanation;
+	}
+
+	@Column
 	private String description;
 
 	@ManyToOne(cascade = CascadeType.MERGE)
@@ -39,10 +50,19 @@ public class Transaction {
 
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "category", referencedColumnName = "id")
-
 	private Category category;
+
 	@Column
 	private BigDecimal amount;
+
+	@Column
+	private String source;
+
+	@Column
+	private Long sourceTime;
+
+	@Column
+	private String currency;
 
 	@Column
 	private TransactionType transactionType;
@@ -74,6 +94,14 @@ public class Transaction {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	public void setDescription(String description) {
@@ -128,9 +156,28 @@ public class Transaction {
 		this.parentTransaction = parentTransaction;
 	}
 
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public Long getSourceTime() {
+		return sourceTime;
+	}
+
+	public void setSourceTime(Long sourceTime) {
+		this.sourceTime = sourceTime;
+	}
+
 	@Override
 	public String toString() {
-		return "Transaction [id=" + id + ", account=" + account + ", category=" + category + "]";
+		return "Transaction [id=" + id + ", date=" + date + ", description=" + description + ", account="
+				+ account.getName() + ", category=" + category.getName() + ", amount=" + amount + ", source=" + source
+				+ ", sourceTime=" + sourceTime + ", currency=" + currency + ", transactionType=" + transactionType
+				+ "]";
 	}
 
 }

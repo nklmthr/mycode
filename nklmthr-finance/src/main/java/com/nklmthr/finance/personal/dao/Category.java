@@ -16,6 +16,8 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Category{
+	public static final String UNCLASSIFIED = "Not Classified";
+
 	@Id
 	@UuidGenerator
 	private String id;
