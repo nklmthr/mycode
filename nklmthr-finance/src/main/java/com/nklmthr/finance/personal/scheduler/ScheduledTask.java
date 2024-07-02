@@ -139,11 +139,11 @@ public abstract class ScheduledTask {
 
     protected String getGMailAPIQuery() {
         LocalDate localDate = LocalDate.now();
-        String beforeDate = " before " + localDate.getYear() + "-" + localDate.getMonth() + "-" + localDate.getDayOfMonth();
+        String beforeDate = String.format(" before:  %d-%02d-%02d", localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
         LocalDate oneMonthBeforeDate = localDate.minusMonths(1);
-        String afterDate = " after " + oneMonthBeforeDate.getYear() + "-" + oneMonthBeforeDate.getMonth() + "-" + oneMonthBeforeDate.getDayOfMonth();
+        String afterDate = String.format(" after: %d-%02d-%02d", oneMonthBeforeDate.getYear(), oneMonthBeforeDate.getMonthValue(), oneMonthBeforeDate.getDayOfMonth());
         String subject = getEmailSubject();
-        String query = subject + afterDate + beforeDate;
+        String query = "subject: "+subject + afterDate + beforeDate;
         logger.info(query);
         return query;
     }
