@@ -35,13 +35,13 @@
 				</td>
 				<td th:text="${transaction.transactionType}"></td>
 				<td th:if=${showUpdateDelete} align="center"><a
-					th:href="@{/showFormForTransactionUpdate/{id}(id=${transaction.id})}"
+					th:href="@{/showFormForTransactionUpdate/{id}(id=${transaction.id})}+'/'+${monthYear}+'/'+${month}+'?page='+${currentPage}"
 					class="update-delete-button">Update</a></td>
 				<td th:if=${showUpdateDelete} align="center"><a
-					th:href="@{/deleteTransaction/{id}(id=${transaction.id})}"
+					th:href="@{/deleteTransaction/{id}(id=${transaction.id})}+'/'+${monthYear}+'/'+${month}+'?page='+${currentPage}"
 					class="update-delete-button">Delete</a></td>
 				<td th:if=${showUpdateDelete} align="center"><a
-					th:href="@{/splitTransaction/{id}(id=${transaction.id})}"
+					th:href="@{/splitTransaction/{id}(id=${transaction.id})}+'/'+${monthYear}+'/'+${month}+'?page='+${currentPage}"
 					class="update-delete-button">Split</a></td>
 			</tr>
 		</tbody>

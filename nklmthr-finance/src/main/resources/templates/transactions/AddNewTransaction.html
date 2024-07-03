@@ -11,7 +11,7 @@
 	<h2>Add Transactions</h2>
 	<br />
 	<br />
-	<form action="#" th:action="@{/saveTransaction}"
+	<form action="#" th:action="@{/saveTransaction}/+${year}+'/'+${month}+'?page='+${page}"
 		th:object="${transaction}" method="POST">
 		<!-- Add hidden form field to handle update -->
 		<input type="hidden" th:field="*{id}" />

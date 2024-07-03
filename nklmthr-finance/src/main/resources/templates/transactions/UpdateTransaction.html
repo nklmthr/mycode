@@ -8,7 +8,7 @@
 		<h2>Update Transactions</h2>
 		<hr>
 		<br /> <br />
-		<form action="#" th:action="@{/saveTransaction}"
+		<form action="#" th:action="@{/saveTransaction/}+${year}+'/'+${month}+'?page='+${page}"
 			th:object="${transaction}" method="POST">
 			<table>
 				<tr>
