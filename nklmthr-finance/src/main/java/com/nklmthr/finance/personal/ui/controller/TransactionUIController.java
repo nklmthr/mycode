@@ -44,24 +44,19 @@ public class TransactionUIController {
     private TransactionService transactionService;
 
     @GetMapping("/Transactions")
-    public String getTransactions(Model m, @PathParam(value = "categoryId") String categoryId,
-                                  @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int size,
-                                  @RequestParam(defaultValue = "date,desc") String[] sort) {
+    public String getTransactions(Model m, @PathParam(value = "categoryId") String categoryId, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "date,desc") String[] sort) {
         return getTransactionsByCategoryInMonth(m, null, null, null, categoryId, page, size, sort);
     }
 
     @GetMapping("/Transactions/{year}/{month}")
-    public String getTransactionsByCategoryInMonth(Model m, @PathVariable(value = "year") Integer year,
-                                                   @PathVariable(value = "month") Integer month, @PathParam(value = "categoryId") String categoryId,
-                                                   @RequestParam(required = false) String keyword, @RequestParam(defaultValue = "1") int page,
-                                                   @RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "date,desc") String[] sort) {
+    public String getTransactionsByCategoryInMonth(Model m, @PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month, @PathParam(value = "categoryId") String categoryId, @RequestParam(required = false) String keyword, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "date,desc") String[] sort) {
         logger.info("Recieved year =" + year + ", month=" + month);
         String sortField = sort[0];
         String sortDirection = sort[1];
         Direction direction = sortDirection.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
         Order order = new Order(direction, sortField);
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by(order));
-        Integer nextMonthYear = year, nextMonth = month, previousMonthYear = year, previousMonth = month;
+        Integer nextMonthYear, nextMonth, previousMonthYear, previousMonth;
         if (year == null || year == 0) {
             year = YearMonth.now().getYear();
         }
@@ -69,8 +64,7 @@ public class TransactionUIController {
             month = YearMonth.now().getMonthValue();
         }
         logger.info("year =" + year + ", month=" + month);
-        Page<Transaction> pageTansactions = transactionService.getTransactionsByCategoryInYearAndMonth(keyword,
-                pageable, categoryId, year, month);
+        Page<Transaction> pageTansactions = transactionService.getTransactionsByCategoryInYearAndMonth(keyword, pageable, categoryId, year, month);
         previousMonthYear = YearMonth.of(year, month).minusMonths(1).getYear();
         nextMonthYear = YearMonth.of(year, month).plusMonths(1).getYear();
         previousMonth = YearMonth.of(year, month).minusMonths(1).getMonth().getValue();
@@ -96,7 +90,7 @@ public class TransactionUIController {
     }
 
     @GetMapping("/addnewTransaction/{year}/{month}")
-    public String addNewTransaction(Model m, @PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month, @RequestParam(value = "page") Integer page) {
+    public String addNewTransaction(Model m, @PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month, @RequestParam(value = "page", defaultValue = "1") Integer page) {
         String sortField = "date";
         String sortDirection = "desc";
         Direction direction = sortDirection.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
@@ -110,7 +104,7 @@ public class TransactionUIController {
         }
         Page<Transaction> pageTansactions = transactionService.findAllTransactionsByMonth(pageable, year, month);
         m.addAttribute("transactions", pageTansactions.getContent());
-        List<Category> categorys = categoryService.getAllCategorys();
+        List<Category> categorys = categoryService.getAllCategoryExcludingHidden();
         m.addAttribute("categoryList", categorys);
         List<Account> accounts = accountService.getAllAccounts();
         m.addAttribute("accountList", accounts);
@@ -132,7 +126,7 @@ public class TransactionUIController {
     }
 
     @PostMapping("/saveAndAddnewTransaction/{year}/{month}")
-    public String saveAndAddnewTransaction(@ModelAttribute("transaction") Transaction transaction, Model m, @PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month, @RequestParam(value = "page") Integer page) {
+    public String saveAndAddnewTransaction(@ModelAttribute("transaction") Transaction transaction, Model m, @PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month, @RequestParam(value = "page", defaultValue = "1") Integer page) {
         saveTransaction(transaction, year, month, page);
         String sortField = "date";
         String sortDirection = "desc";
@@ -147,7 +141,7 @@ public class TransactionUIController {
         }
         Page<Transaction> pageTansactions = transactionService.findAllTransactionsByMonth(pageable, year, month);
         m.addAttribute("transactions", pageTansactions.getContent());
-        List<Category> categorys = categoryService.getAllCategorys();
+        List<Category> categorys = categoryService.getAllCategory();
         m.addAttribute("categoryList", categorys);
         List<Account> accounts = accountService.getAllAccounts();
         m.addAttribute("accountList", accounts);
@@ -169,15 +163,15 @@ public class TransactionUIController {
     }
 
     @PostMapping("/saveTransaction/{year}/{month}")
-    public String saveTransaction(@ModelAttribute("transaction") Transaction transaction, @PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month, @RequestParam(value = "page") Integer page) {
+    public String saveTransaction(@ModelAttribute("transaction") Transaction transaction, @PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month, @RequestParam(value = "page", defaultValue = "1") Integer page) {
         transactionService.saveTransaction(transaction);
         logger.info("saveTransaction " + transaction);
         return "redirect:/Transactions/" + year + "/" + month + "?&page=" + page;
     }
 
     @GetMapping("/showFormForTransactionUpdate/{id}/{year}/{month}")
-    public String showFormForTransactionUpdate(@PathVariable(value = "id") String id, @PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month, @RequestParam(value = "page") Integer page, Model m) {
-        List<Category> categorys = categoryService.getAllCategorys();
+    public String showFormForTransactionUpdate(@PathVariable(value = "id") String id, @PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month, @RequestParam(value = "page", defaultValue = "1") Integer page, Model m) {
+        List<Category> categorys = categoryService.getAllCategory();
         m.addAttribute("CategoryList", categorys);
         List<Account> accounts = accountService.getAllAccounts();
         m.addAttribute("accountList", accounts);
@@ -192,7 +186,7 @@ public class TransactionUIController {
     }
 
     @GetMapping("/deleteTransaction/{id}/{year}/{month}")
-    public String deleteTransaction(@PathVariable(value = "id") String id, @PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month, @RequestParam(value = "page") Integer page, Model model) {
+    public String deleteTransaction(@PathVariable(value = "id") String id, @PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month, @RequestParam(value = "page", defaultValue = "1") Integer page, Model model) {
         transactionService.deleteTransaction(id);
         return "redirect:/Transactions/" + year + "/" + month + "?page=" + page;
     }
@@ -201,16 +195,11 @@ public class TransactionUIController {
     public String splitTransaction(@PathVariable(value = "id") String id, Model m) {
         Transaction parentTransaction = transactionService.findTransactionById(id);
         m.addAttribute("parentTransaction", parentTransaction);
-        List<Category> categorys = categoryService.getAllCategorys();
+        List<Category> categorys = categoryService.getAllCategoryExcludingHidden();
         m.addAttribute("categoryList", categorys);
         List<Account> accounts = accountService.getAllAccounts();
         m.addAttribute("accountList", accounts);
         m.addAttribute("transactionTypes", transactionService.getTransactionTypes());
         return "transactions/SplitTransaction";
-    }
-
-    @GetMapping("/saveSplitTransaction/{id}")
-    public String saveSplitTransaction(Model m, @PathVariable(value = "id") String id) {
-        return "redirect:/Transactions";
     }
 }

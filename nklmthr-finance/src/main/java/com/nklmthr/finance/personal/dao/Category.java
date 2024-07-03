@@ -15,81 +15,86 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Category{
-	public static final String UNCLASSIFIED = "Not Classified";
+public class Category {
+    public static final String UNCLASSIFIED = "Not Classified";
 
-	@Id
-	@UuidGenerator
-	private String id;
+    @Id
+    @UuidGenerator
+    private String id;
 
-	@Column
-	private String name;
+    @Column
+    private String name;
 
-	@Column
-	private int level;
-	
-	@Column
-	private boolean hidden;
-	
+    @Column
+    private int level;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "category", referencedColumnName = "id")
-	private Category parentCategory;
+    @Column
+    private boolean hidden;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
-	private Set<Category> childCategorys;
 
-	public String getId() {
-		return id;
-	}
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category", referencedColumnName = "id")
+    private Category parentCategory;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    @JsonIgnore
+    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
+    private Set<Category> childCategorys;
 
-	public String getName() {
-		return name;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public Category getParentCategory() {
-		return parentCategory;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setParentCategory(Category parentCategory) {
-		this.parentCategory = parentCategory;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public int getLevel() {
-		return level;
-	}
+    public Category getParentCategory() {
+        return parentCategory;
+    }
 
-	public void setLevel(int level) {
-		this.level = level;
-	}
+    public void setParentCategory(Category parentCategory) {
+        this.parentCategory = parentCategory;
+    }
 
-	public Set<Category> getChildCategorys() {
-		return childCategorys;
-	}
+    public int getLevel() {
+        return level;
+    }
 
-	public void setChildCategorys(Set<Category> childCategorys) {
-		this.childCategorys = childCategorys;
-	}
+    public void setLevel(int level) {
+        this.level = level;
+    }
 
-	public boolean isHidden() {
-		return hidden;
-	}
+    public Set<Category> getChildCategorys() {
+        return childCategorys;
+    }
 
-	public void setHidden(boolean hidden) {
-		this.hidden = hidden;
-	}
+    public void setChildCategorys(Set<Category> childCategorys) {
+        this.childCategorys = childCategorys;
+    }
 
-	@Override
-	public String toString() {
-		return "Category [name=" + name + ", level=" + level + "]";
-	}
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", level=" + level +
+                ", hidden=" + hidden +
+                '}';
+    }
 }

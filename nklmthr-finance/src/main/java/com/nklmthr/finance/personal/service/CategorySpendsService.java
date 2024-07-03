@@ -74,7 +74,7 @@ public class CategorySpendsService {
 			}
 			queue.addAll(cat.getChildCategorys().stream().filter((s -> !s.isHidden())).collect(Collectors.toSet()));
 		}
-		List<Category> categorys = categoryService.getAllCategorys();
+		List<Category> categorys = categoryService.getAllCategoryExcludingHidden();
 		int highestLevel = findHighestCategoryLevel(categorys);
 		logger.info("highestLevel:" + highestLevel);
 		while (highestLevel >= 0) {

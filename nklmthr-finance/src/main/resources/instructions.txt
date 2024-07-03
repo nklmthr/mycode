@@ -1,4 +1,6 @@
 mvn clean package spring-boot:repackage
+java -jar -Dspring.profiles.active=prod target/MyFinanceApp.jar
+
 
 cd /home/ec2-user/app/
 java -jar -Dserver.port=9000 MyFinanceApp-1.0.0.jar

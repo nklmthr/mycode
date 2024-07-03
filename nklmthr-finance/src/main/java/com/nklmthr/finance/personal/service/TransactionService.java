@@ -27,7 +27,7 @@ import jakarta.transaction.Transactional;
 @Service
 public class TransactionService {
 
-	private static Logger logger = Logger.getLogger(TransactionService.class);
+	private static final Logger logger = Logger.getLogger(TransactionService.class);
 
 	@Autowired
 	private TransactionRepository transactionRepository;
@@ -40,8 +40,8 @@ public class TransactionService {
 		Page<Transaction> pageTransactions;
 		if (categoryId != null) {
 			Category category = categoryRepository.findById(categoryId).get();
-			List<Category> categories = new ArrayList<Category>();
-			Queue<Category> queue = new LinkedList<Category>();
+			List<Category> categories = new ArrayList<>();
+			Queue<Category> queue = new LinkedList<>();
 			queue.add(category);
 			while (!queue.isEmpty()) {
 				logger.debug("queue Size:" + queue.size() + " category sz:" + categories.size());
@@ -52,9 +52,9 @@ public class TransactionService {
 			}
 			logger.info("Total Child Categories" + categories.size());
 			pageTransactions = transactionRepository.findAllTransactionsInCategoriesByMonth(pageable, year, month,
-					categories.stream().map(s -> s.getId()).collect(Collectors.toList()));
+					categories.stream().map(Category::getId).collect(Collectors.toList()));
 		} else {
-			logger.info("No Catgory. Find Transactions by year and month");
+			logger.info("No Category. Find Transactions by year and month");
 			pageTransactions = findAllTransactionsByMonth(pageable, year, month);
 		}
 		return pageTransactions;
@@ -145,7 +145,7 @@ public class TransactionService {
 		Transaction parent = child.getParentTransaction();
 		if (parent != null) {
 			parent.setAmount(parent.getAmount().add(child.getAmount()));
-			if (parent.getChildTransactions().size() > 0) {
+			if (!parent.getChildTransactions().isEmpty()) {
 				parent.setCategory(child.getCategory());
 			}
 			parent.getChildTransactions().remove(child);
@@ -161,8 +161,7 @@ public class TransactionService {
 	}
 
 	public Transaction findTransactionsBySource(String source, Long sourceTime) {
-		Transaction transaction = transactionRepository.findBySource(source, sourceTime);
-		return transaction;
+        return transactionRepository.findBySource(source, sourceTime);
 
 	}
 

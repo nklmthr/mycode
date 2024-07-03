@@ -1,66 +1,67 @@
 <html>
 <head th:insert="~{header.html ::header}"></head>
 <body>
-	<div>
-		<div th:insert="~{TopNavigation.html ::topNavigation('Transactions')}"></div>
-	</div>
-	<div class="container">
-		<h2>Update Transactions</h2>
-		<hr>
-		<br /> <br />
-		<form action="#" th:action="@{/saveTransaction/}+${year}+'/'+${month}+'?page='+${page}"
-			th:object="${transaction}" method="POST">
-			<table>
-				<tr>
-					<td><input type="hidden" th:field="*{id}" /> <input
-						type="hidden" name="oldAmount" th:value="*{amount}" /> <label
-						for="date">Date</label> <input type="datetime-local"
-						th:field="*{date}" /></td>
-					<td colspan="2"><label for="description">Description</label> <input
-						type="text" readOnly="true" th:field="*{description}" size="40" />
-					</td>
-				</tr>
-				<tr>
-					<td colspan="3"><label for="explanation">Explanation</label> <input
-						type="text" th:field="*{explanation}" size="70" /></td>
-				</tr>
-				<tr>
-					<td colspan="2"><label for="category">Category</label> <select
-						th:field="*{category}">
-							<option th:each="category : ${CategoryList}"
-								th:value="${category.id}" th:text="${category.name}"></option>
-					</select></td>
-					<td><label for="account">Account</label> <select
-						th:field="*{account}">
-							<option th:each="account : ${accountList}"
-								th:value="${account.id}" th:text="${account.name}"></option>
-					</select></td>
-				</tr>
-				<tr>
-					<td><label for="amount">Amount</label> <input type="text"
-						th:field="*{amount}" placeholder="0.0" /></td>
-					<td><input type="hidden" th:field="*{source}" /> <input
-						type="hidden" th:field="*{sourceTime}" /> <input type="text"
-						size="5" readonly="true" th:field="*{currency}"
-						placeholder="INR" /> <label for="transactionType">Transaction
-							Type</label> <select th:field="*{transactionType}">
-							<option th:each="transactionType:${transactionTypes}"
-								th:value="${transactionType.name}"
-								th:text="${transactionType.name}" />
-					</select></td>
-				</tr>
-				<tr>
-					<td>
-						<button type="submit" class="update-delete-button">Save</button>
-					</td>
-				</tr>
-			</table>
-		</form>
-		<br />
-		<hr>
-		<br /> <br /> <br /> <a th:href="@{/Transactions}">Back to
-			Transactions List</a>
-	</div>
+<div>
+    <div th:insert="~{TopNavigation.html ::topNavigation('Transactions')}"></div>
+</div>
+<div class="container">
+    <h2>Update Transactions</h2>
+    <hr>
+    <br/> <br/>
+    <form action="#" th:action="@{/saveTransaction/}+${year}+'/'+${month}+'?page='+${page}"
+          th:object="${transaction}" method="POST">
+        <table>
+            <tr>
+                <td><input type="hidden" th:field="*{id}"/> <input
+                        type="hidden" name="oldAmount" th:value="*{amount}"/> <label
+                        for="date">Date</label> <input type="datetime-local" id="date"
+                                                       th:field="*{date}"/></td>
+                <td colspan="2"><label for="description">Description</label> <input
+                        id="description" type="text" readOnly="true" th:field="*{description}" size="40"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"><label for="explanation">Explanation</label> <input
+                        id="explanation" type="text" th:field="*{explanation}" size="70"/></td>
+            </tr>
+            <tr>
+                <td colspan="2"><label for="category">Category</label> <select id="category"
+                                                                               th:field="*{category}">
+                    <option th:each="category : ${CategoryList}"
+                            th:value="${category.id}" th:text="${category.name}"></option>
+                </select></td>
+                <td><label for="account">Account</label> <select id="account"
+                                                                 th:field="*{account}">
+                    <option th:each="account : ${accountList}"
+                            th:value="${account.id}" th:text="${account.name}"></option>
+                </select></td>
+            </tr>
+            <tr>
+                <td><label for="amount">Amount</label> <input type="text" id="amount"
+                                                              th:field="*{amount}" placeholder="0.0"/></td>
+                <td><input type="hidden" th:field="*{source}"/> <input
+                        type="hidden" th:field="*{sourceTime}"/> <input type="text"
+                                                                        size="5" readonly="true" th:field="*{currency}"
+                                                                        placeholder="INR"/> <label
+                        for="transactionType">Transaction
+                    Type</label> <select id="transactionType" th:field="*{transactionType}">
+                    <option th:each="transactionType:${transactionTypes}"
+                            th:value="${transactionType.name}"
+                            th:text="${transactionType.name}"/>
+                </select></td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" class="update-delete-button">Save</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br/>
+    <hr>
+    <br/> <br/> <br/> <a th:href="@{/Transactions}">Back to
+    Transactions List</a>
+</div>
 </body>
 
 </html>
