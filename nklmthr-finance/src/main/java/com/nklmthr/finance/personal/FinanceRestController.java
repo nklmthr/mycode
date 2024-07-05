@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nklmthr.finance.personal.dao.Transaction;
-import com.nklmthr.finance.personal.dao.TransactionRepository;
 import com.nklmthr.finance.personal.exception.SaveSplitTransactionException;
 import com.nklmthr.finance.personal.service.CategoryService;
 import com.nklmthr.finance.personal.service.TransactionService;
@@ -26,10 +25,6 @@ public class FinanceRestController {
 
 	@Autowired
 	private TransactionService transactionService;
-
-
-	@Autowired
-	private CategoryService categoryService;
 	
 	@PostMapping("/saveSplitTransaction/{id}")
 	public ResponseEntity<String> saveSplitTransaction(@PathVariable(name = "id") String id,

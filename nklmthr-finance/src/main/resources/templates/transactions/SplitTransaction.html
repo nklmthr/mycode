@@ -63,11 +63,11 @@
 			var account = {};
 			account["id"] = "";
 			splitTransaction["account"]=account;
-
 			splitTransaction["category"] = category;
 			splitTransaction["explanation"] = explanation;
 			splitTransaction["amount"] = amount;
 			splitTranJson.push(splitTransaction);
+			//alert("JSON.stringify(splitTranJson) "+JSON.stringify(splitTranJson));
 
 		})
 		$.post({			
@@ -142,7 +142,7 @@
 			<thead>
 				<tr>
 					<th>Category</th>
-					<th>explanation</th>
+					<th>Explanation</th>
 					<th>Amount</th>
 
 				</tr>

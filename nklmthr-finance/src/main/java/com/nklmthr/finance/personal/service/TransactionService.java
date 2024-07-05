@@ -105,7 +105,6 @@ public class TransactionService {
 		}
 		BigDecimal origParentAmount = parent.getAmount();
 		String originalParentDescription = parent.getDescription();
-
 		parent.setDescription(
 				parent.getCategory().getName() + "|" + parent.getDescription() + "|" + parent.getAmount());
 		String originalParentCategory = parent.getCategory().getName();
@@ -117,8 +116,7 @@ public class TransactionService {
 			t.setParentTransaction(parent);
 			t.setCategory(categoryRepository.findById(t.getCategory().getId()).get());
 			t.setTransactionType(parent.getTransactionType());
-			t.setDescription("[" + originalParentCategory + "|" + originalParentDescription + "|" + origParentAmount
-					+ "] " + t.getDescription());
+			t.setDescription(originalParentDescription);			
 			parent.setAmount(parent.getAmount().subtract(t.getAmount()));
 			transactionRepository.save(t);
 		}

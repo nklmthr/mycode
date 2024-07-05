@@ -15,15 +15,20 @@
 		<tr>
 			<td>
 				<div th:if="${param.categoryId} !=null">
-					<form th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}" method="GET">
-						<input type="hidden" name="categoryId" th:value="${param.categoryId}" />
+					<form
+						th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}"
+						method="GET">
+						<input type="hidden" name="categoryId"
+							th:value="${param.categoryId}" />
 						<button class="navButtonClass" type="submit">
 							Previous Month</span>
 						</button>
 					</form>
 				</div>
 				<div th:unless="${param.categoryId} !=null">
-					<form th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}" method="GET">
+					<form
+						th:action="'/Transactions/'+${previousMonthYear}+'/'+${previousMonth}"
+						method="GET">
 						<button class="navButtonClass" type="submit">
 							Previous Month</span>
 						</button>
@@ -32,14 +37,19 @@
 			</td>
 			<td>
 				<div th:if="${param.categoryId} !=null">
-					<form th:action="'/Transactions/'+${currentMonthYear}+'/'+${currentMonth}" method="GET">
-						<input type="hidden" name="categoryId" th:value="${param.categoryId}" />
+					<form
+						th:action="'/Transactions/'+${currentMonthYear}+'/'+${currentMonth}"
+						method="GET">
+						<input type="hidden" name="categoryId"
+							th:value="${param.categoryId}" />
 						<button class="navButtonClass" type="submit">Current
 							Month</button>
 					</form>
 				</div>
 				<div th:unless="${param.categoryId} !=null">
-					<form th:action="'/Transactions/'+${currentMonthYear}+'/'+${currentMonth}" method="GET">
+					<form
+						th:action="'/Transactions/'+${currentMonthYear}+'/'+${currentMonth}"
+						method="GET">
 						<button class="navButtonClass" type="submit">Current
 							Month</button>
 					</form>
@@ -50,12 +60,15 @@
 					<form
 						th:action="'/Transactions/'+${nextMonthYear}+'/'+${nextMonth}+'?categoryId='+${param.categoryId}"
 						method="GET">
-						<input type="hidden" name="categoryId" th:value="${param.categoryId}" />
+						<input type="hidden" name="categoryId"
+							th:value="${param.categoryId}" />
 						<button class="navButtonClass" type="submit">Next Month</button>
 					</form>
 				</div>
 				<div th:unless="${param.categoryId} !=null">
-					<form th:action="'/Transactions/'+${nextMonthYear}+'/'+${nextMonth}" method="GET">
+					<form
+						th:action="'/Transactions/'+${nextMonthYear}+'/'+${nextMonth}"
+						method="GET">
 						<button class="navButtonClass" type="submit">Next Month</button>
 					</form>
 				</div>
@@ -78,9 +91,7 @@
 					<button class="addButtonClass" type="button"
 						th:onclick="|window.location.href='/addnewTransaction/'+${monthYear}+'/'+${month}|">Add
 						Transaction</button> <br />
-					<br />
-					<br />
-
+				</td>			
 			</tr>
 			<tr>
 				<td colspan="3">
@@ -95,8 +106,7 @@
 	<br />
 	<br />
 	<hr>
-
-	<body>
-	</body>
+<body>
+</body>
 
 </html>
