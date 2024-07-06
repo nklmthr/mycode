@@ -1,5 +1,9 @@
 package com.nklmthr.finance.personal.ui.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.YearMonth;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.nklmthr.finance.personal.dao.Account;
 import com.nklmthr.finance.personal.dao.Category;
@@ -42,6 +47,7 @@ public class TransactionUIController {
 
 	@Autowired
 	private TransactionService transactionService;
+	public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/uploads";
 
 	@GetMapping("/Transactions")
 	public String getTransactions(Model m, @PathParam(value = "categoryId") String categoryId,
@@ -219,5 +225,17 @@ public class TransactionUIController {
 		m.addAttribute("accountList", accounts);
 		m.addAttribute("transactionTypes", transactionService.getTransactionTypes());
 		return "transactions/SplitTransaction";
+	}
+
+	@PostMapping("/upload/{year}/{month}")
+	public String uploadImage(Model model, @RequestParam("image") MultipartFile file,
+			@PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month,
+			@RequestParam(value = "page", defaultValue = "1") Integer page) throws IOException {
+		StringBuilder fileNames = new StringBuilder();
+		Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
+		fileNames.append(file.getOriginalFilename());
+		Files.write(fileNameAndPath, file.getBytes());
+		model.addAttribute("msg", "Uploaded images: " + fileNames.toString());
+		return "redirect:/Transactions/"+year+"/"+month+"?page="+page;
 	}
 }

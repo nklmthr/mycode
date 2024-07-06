@@ -37,5 +37,11 @@ public class SchedulingConfiguration {
 		ScheduledTask task = (ScheduledTask) applicationContext.getBean(CitiSBScheduleImpl.class);
 		task.doScheduledTask();
 	}
+	
+	@Scheduled(cron = "${icici.amazon.cc.cron.expression}")
+	public void runICICIAmazonCCJob() throws GeneralSecurityException, IOException, ParseException {
+		ScheduledTask task = (ScheduledTask) applicationContext.getBean(ICICIAmazonCCSchedulerImpl.class);
+		task.doScheduledTask();
+	}
 
 }
