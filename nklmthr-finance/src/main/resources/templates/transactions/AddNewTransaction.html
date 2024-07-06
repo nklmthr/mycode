@@ -17,68 +17,55 @@
 			th:object="${transaction}" method="POST">
 			<!-- Add hidden form field to handle update -->
 			<input type="hidden" th:field="*{id}" />
-		<tr>
-			<td align="right" padding-right="40px"><label>Date <input
-					type="datetime-local" th:field="*{date}">
-			</label></td>
-			<td><label> Description <input type="text" size="100"
-					placeholder="ANX DMart" required="true" th:field="*{description}">
-			</label></td>
+			<tr>
+				<td align="right" padding-right="40px"><label>Date <input
+						type="datetime-local" th:field="*{date}">
+				</label></td>
+				<td><label> Description <input type="text" size="100"
+						placeholder="ANX DMart" required="true" th:field="*{description}">
+				</label></td>
 
-		</tr>
-		<tr>
-			<td colspan="2" align="center"><label> Description <input
-					type="text" size="100" placeholder="DMart Groceries"
-					required="true" th:field="*{explanation}">
-			</label></td>
-		<tr>
-			<td align="right"><label>Category <select
-					th:field="*{category}">
-						<option th:each="category : ${categoryList}"
-							th:value="${category.id}" th:text="${category.name}"></option>
-				</select>
-			</label></td>
-			<td><label>Account <select th:field="*{account}">
-						<option th:each="account : ${accountList}"
-							th:value="${account.id}" th:text="${account.name}"></option>
-				</select>
-			</label></td>
-		</tr>
-		<tr>
-			<td align="right"><label>Amount <input type="text"
-					size="15" inputmode="numeric" th:field="*{amount}" required="true"
-					placeholder="0.0" />
-			</label></td>
-			<td><label>Type <select th:field="*{transactionType}">
-						<option th:each="transactionType:${transactionTypes}"
-							th:value="${transactionType.name}"
-							th:text="${transactionType.name}" />
-				</select>
-			</label></td>
-		</tr>
-		<tr>
-			<td align="center">
-				<button class="update-delete-button" type="submit">Save</button>
-			</td>
-			<td align="center">
-				<button th:formaction="@{/saveAndAddnewTransaction}"
-					class="addMore-button" type="submit">Add More</button>
-			</td>
-		</tr>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><label> Description <input
+						type="text" size="100" placeholder="DMart Groceries"
+						required="true" th:field="*{explanation}">
+				</label></td>
+			<tr>
+				<td align="right"><label>Category <select
+						th:field="*{category}">
+							<option th:each="category : ${categoryList}"
+								th:value="${category.id}" th:text="${category.name}"></option>
+					</select>
+				</label></td>
+				<td><label>Account <select th:field="*{account}">
+							<option th:each="account : ${accountList}"
+								th:value="${account.id}" th:text="${account.name}"></option>
+					</select>
+				</label></td>
+			</tr>
+			<tr>
+				<td align="right"><label>Amount <input type="text"
+						size="15" inputmode="numeric" th:field="*{amount}" required="true"
+						placeholder="0.0" />
+				</label></td>
+				<td><label>Type <select th:field="*{transactionType}">
+							<option th:each="transactionType:${transactionTypes}"
+								th:value="${transactionType.name}"
+								th:text="${transactionType.name}" />
+					</select>
+				</label></td>
+			</tr>
+			<tr>
+				<td align="center">
+					<button class="update-delete-button" type="submit">Save</button>
+				</td>
+				<td align="center">
+					<button th:formaction="@{/saveAndAddnewTransaction}"
+						class="addMore-button" type="submit">Add More</button>
+				</td>
+			</tr>
 		</form>
-		<tr>
-			<td align="right">
-				<form method="post" th:action="@{/upload}+'/'+${currentMonthYear}+'/'+ ${currentMonth}"
-					enctype="multipart/form-data">
-					<div>
-						<input type="file" name="image" accept="image/*">
-					</div>
-			</td>
-			<td align="left">
-				<button type="submit" class="btn btn-primary">Upload image</button>
-				</form>
-			</td>
-		</tr>
 
 	</table>
 	<br />

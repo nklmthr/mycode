@@ -1,14 +1,20 @@
 package com.nklmthr.finance.personal.ui.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.nklmthr.finance.personal.dao.Account;
 import com.nklmthr.finance.personal.dao.Category;
 import com.nklmthr.finance.personal.dao.Transaction;
+import com.nklmthr.finance.personal.dao.TransactionAttachment;
 import com.nklmthr.finance.personal.service.AccountService;
 import com.nklmthr.finance.personal.service.CategoryService;
 import com.nklmthr.finance.personal.service.TransactionService;
@@ -190,7 +197,7 @@ public class TransactionUIController {
 	@GetMapping("/showFormForTransactionUpdate/{id}/{year}/{month}")
 	public String showFormForTransactionUpdate(@PathVariable(value = "id") String id,
 			@PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month,
-			@RequestParam(value = "page", defaultValue = "1") Integer page, Model m) {
+			@RequestParam(value = "page", defaultValue = "1") Integer page, Model m) throws IOException {
 		List<Category> categorys = categoryService.getAllCategory();
 		m.addAttribute("CategoryList", categorys);
 		List<Account> accounts = accountService.getAllAccounts();
@@ -201,6 +208,8 @@ public class TransactionUIController {
 		m.addAttribute("year", year);
 		m.addAttribute("month", month);
 		m.addAttribute("page", page);
+		List<TransactionAttachment> transactionAttachments = transactionService.getTransactionAttachments(id);
+		logger.info("transactionAttachments" + transactionAttachments);
 		logger.info("showFormForTransactionUpdate ");
 		return "transactions/UpdateTransaction";
 	}
@@ -227,15 +236,18 @@ public class TransactionUIController {
 		return "transactions/SplitTransaction";
 	}
 
-	@PostMapping("/upload/{year}/{month}")
+	@PostMapping("transaction/{id}/upload/{year}/{month}")
 	public String uploadImage(Model model, @RequestParam("image") MultipartFile file,
-			@PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month,
+			@PathVariable(value = "id") String id, @PathVariable(value = "year") Integer year,
+			@PathVariable(value = "month") Integer month,
 			@RequestParam(value = "page", defaultValue = "1") Integer page) throws IOException {
-		StringBuilder fileNames = new StringBuilder();
-		Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
-		fileNames.append(file.getOriginalFilename());
-		Files.write(fileNameAndPath, file.getBytes());
-		model.addAttribute("msg", "Uploaded images: " + fileNames.toString());
-		return "redirect:/Transactions/"+year+"/"+month+"?page="+page;
+		TransactionAttachment attachment = new TransactionAttachment();
+		Transaction t = transactionService.getTransactionById(id);
+		attachment.setTransaction(t);
+		attachment.setFileName(file.getOriginalFilename());
+		attachment.setDate(new Date());
+		attachment.setImageData(file.getBytes());
+		transactionService.addAttachment(t, attachment);
+		return "redirect:/Transactions/" + year + "/" + month + "?page=" + page;
 	}
 }
