@@ -182,4 +182,8 @@ public class TransactionService {
 	public List<TransactionAttachment> getTransactionAttachments(String id) {
 		return transactionAttachmentRepository.findByTransactionId(id);
 	}
+
+	public void deleteTransactionAttachmentById(String attachmentId) {
+		transactionAttachmentRepository.deleteById(attachmentId);		
+	}
 }

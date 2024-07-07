@@ -85,20 +85,24 @@ public class TransactionAttachment {
 		this.transaction = transaction;
 	}
 
+	public String getFullImage() {
+		return Base64.encodeBase64String(getImageData());
+	}
 	public String getThumbnail() throws IOException {
 		BufferedImage image = ImageIO.read(new ByteArrayInputStream(getImageData()));
-		BufferedImage resizedthumbnailImage = Scalr.resize(image, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 50,
+		BufferedImage resizedthumbnailImage = Scalr.resize(image, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, 200,
 				Scalr.OP_ANTIALIAS);
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		ImageIO.write(resizedthumbnailImage, "jpg", os);
+		ImageIO.write(resizedthumbnailImage,
+				getFileName().substring(getFileName().lastIndexOf(".")+1, getFileName().length()), os);
 		return Base64.encodeBase64String(os.toByteArray());
 	}
 
 	@Override
 	public String toString() {
 		try {
-			return "TransactionAttachment [id=" + id + ", date=" + date + ", fileName=" + fileName + ", transaction=" + transaction.getDescription() + ", getThumbnail()=" + getThumbnail()
-					+ "]";
+			return "TransactionAttachment [id=" + id + ", date=" + date + ", fileName=" + fileName + ", transaction="
+					+ transaction.getDescription() + ", getThumbnail()=" + getThumbnail() + "]";
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -106,5 +110,4 @@ public class TransactionAttachment {
 		return null;
 	}
 
-	
 }

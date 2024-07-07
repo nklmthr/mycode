@@ -209,6 +209,7 @@ public class TransactionUIController {
 		m.addAttribute("month", month);
 		m.addAttribute("page", page);
 		List<TransactionAttachment> transactionAttachments = transactionService.getTransactionAttachments(id);
+		m.addAttribute("transactionAttachments", transactionAttachments);
 		logger.info("transactionAttachments" + transactionAttachments);
 		logger.info("showFormForTransactionUpdate ");
 		return "transactions/UpdateTransaction";
@@ -248,6 +249,15 @@ public class TransactionUIController {
 		attachment.setDate(new Date());
 		attachment.setImageData(file.getBytes());
 		transactionService.addAttachment(t, attachment);
-		return "redirect:/Transactions/" + year + "/" + month + "?page=" + page;
+		return "redirect:/showFormForTransactionUpdate/" + id + "/" + year + "/" + month + "?page=" + page;
+	}
+
+	@GetMapping("/transaction/{transactionId}/deleteAttachment/{attachmentId}/{year}/{month}")
+	public String deleteAttachment(Model model, @PathVariable(value = "transactionId") String transactionId,
+			@PathVariable(value = "attachmentId") String attachmentId,			
+			@PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month,
+			@RequestParam(value = "page", defaultValue = "1") Integer page) throws IOException {
+		transactionService.deleteTransactionAttachmentById(attachmentId);
+		return "redirect:/showFormForTransactionUpdate/" + transactionId + "/" + year + "/" + month + "?page=" + page;
 	}
 }
