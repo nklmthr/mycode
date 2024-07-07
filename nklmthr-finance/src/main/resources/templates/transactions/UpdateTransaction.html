@@ -61,18 +61,16 @@
 		<table border="1">
 			<tr th:each="attachment : ${transactionAttachments}">
 				<div th:if="${attachment.getFileType() == 'pdf'}">
-				<td>
-					<a th:download"${attachment.getImageData()}" type="application/pdf"
-						th:href="${attachment.getFileName()}"><span
-						th:text="${attachment.getFileName()}" /></a>
-				</td>
+					<td><a th:download="${attachment.getFileName()}"
+						th:href="@{/transaction/}+${attachment.getTransaction().getId()}+'/attachment/'+${attachment.getId()}+'/'+${year}+'/'+${month}+'?page='+${page}" type="application/pdf" /> <span
+						th:text="${attachment.getFileName()}" /></a></td>
 				</div>
 				<div th:if="${attachment.getFileType() != 'pdf'}">
-				<td><a th:download="${attachment.getFileName()}"
-					th:href="@{'data:image/*;base64,'}+${attachment.getFullImage()}"
-					target="_blank"><img
-						th:src="@{'data:image/*;base64,'+${attachment.getThumbnail()}}"
-						alt="Reciept" /></a></td>
+					<td><a th:download="${attachment.getFileName()}"
+						th:href="@{'data:image/*;base64,'}+${attachment.getFullImage()}"
+						target="_blank"><img
+							th:src="@{'data:image/*;base64,'+${attachment.getThumbnail()}}"
+							alt="Reciept" /></a></td>
 				</div>
 				<td><a
 					th:href="@{/transaction/}+${attachment.getTransaction().getId()}+'/deleteAttachment/'+${attachment.getId()}+'/'+${year}+'/'+${month}+'?page='+${page}">Delete</a></td>

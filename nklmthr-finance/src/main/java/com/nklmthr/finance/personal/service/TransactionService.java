@@ -186,4 +186,9 @@ public class TransactionService {
 	public void deleteTransactionAttachmentById(String attachmentId) {
 		transactionAttachmentRepository.deleteById(attachmentId);		
 	}
+
+	public byte[] getTransactionAttachmentById(String attachmentId) {
+		return transactionAttachmentRepository.findById(attachmentId).get().getImageData();	
+		
+	}
 }

@@ -1,20 +1,13 @@
 package com.nklmthr.finance.personal.ui.controller;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import javax.imageio.ImageIO;
-
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
-import org.imgscalr.Scalr;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +33,7 @@ import com.nklmthr.finance.personal.service.AccountService;
 import com.nklmthr.finance.personal.service.CategoryService;
 import com.nklmthr.finance.personal.service.TransactionService;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.websocket.server.PathParam;
 
 @Controller
@@ -254,10 +248,20 @@ public class TransactionUIController {
 
 	@GetMapping("/transaction/{transactionId}/deleteAttachment/{attachmentId}/{year}/{month}")
 	public String deleteAttachment(Model model, @PathVariable(value = "transactionId") String transactionId,
-			@PathVariable(value = "attachmentId") String attachmentId,			
-			@PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month,
+			@PathVariable(value = "attachmentId") String attachmentId, @PathVariable(value = "year") Integer year,
+			@PathVariable(value = "month") Integer month,
 			@RequestParam(value = "page", defaultValue = "1") Integer page) throws IOException {
 		transactionService.deleteTransactionAttachmentById(attachmentId);
 		return "redirect:/showFormForTransactionUpdate/" + transactionId + "/" + year + "/" + month + "?page=" + page;
+	}
+
+	@GetMapping("/transaction/{transactionId}/attachment/{attachmentId}/{year}/{month}")
+	public void getAttachment(Model model, @PathVariable(value = "transactionId") String transactionId,
+			@PathVariable(value = "attachmentId") String attachmentId, @PathVariable(value = "year") Integer year,
+			@PathVariable(value = "month") Integer month,
+			@RequestParam(value = "page", defaultValue = "1") Integer page, HttpServletResponse response)
+			throws IOException {
+		byte[] attachment = transactionService.getTransactionAttachmentById(attachmentId);
+		IOUtils.copy(new ByteArrayInputStream(attachment), response.getOutputStream());
 	}
 }
