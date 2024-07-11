@@ -24,12 +24,12 @@ public class AccountService {
 	}
 
 	public Account saveAccount(Account account) {
-		return accountRepository.save(account);		
+		return accountRepository.save(account);
 	}
 
 	public Account findAccountById(String id) {
 		Optional<Account> account = accountRepository.findById(id);
-		if(account.isPresent()) {
+		if (account.isPresent()) {
 			return account.get();
 		}
 		return null;
@@ -41,6 +41,14 @@ public class AccountService {
 
 	public Account findAccountByName(String name) {
 		return accountRepository.findByName(name);
+	}
+
+	public Account getAccountById(String id) {
+		Optional<Account> optional = accountRepository.findById(id);
+		if (optional.isPresent()) {
+			return optional.get();
+		}
+		return null;
 	}
 
 }

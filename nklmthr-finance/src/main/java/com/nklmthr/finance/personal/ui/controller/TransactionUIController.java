@@ -217,6 +217,36 @@ public class TransactionUIController {
 		return "redirect:/Transactions/" + year + "/" + month + "?page=" + page;
 	}
 
+	@GetMapping("/openTransferPage/{id}/{year}/{month}")
+	public String openTransferPageForTransaction(@PathVariable(value = "id") String id,
+			@PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month,
+			@RequestParam(value = "page", defaultValue = "1") Integer page, Model model) {
+		Transaction transaction = transactionService.getTransactionById(id);
+		List<Account> accounts = accountService.getAllAccounts();
+		List<Category> categorys = categoryService.getAllCategory();
+		model.addAttribute("categorys", categorys);
+		model.addAttribute("transaction", transaction);
+		model.addAttribute("accounts", accounts);
+		model.addAttribute("transactionTypes", transactionService.getTransactionTypes());
+		model.addAttribute("year", year);
+		model.addAttribute("month", month);
+		model.addAttribute("page", page);
+		return "transactions/Transfer";
+	}
+
+	@PostMapping("/saveTransactionTransfer/{year}/{month}")
+	public String saveTransactionTransfer(@ModelAttribute("transaction") Transaction transaction,
+			@RequestParam(value = "transferToAccount") String transferToAccount,
+			@PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month,
+			@RequestParam(value = "page", defaultValue = "1") Integer page) {
+		Account account = accountService.getAccountById(transferToAccount);
+		logger.info("transferToAccount id:" + transferToAccount + " found Account:" + account.toString());
+		logger.info("Account Balance:" + account.getTransactionBalance());
+		logger.info("Setting new Account Balance:" + account.getTransactionBalance().min(transaction.getAmount()));
+		account.setTransactionBalance(account.getTransactionBalance().min(transaction.getAmount()));
+		return "redirect:/Transactions/" + year + "/" + month + "?&page=" + page;
+	}
+
 	@GetMapping("/splitTransaction/{id}/{year}/{month}")
 	public String splitTransaction(@PathVariable(value = "id") String id, @PathVariable(value = "year") Integer year,
 			@PathVariable(value = "month") Integer month,
