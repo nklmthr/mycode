@@ -29,23 +29,23 @@ public class AxisBankCCSchedulerImpl extends ScheduledTask {
 
     @Override
     protected String getJSOUPXPathQuery() {
-        return "/html/body/table/tbody/tr/td/table/tbody/tr[2]/td/table[1]/tbody/tr[1]/td/p/span[2]";
+        return "/html/body/table/tbody/tr/td/table/tbody/tr[2]/td/table[1]/tbody/tr[1]/td/span[3]";
     }
 
     @Override
     protected Transaction getTransactionFromContent(String html) throws ParseException {
         if (StringUtils.isNotBlank(html) && !html.contains("declined")) {
             Transaction transaction = new Transaction();
-            String amountStr = html.substring(html.indexOf("Thank you for using your Card no. XX2107 for")
-                    + "Thank you for using your Card no. XX2107 for".length(), html.indexOf(" at ")).trim();
+            String amountStr = html.substring(html.indexOf("Thank you for using your credit card no. XX2107 for")
+                    + "Thank you for using your credit card no. XX2107 for".length(), html.indexOf(" at ")).trim();
             amountStr = amountStr.replaceAll(",", "");
             logger.debug(amountStr);
             String description = html.substring(html.indexOf(" at ") + 4, html.indexOf("on ")).trim();
             String currency = amountStr.substring(0, 3);
             String amountValue = amountStr.substring(4, amountStr.length());
-            logger.debug("currency" + currency + ", value=" + amountValue);
+            logger.info("currency" + currency + ", value=" + amountValue);
             BigDecimal amount = new BigDecimal(amountValue);
-            logger.debug(description);
+            logger.info(description);
             transaction.setCurrency(currency);
             transaction.setAmount(amount);
             transaction.setAccount(accountService.findAccountByName("AXIS-CCA-Airtel"));
@@ -79,7 +79,7 @@ public class AxisBankCCSchedulerImpl extends ScheduledTask {
         String emailEncoded = part.getParts().get(0).getBody().getData().toString();
         byte[] emaildecoded = BaseEncoding.base64Url().decode(emailEncoded);
         String email = new String(emaildecoded).trim();
-        logger.debug(email);
+        logger.info(email);
         return email;
     }
 
