@@ -202,8 +202,10 @@ public class TransactionService {
 		logger.info("transaction:" + transaction);
 		logger.info("transferToAccount id:" + transferToAccountId + " found Account:" + transferToAccount.toString());
 		logger.info("Account Balance:" + transferToAccount.getTransactionBalance());
-		logger.info("Setting new Account Balance:" + transferToAccount.getTransactionBalance().subtract(transaction.getAmount()));
-		transferToAccount.setTransactionBalance(transferToAccount.getTransactionBalance().subtract(transaction.getAmount()));
+		logger.info("Setting new Account Balance:"
+				+ transferToAccount.getTransactionBalance().subtract(transaction.getAmount()));
+		transferToAccount
+				.setTransactionBalance(transferToAccount.getTransactionBalance().subtract(transaction.getAmount()));
 		Category category = categoryRepository.findByName("TRANSFERS");
 		transaction.setCategory(category);
 		Transaction newTransaction = new Transaction();
@@ -212,7 +214,11 @@ public class TransactionService {
 		newTransaction.setExplanation(transaction.getExplanation());
 		newTransaction.setAccount(transferToAccount);
 		newTransaction.setAmount(transaction.getAmount());
-		newTransaction.setTransactionType(TransactionType.CREDIT);
+		if (transaction.getTransactionType().equals(TransactionType.CREDIT)) {
+			newTransaction.setTransactionType(TransactionType.DEBIT);
+		} else {
+			newTransaction.setTransactionType(TransactionType.CREDIT);
+		}
 		newTransaction.setCategory(category);
 		transactionRepository.save(transaction);
 		logger.info(newTransaction);
