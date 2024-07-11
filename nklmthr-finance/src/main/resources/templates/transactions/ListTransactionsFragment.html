@@ -10,16 +10,18 @@
 				<th th:replace="~{common/sorting :: sorting('date','Date')}"></th>
 				<th
 					th:replace="~{common/sorting :: sorting('description','Description')}"></th>
-				<th th:replace="~{common/sorting :: sorting('explanation','Explanation')}"></th>
+				<th
+					th:replace="~{common/sorting :: sorting('explanation','Explanation')}"></th>
 				<th th:replace="~{common/sorting :: sorting('account','Account')}"></th>
 				<th th:replace="~{common/sorting :: sorting('category','Category')}"></th>
 				<th th:replace="~{common/sorting :: sorting('currency','Currency')}"></th>
 				<th th:replace="~{common/sorting :: sorting('amount','Amount')}"></th>
 				<th
-					th:replace="~{common/sorting :: sorting('transactionType','Type')}"></th>				
+					th:replace="~{common/sorting :: sorting('transactionType','Type')}"></th>
 				<th th:if=${showUpdateDelete}>Update</th>
 				<th th:if=${showUpdateDelete}>Delete</th>
 				<th th:if=${showUpdateDelete}>Split</th>
+				<th th:if=${showUpdateDelete}>Mark Transfer</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -43,6 +45,9 @@
 				<td th:if=${showUpdateDelete} align="center"><a
 					th:href="@{/splitTransaction/{id}(id=${transaction.id})}+'/'+${monthYear}+'/'+${month}+'?page='+${currentPage}"
 					class="update-delete-button">Split</a></td>
+				<td th:if=${showUpdateDelete} align="center"><a
+					th:href="@{/openTransferPage/{id}(id=${transaction.id})}+'/'+${monthYear}+'/'+${month}+'?page='+${currentPage}"
+					class="update-delete-button">Transfer</a></td>
 			</tr>
 		</tbody>
 	</table>
