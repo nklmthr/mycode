@@ -214,6 +214,7 @@ public class TransactionService {
 		newTransaction.setExplanation(transaction.getExplanation());
 		newTransaction.setAccount(transferToAccount);
 		newTransaction.setAmount(transaction.getAmount());
+		newTransaction.setCurrency(transaction.getCurrency());
 		if (transaction.getTransactionType().equals(TransactionType.CREDIT)) {
 			newTransaction.setTransactionType(TransactionType.DEBIT);
 		} else {
