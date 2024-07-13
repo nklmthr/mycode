@@ -8,9 +8,6 @@ import jakarta.persistence.Id;
 
 @Entity
 public class AccountType {
-	public static final Object CreditCard = "CCA";
-
-	public static final Object Savings = "SVG";
 
 	@Id
 	@UuidGenerator
@@ -22,10 +19,10 @@ public class AccountType {
 
 	@Column
 	private String description;
-	
+
 	@Column
 	private String classification;
-	
+
 	public String getId() {
 		return id;
 	}

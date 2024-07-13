@@ -2,6 +2,9 @@
 	<a th:if="${name=='home'}" class="active" href="/home">Home</a>
 	<a th:unless="${name=='home'}" href="/home">Home</a>
 	
+	<a th:if="${name=='BalanceSheet'}" class="active" href="/BalanceSheet">Balance Sheet</a>
+	<a th:unless="${name=='BalanceSheet'}" href="/BalanceSheet">Balance Sheet</a>
+	
 	<a th:if="${name=='Transactions'}" class="active" href="/Transactions">Transactions</a>
 	<a th:unless="${name=='Transactions'}" href="/Transactions">Transactions</a>
 
