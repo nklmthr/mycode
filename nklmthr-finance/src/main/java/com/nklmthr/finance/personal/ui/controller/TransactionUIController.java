@@ -33,6 +33,7 @@ import com.nklmthr.finance.personal.service.AccountService;
 import com.nklmthr.finance.personal.service.CategoryService;
 import com.nklmthr.finance.personal.service.TransactionService;
 
+import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.websocket.server.PathParam;
 
@@ -183,6 +184,9 @@ public class TransactionUIController {
 	public String saveTransaction(@ModelAttribute("transaction") Transaction transaction,
 			@PathVariable(value = "year") Integer year, @PathVariable(value = "month") Integer month,
 			@RequestParam(value = "page", defaultValue = "1") Integer page) {
+		if(StringUtils.isBlank(transaction.getCurrency())){
+			transaction.setCurrency("INR");
+		}
 		transactionService.saveTransaction(transaction);
 		logger.info("saveTransaction " + transaction);
 		return "redirect:/Transactions/" + year + "/" + month + "?&page=" + page;

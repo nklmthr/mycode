@@ -79,7 +79,7 @@
 			<tr>
 				<td colspan="3">
 					<div
-						th:insert="transactions/ListTransactionsFragment ::transactionListFragment(true, ${categoryId}, ${monthYear}, ${month})">
+						th:insert="~{transactions/ListTransactionsFragment ::transactionListFragment(true, ${categoryId}, ${monthYear}, ${month})}">
 					</div>
 				</td>
 			</tr>
