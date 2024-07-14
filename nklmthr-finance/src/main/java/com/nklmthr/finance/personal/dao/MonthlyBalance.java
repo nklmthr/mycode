@@ -29,6 +29,7 @@ public class MonthlyBalance {
 	@Column
 	private BigDecimal amount;
 
+
 	public String getId() {
 		return id;
 	}

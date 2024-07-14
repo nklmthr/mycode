@@ -9,27 +9,33 @@
 	<br>
 	<br>
 	<form th:action="'/generateMonthEndReport'" method="GET">
-		<button class="navButtonClass" type="submit">Generate Closing Report for Today</button>
+		<button class="navButtonClass" type="submit">Generate Closing
+			Report for Today</button>
 	</form>
-	<br/>
-	<form th:action="'/fetchReportForMonth'" method="GET">
-		<input type="date" th:name="dateStr"/>
-		<button class="navButtonClass" type="submit">Fetch Report for Month</button>
-	</form>
-	
-	
 	<br />
-	<span th:text="${#dates.format(monthlyBalanceSheetDate, 'dd-MM-yyyy')}"></span>
-	<table width="100%">
-		<tr>
-			<th>Classification</th>
-			<th>Balance</th>
-		</tr>
-		<tr th:each="monthlyBalance : ${monthlyBalanceSheet}">
-			<td th:text="${monthlyBalance.accountSummaryType}"></td>
-			<td th:text="${monthlyBalance.amount}"></td>
-		</tr>
-	</table>
+	<form th:action="'/fetchReportForMonth'" method="GET">
+		<input type="date" th:name="dateStr" />
+		<button class="navButtonClass" type="submit">Fetch Report for
+			Month</button>
+	</form>
+
+
+	<br />
+	<table border ="2">
+    <thead>
+        <tr class="headings">
+        	<th>Classification</th>
+            <th th:each="header: ${monthlyBalanceSheet.dates}" class="column-title" th:text="${header}" />
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr class="even pointer" th:each="row: ${monthlyBalanceSheet.rows}" id="tablerow">
+        	<td th:text="${row.get('Classification')}" />
+            <td th:each="header: ${monthlyBalanceSheet.dates}" th:text="${row.get(header)}" />
+        </tr>
+    </tbody>
+</table>
 	<br /> Balance Sheet
 </body>
 </html>

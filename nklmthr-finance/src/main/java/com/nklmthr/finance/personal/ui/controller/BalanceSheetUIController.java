@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,7 @@ public class BalanceSheetUIController {
 
 	@GetMapping("/BalanceSheet")
 	public String getBalanceSheet(Model m) {
-		List<MonthlyBalanceSummary> monthlyBalanceSheet = monthlyBalanceService.getLastMonthBalanceSheet();
-		m.addAttribute("monthlyBalanceSheetDate", new Date());
+		MonthlyBalanceSummary monthlyBalanceSheet = monthlyBalanceService.getLastMonthBalanceSheet();
 		m.addAttribute("monthlyBalanceSheet", monthlyBalanceSheet);
 		return "balanceSheet/BalanceSheet";
 	}
@@ -36,9 +36,9 @@ public class BalanceSheetUIController {
 	@GetMapping("/generateMonthEndReport")
 	public String generateMonthEndReport(Model m) {
 		monthlyBalanceService.generateMonthEndReport();
-		List<MonthlyBalanceSummary> monthlyBalanceSheet = monthlyBalanceService.getLastMonthBalanceSheet();
+		MonthlyBalanceSummary summReport = monthlyBalanceService.getLastMonthBalanceSheet();
 		m.addAttribute("monthlyBalanceSheetDate", new Date());
-		m.addAttribute("monthlyBalanceSheet", monthlyBalanceSheet);
+		m.addAttribute("monthlyBalanceSheet", summReport);
 		return "balanceSheet/BalanceSheet";
 	}
 	
@@ -51,9 +51,8 @@ public class BalanceSheetUIController {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = dateFormat.parse(dateStr);
 		logger.info("date:"+date);
-		List<MonthlyBalanceSummary> monthlyBalanceSheet = monthlyBalanceService.getMonthlyBalanceSheet(date);
-		logger.info("monthlyBalanceSheet:"+monthlyBalanceSheet.size());
-		m.addAttribute("monthlyBalanceSheetDate", new Date());
+		MonthlyBalanceSummary monthlyBalanceSheet = monthlyBalanceService.getMonthlyBalanceSheet(date);
+		logger.info("monthlyBalanceSheet:"+monthlyBalanceSheet.getRows().size());
 		m.addAttribute("monthlyBalanceSheet", monthlyBalanceSheet);
 		return "balanceSheet/BalanceSheet";
 	}
