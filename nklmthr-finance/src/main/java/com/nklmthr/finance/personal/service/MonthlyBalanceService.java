@@ -1,12 +1,12 @@
 package com.nklmthr.finance.personal.service;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.time.YearMonth;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,13 +50,30 @@ public class MonthlyBalanceService {
 				month);
 		logger.info("monthlyBalances:" + monthlyBalances.size());
 		for (MonthlyBalanceSummaryDTO mb : monthlyBalances) {
-			Date myDate = summReport.addDate(mb.getDate());
+			Date checkedDateExists = checkIfDateExists(summReport, mb.getDate());
 			Map<String, String> row = new HashMap<String, String>();
 			row.put("Classification", mb.getDescription());
-			row.put(myDate.toString(), mb.getAmount().toString());
+			row.put(checkedDateExists.toString(), mb.getAmount().toString());
 			summReport.getRows().add(row);
 		}
+		logger.info(summReport);
 		return summReport;
+	}
+
+	private Date checkIfDateExists(MonthlyBalanceSummary summReport, Date date) {
+		if(summReport.getDates().size()==0) {
+			summReport.getDates().add(date);
+			return date;
+		}
+		Date latest = summReport.getDates().stream().sorted().findFirst().get();
+		long diff = latest.getTime() - date.getTime();
+		long diffDays = TimeUnit.HOURS.convert(Math.abs(diff), TimeUnit.MILLISECONDS);
+		if(diffDays > 24) {
+			summReport.getDates().add(date);			
+		}
+		return date;
+			
+		
 	}
 
 	public void generateMonthEndReport() {
