@@ -34,13 +34,20 @@ public class BalanceSheetUIController {
 		Map<String, Double> sumamryList = new HashMap<>(monthlyBalanceSheet.getDates().size());
 
 		for (Date date : monthlyBalanceSheet.getDates()) {
+			logger.info("*********date:" + date);
 			for (Map<String, String> map : monthlyBalanceSheet.getRows()) {
-				Double summ = map.entrySet().stream().filter(s -> !s.getKey().equals("Classification"))
-						.collect(Collectors.summarizingDouble(s -> Double.valueOf(s.getValue()))).getSum();
-				if (sumamryList.containsKey(date.toString())) {
-					sumamryList.put(date.toString(), sumamryList.get(date.toString()) + summ);
-				} else {
-					sumamryList.put(date.toString(), summ);
+				Double summ = 0.0;
+				if (map.containsKey(date.toString())) {
+					logger.info("map" + map);
+					summ = map.entrySet().stream().filter(s -> s.getKey().equals(date.toString()))
+							.filter(s -> !s.getKey().equals("Classification"))
+							.collect(Collectors.summarizingDouble(s -> Double.valueOf(s.getValue()))).getSum();
+					logger.info("summ" + summ);
+					if (sumamryList.containsKey(date.toString())) {
+						sumamryList.put(date.toString(), sumamryList.get(date.toString()) + summ);
+					} else {
+						sumamryList.put(date.toString(), summ);
+					}
 				}
 			}
 		}
