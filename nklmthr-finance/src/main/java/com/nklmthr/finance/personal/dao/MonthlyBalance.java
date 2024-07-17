@@ -62,4 +62,9 @@ public class MonthlyBalance {
 		this.amount = amount;
 	}
 
+	@Override
+	public String toString() {
+		return "MonthlyBalance [id=" + id + ", date=" + date + ", account=" + account + ", amount=" + amount + "]";
+	}
+
 }
