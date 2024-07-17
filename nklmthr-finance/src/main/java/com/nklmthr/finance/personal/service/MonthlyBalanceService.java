@@ -1,5 +1,6 @@
 package com.nklmthr.finance.personal.service;
 
+import java.text.SimpleDateFormat;
 import java.time.YearMonth;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +28,8 @@ public class MonthlyBalanceService {
 
 	@Autowired
 	AccountService accountService;
+
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	public MonthlyBalanceSummary getMonthlyBalanceSheet(Date date) {
 		Integer year = date.getYear() + 1900;
