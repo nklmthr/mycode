@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,29 +51,36 @@ public class MonthlyBalanceService {
 		logger.info("monthlyBalances:" + monthlyBalances.size());
 		for (MonthlyBalanceSummaryDTO mb : monthlyBalances) {
 			Date checkedDateExists = checkIfDateExists(summReport, mb.getDate());
-			Map<String, String> row = new HashMap<String, String>();
-			row.put("Classification", mb.getDescription());
+			Optional<Map<String, String>> optional = summReport.getRows().stream()
+					.filter(s -> s.containsKey("Classification"))
+					.filter(s -> s.get("Classification").equals(mb.getDescription())).findFirst();
+			Map<String, String> row = null;
+			if (optional.isEmpty()) {
+				row = new HashMap<String, String>();
+				row.put("Classification", mb.getDescription());
+				summReport.getRows().add(row);
+			} else {
+				row = optional.get();
+			}
 			row.put(checkedDateExists.toString(), mb.getAmount().toString());
-			summReport.getRows().add(row);
 		}
 		logger.info(summReport);
 		return summReport;
 	}
 
 	private Date checkIfDateExists(MonthlyBalanceSummary summReport, Date date) {
-		if(summReport.getDates().size()==0) {
+		if (summReport.getDates().size() == 0) {
 			summReport.getDates().add(date);
 			return date;
 		}
 		Date latest = summReport.getDates().stream().sorted().findFirst().get();
 		long diff = latest.getTime() - date.getTime();
-		long diffDays = TimeUnit.HOURS.convert(Math.abs(diff), TimeUnit.MILLISECONDS);
-		if(diffDays > 24) {
-			summReport.getDates().add(date);			
+		long diffDays = TimeUnit.DAYS.convert(Math.abs(diff), TimeUnit.MILLISECONDS);
+		if (diffDays > 0) {
+			summReport.getDates().add(date);
 		}
 		return date;
-			
-		
+
 	}
 
 	public void generateMonthEndReport() {
