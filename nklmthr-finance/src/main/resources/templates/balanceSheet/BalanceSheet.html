@@ -26,7 +26,7 @@
 			<tr class="headings">
 				<th th:if=" ${monthlyBalanceSheet.dates.size > 0}">Classification</th>
 				<th th:each="date: ${monthlyBalanceSheet.dates}"
-					class="column-title" th:text="${#dates.format(date, 'yyyy-MMM-dd')}" />
+					class="column-title" th:text="${#dates.format(date, 'dd-MMM-yyyy')}" />
 			</tr>
 		</thead>
 
