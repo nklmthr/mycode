@@ -2,9 +2,9 @@ package com.nklmthr.finance.personal.dao;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -13,7 +13,7 @@ import com.nklmthr.finance.personal.service.MonthlyBalanceService;
 public class MonthlyBalanceSummary {
 	private static Logger logger = Logger.getLogger(MonthlyBalanceService.class);
 	List<Map<String, String>> rows = new ArrayList<>();
-	Map<Date, String> dates = new HashMap<>();
+	Map<Date, String> dates = new TreeMap<>();
 
 	public List<Map<String, String>> getRows() {
 		return rows;

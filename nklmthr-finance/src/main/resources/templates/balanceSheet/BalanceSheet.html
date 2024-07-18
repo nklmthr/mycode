@@ -19,7 +19,7 @@
 	<table border="2">
 		<thead>
 			<tr class="headings">
-				<th th:if=" ${monthlyBalanceSummary.dates.size > 0}">Classification</th>
+				<th th:if=" ${monthlyBalanceSummary.dates.size() > 0}">Classification</th>
 				<th th:each="date: ${monthlyBalanceSummary.dates.keySet()}"
 					class="column-title" th:text="${#dates.format(date, 'dd-MMM-yyyy')}" />
 			</tr>
