@@ -62,7 +62,7 @@ public class Transaction {
 	private Long sourceTime;
 
 	@Column
-	private String currency;
+	private String currency="INR";
 
 	@Column
 	private TransactionType transactionType;

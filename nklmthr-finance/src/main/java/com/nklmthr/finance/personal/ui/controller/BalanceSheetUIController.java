@@ -1,12 +1,9 @@
 package com.nklmthr.finance.personal.ui.controller;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,39 +27,18 @@ public class BalanceSheetUIController {
 
 	@GetMapping("/BalanceSheet")
 	public String getBalanceSheet(Model m) {
-		MonthlyBalanceSummary monthlyBalanceSheet = monthlyBalanceService.getLastMonthBalanceSheet();
-		Map<String, Double> sumamryList = new HashMap<>(monthlyBalanceSheet.getDates().size());
-
-		for (Date date : monthlyBalanceSheet.getDates()) {
-			logger.info("*********date:" + date);
-			for (Map<String, String> map : monthlyBalanceSheet.getRows()) {
-				Double summ = 0.0;
-				if (map.containsKey(date.toString())) {
-					logger.info("map" + map);
-					summ = map.entrySet().stream().filter(s -> s.getKey().equals(date.toString()))
-							.filter(s -> !s.getKey().equals("Classification"))
-							.collect(Collectors.summarizingDouble(s -> Double.valueOf(s.getValue()))).getSum();
-					logger.info("summ" + summ);
-					if (sumamryList.containsKey(date.toString())) {
-						sumamryList.put(date.toString(), sumamryList.get(date.toString()) + summ);
-					} else {
-						sumamryList.put(date.toString(), summ);
-					}
-				}
-			}
-		}
-		m.addAttribute("monthlyBalanceSheet", monthlyBalanceSheet);
-		m.addAttribute("sumamryList", sumamryList);
-		logger.info("sumamryList" + sumamryList);
+		MonthlyBalanceSummary monthlyBalanceSummary = monthlyBalanceService.getLastYearBalanceSheet();
+		m.addAttribute("monthlyBalanceSummary", monthlyBalanceSummary);
+		logger.debug("monthlyBalanceSummary" + monthlyBalanceSummary);
 		return "balanceSheet/BalanceSheet";
 	}
 
 	@GetMapping("/generateMonthEndReport")
 	public String generateMonthEndReport(Model m) {
 		monthlyBalanceService.generateMonthEndReport();
-		MonthlyBalanceSummary summReport = monthlyBalanceService.getLastMonthBalanceSheet();
-		m.addAttribute("monthlyBalanceSheetDate", new Date());
-		m.addAttribute("monthlyBalanceSheet", summReport);
+		MonthlyBalanceSummary monthlyBalanceSummary = monthlyBalanceService.getLastYearBalanceSheet();
+		m.addAttribute("monthlyBalanceSummary", monthlyBalanceSummary);
+		logger.info("monthlyBalanceSummary" + monthlyBalanceSummary);
 		return "balanceSheet/BalanceSheet";
 	}
 
@@ -72,12 +48,12 @@ public class BalanceSheetUIController {
 		if (StringUtils.isBlank(dateStr)) {
 			return "balanceSheet/BalanceSheet";
 		}
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = dateFormat.parse(dateStr);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate date = LocalDate.parse(dateStr, formatter);
 		logger.info("date:" + date);
-		MonthlyBalanceSummary monthlyBalanceSheet = monthlyBalanceService.getMonthlyBalanceSheet(date);
-		logger.info("monthlyBalanceSheet:" + monthlyBalanceSheet.getRows().size());
-		m.addAttribute("monthlyBalanceSheet", monthlyBalanceSheet);
+		MonthlyBalanceSummary monthlyBalanceSummary = monthlyBalanceService.getMonthlyBalanceSheet(date);
+		logger.info("monthlyBalanceSummary:" + monthlyBalanceSummary.getDates().size());
+		m.addAttribute("monthlyBalanceSummary", monthlyBalanceSummary);
 		return "balanceSheet/BalanceSheet";
 	}
 }

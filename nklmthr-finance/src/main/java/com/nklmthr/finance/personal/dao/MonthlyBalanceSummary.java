@@ -2,6 +2,7 @@ package com.nklmthr.finance.personal.dao;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,22 +13,22 @@ import com.nklmthr.finance.personal.service.MonthlyBalanceService;
 public class MonthlyBalanceSummary {
 	private static Logger logger = Logger.getLogger(MonthlyBalanceService.class);
 	List<Map<String, String>> rows = new ArrayList<>();
-	List<Date> dates = new ArrayList<>();
+	Map<Date, String> dates = new HashMap<>();
 
 	public List<Map<String, String>> getRows() {
 		return rows;
 	}
 
-	public List<Date> getDates() {
+	public Map<Date, String> getDates() {
 		return dates;
+	}
+
+	public void setDates(Map<Date, String> dates) {
+		this.dates = dates;
 	}
 
 	public void setRows(List<Map<String, String>> rows) {
 		this.rows = rows;
-	}
-
-	public void setDates(List<Date> dates) {
-		this.dates = dates;
 	}
 
 	@Override

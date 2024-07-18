@@ -1,7 +1,9 @@
 package com.nklmthr.finance.personal.service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,26 +32,25 @@ public class MonthlyBalanceService {
 	@Autowired
 	AccountService accountService;
 
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-	public MonthlyBalanceSummary getMonthlyBalanceSheet(Date date) {
-		Integer year = date.getYear() + 1900;
-		Integer month = date.getMonth() + 1;
-		Integer day = date.getDate();
-		return getMonthlyBalanceByDate(year, month, day);
+	public MonthlyBalanceSummary getMonthlyBalanceSheet(LocalDate date) {
+		Integer year = date.getYear();
+		Integer month = date.getMonth().getValue();
+		return getMonthlyBalanceByDate(year, month);
 	}
 
-	public MonthlyBalanceSummary getLastMonthBalanceSheet() {
+	public MonthlyBalanceSummary getLastYearBalanceSheet() {
 
 		YearMonth current = YearMonth.now();
-		Integer year = current.getYear();
-		Integer month = current.getMonthValue();
+		YearMonth yearBack = current.minusMonths(12);
+		Integer year = yearBack.getYear();
+		Integer month = yearBack.getMonthValue();
 
-		return getMonthlyBalanceByDate(year, month, new Date().getDay());
+		return getMonthlyBalanceByDate(year, month);
 	}
 
-	private MonthlyBalanceSummary getMonthlyBalanceByDate(Integer year, Integer month, Integer day) {
+	private MonthlyBalanceSummary getMonthlyBalanceByDate(Integer year, Integer month) {
 		MonthlyBalanceSummary summReport = new MonthlyBalanceSummary();
+		logger.info("Fetch Summary after:" + year + " month:" + month);
 		List<MonthlyBalanceSummaryDTO> monthlyBalances = monthlyBalanceRepository.findAllMonthBalanceForLastMonth(year,
 				month);
 		logger.info("monthlyBalances:" + monthlyBalances.size());
@@ -68,36 +69,60 @@ public class MonthlyBalanceService {
 			}
 			row.put(checkedDateExists.toString(), mb.getAmount().toString());
 		}
-		logger.info(summReport);
+		logger.debug(summReport);
+		for (Date date : summReport.getDates().keySet()) {
+			logger.debug("*********date:" + date);
+			for (Map<String, String> map : summReport.getRows()) {
+				Double summ = 0.0;
+				if (map.containsKey(date.toString())) {
+					logger.debug("map" + map);
+					summ = map.entrySet().stream().filter(s -> s.getKey().equals(date.toString()))
+							.filter(s -> !s.getKey().equals("Classification"))
+							.collect(Collectors.summarizingDouble(s -> Double.valueOf(s.getValue()))).getSum();
+					logger.debug("summ" + summ);
+					if (summReport.getDates().containsKey(date)) {
+						if (summReport.getDates().get(date) != null) {
+							Double sum = Double.valueOf(summReport.getDates().get(date)) + summ;
+							summReport.getDates().put(date, String.valueOf(sum));
+						} else {
+							summReport.getDates().put(date, String.valueOf(summ));
+						}
+					} else {
+						summReport.getDates().put(date, String.valueOf(summ));
+					}
+				}
+			}
+		}
 		return summReport;
 	}
 
 	private Date checkIfDateExists(MonthlyBalanceSummary summReport, Date date) {
 		if (summReport.getDates().size() == 0) {
-			summReport.getDates().add(date);
+			summReport.getDates().put(date, null);
 			return date;
 		}
-		Date latest = summReport.getDates().stream().sorted().findFirst().get();
+		Date latest = summReport.getDates().keySet().stream().sorted().findFirst().get();
 		long diff = latest.getTime() - date.getTime();
 		long diffDays = TimeUnit.DAYS.convert(Math.abs(diff), TimeUnit.MILLISECONDS);
 		if (diffDays > 0) {
-			summReport.getDates().add(date);
+			summReport.getDates().put(date, null);
 		}
 		return date;
 
 	}
 
 	public void generateMonthEndReport() {
-		Date currentDate = new Date();
-		List<MonthlyBalance> monthlyBalances = monthlyBalanceRepository.findByDate(currentDate.getYear() + 1900,
-				currentDate.getMonth() + 1, currentDate.getDay());
+		LocalDate curr = LocalDate.now();
+		LocalDate threeWeeksBack = curr.minusWeeks(3);
+		List<MonthlyBalance> monthlyBalances = monthlyBalanceRepository
+				.findMonthlyDataBalanceForLastThreeWeek(threeWeeksBack.getYear(), threeWeeksBack.getMonth().getValue());
 		if (monthlyBalances.size() > 0) {
 			return;
 		}
 		List<Account> accounts = accountService.getAllAccounts();
 		for (Account account : accounts) {
 			MonthlyBalance mb = new MonthlyBalance();
-			mb.setDate(currentDate);
+			mb.setDate(Date.from(curr.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 			mb.setAccount(account);
 			mb.setAmount(account.getTransactionBalance());
 			monthlyBalanceRepository.save(mb);
