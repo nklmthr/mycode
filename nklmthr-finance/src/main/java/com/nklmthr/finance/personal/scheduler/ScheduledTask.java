@@ -181,7 +181,7 @@ public abstract class ScheduledTask {
 	protected abstract String getJSOUPXPathQuery();
 
 	@Scheduled(cron = "${sbi.cc.cron.expression}")
-	protected void doScheduledTask() throws GeneralSecurityException, IOException, ParseException {
+	public void doScheduledTask() throws GeneralSecurityException, IOException, ParseException {
 		getEmailContent();
 		doScheduledSubTask();
 	}

@@ -1,12 +1,14 @@
 package com.nklmthr.finance.personal.ui.controller;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nklmthr.finance.personal.dao.MonthlyBalanceSummary;
+import com.nklmthr.finance.personal.scheduler.AxisBankCCSchedulerImpl;
+import com.nklmthr.finance.personal.scheduler.AxisSBScheduleImpl;
+import com.nklmthr.finance.personal.scheduler.ICICIAmazonCCSchedulerImpl;
+import com.nklmthr.finance.personal.scheduler.SBICCSchedulerImpl;
+import com.nklmthr.finance.personal.scheduler.ScheduledTask;
+import com.nklmthr.finance.personal.scheduler.YesBankCCSchedulerImpl;
 import com.nklmthr.finance.personal.service.MonthlyBalanceService;
 
 import io.micrometer.common.util.StringUtils;
@@ -24,6 +32,9 @@ public class BalanceSheetUIController {
 	Logger logger = Logger.getLogger(BalanceSheetUIController.class);
 	@Autowired
 	MonthlyBalanceService monthlyBalanceService;
+
+	@Autowired
+	private ApplicationContext applicationContext;
 
 	@GetMapping("/BalanceSheet")
 	public String getBalanceSheet(Model m) {
@@ -55,5 +66,24 @@ public class BalanceSheetUIController {
 		logger.info("monthlyBalanceSummary:" + monthlyBalanceSummary.getDates().size());
 		m.addAttribute("monthlyBalanceSummary", monthlyBalanceSummary);
 		return "balanceSheet/BalanceSheet";
+	}
+
+	@GetMapping("/triggerTransactionFetch")
+	public String triggerTransactionFetch(Model m) throws GeneralSecurityException, IOException, ParseException {
+		ScheduledTask task = null;
+		task = applicationContext.getBean(YesBankCCSchedulerImpl.class);
+		task.doScheduledTask();
+		task = applicationContext.getBean(SBICCSchedulerImpl.class);
+		task.doScheduledTask();
+		task = applicationContext.getBean(AxisBankCCSchedulerImpl.class);
+		task.doScheduledTask();
+		task = applicationContext.getBean(AxisSBScheduleImpl.class);
+		task.doScheduledTask();
+		task = (ScheduledTask) applicationContext.getBean(ICICIAmazonCCSchedulerImpl.class);
+		task.doScheduledTask();
+		MonthlyBalanceSummary monthlyBalanceSummary = monthlyBalanceService.getLastYearBalanceSheet();
+		m.addAttribute("monthlyBalanceSummary", monthlyBalanceSummary);
+		return "balanceSheet/BalanceSheet";
+
 	}
 }
