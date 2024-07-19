@@ -32,9 +32,9 @@ public class SchedulingConfiguration {
 		task.doScheduledTask();
 	}
 
-	@Scheduled(cron = "${citi.sb.cron.expression}")
+	@Scheduled(cron = "${axis.sb.cron.expression}")
 	public void runCitiSvgJob() throws GeneralSecurityException, IOException, ParseException {
-		ScheduledTask task = (ScheduledTask) applicationContext.getBean(CitiSBScheduleImpl.class);
+		ScheduledTask task = (ScheduledTask) applicationContext.getBean(AxisSBScheduleImpl.class);
 		task.doScheduledTask();
 	}
 	
