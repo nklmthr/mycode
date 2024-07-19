@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @EnableScheduling
 public class AxisSBScheduleImpl extends ScheduledTask {
 
-	private static final Logger logger = LoggerFactory.getLogger(SBICCSchedulerImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(AxisSBScheduleImpl.class);
 
 	public static void main(String[] args) throws GeneralSecurityException, IOException, ParseException {
 		AxisSBScheduleImpl a = new AxisSBScheduleImpl();

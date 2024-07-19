@@ -203,9 +203,9 @@ public class TransactionService {
 		logger.info("transferToAccount id:" + transferToAccountId + " found Account:" + transferToAccount.toString());
 		logger.info("Account Balance:" + transferToAccount.getTransactionBalance());
 		logger.info("Setting new Account Balance:"
-				+ transferToAccount.getTransactionBalance().subtract(transaction.getAmount()));
+				+ transferToAccount.getTransactionBalance().add(transaction.getAmount()));
 		transferToAccount
-				.setTransactionBalance(transferToAccount.getTransactionBalance().subtract(transaction.getAmount()));
+				.setTransactionBalance(transferToAccount.getTransactionBalance().add(transaction.getAmount()));
 		Category category = categoryRepository.findByName("TRANSFERS");
 		transaction.setCategory(category);
 		Transaction newTransaction = new Transaction();
