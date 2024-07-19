@@ -1,34 +1,37 @@
 <html>
 <head th:include="header.html ::header"></head>
 <body>
-	<div>
-		<div th:insert="TopNavigation.html ::topNavigation('Categorys')"></div>
-	</div>
-	<br>
-	<h2>Add Category</h2>
-	<br>
-	<br>
-	<form action="#" th:action="@{/saveCategory}" th:object="${category}" method="POST">
-		<input type="text" th:field="*{name}" placeholder="Category Name" >
-		<select th:field="*{parentCategory}">
-				<option th:value="0" selected value=" " text="Please Select">Please Select</option>
-				<option th:each="category1 : ${categorys}" th:value="${category1.id}"
+	<div id="header"
+		th:insert="TopNavigation.html ::topNavigation('Categorys')"></div>
+	<div id="content">
+		<h2>Add Category</h2>
+		<br> <br>
+		<form action="#" th:action="@{/saveCategory}" th:object="${category}"
+			method="POST">
+			<input type="text" th:field="*{name}" placeholder="Category Name">
+			<select th:field="*{parentCategory}">
+				<option th:value="0" selected value=" " text="Please Select">Please
+					Select</option>
+				<option th:each="category1 : ${categorys}"
+					th:value="${category1.id}"
 					th:attr="showselected=(${category1.id} == *{parentCategory})"
 					th:text="${category1.name}"></option>
-			</select>						
-		<button type="submit" class="btn btn-info col-2">Save Category</button>
-	</form>
-	<br>
-	
-	<br>
-	<a th:href="@{/Categorys}">Back to Category List</a>
-	<br><br><hr>
-	<h2>Existing Category</h2>
-	<br />
-	<div id="categoriesDiv">
-		<section th:include="@{category/categoryFragment} :: categoryFragment" th:with="headerCategories=${categorys[0]}">
-		</section>
-	</div>	
+			</select>
+			<button type="submit" class="btn btn-info col-2">Save
+				Category</button>
+		</form>
+		<br> <br> <a th:href="@{/Categorys}">Back to Category
+			List</a> <br>
+		<br>
+		<hr>
+		<h2>Existing Category</h2>
+		<br />
+		<div id="categoriesDiv">
+			<section
+				th:include="@{category/categoryFragment} :: categoryFragment"
+				th:with="headerCategories=${categorys[0]}"></section>
+		</div>
+	</div>
 </body>
 
 </html>

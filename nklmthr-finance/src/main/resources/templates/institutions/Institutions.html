@@ -1,20 +1,18 @@
 <html>
 <head th:insert="~{header.html ::header}"></head>
 <body>
-	<div>
-		<div th:insert="~{TopNavigation.html ::topNavigation('Institutions')}"></div>
-	</div>
-	<br />
-
-
-
-	<div class="container my-2" align="left">
-
-		<h3>Insitutions</h3>
+	<div id="header"
+		th:insert="~{TopNavigation.html ::topNavigation('Institutions')}"></div>
+	<div id="content">
+		<h3>Institutions</h3>
 		<br />
-		<button class="addButtonClass" type="button" th:onclick="|window.location.href='/addnewInstitution'|">Add Institution</button>
-		<br /><br />
-		<table style="width:80%" border="1" class="table table-striped table-responsive-md">
+		<button class="addButtonClass" type="button"
+			th:onclick="|window.location.href='/addnewInstitution'|">Add
+			Institution</button>
+		<br />
+		<br />
+		<table style="width: 80%" border="1"
+			class="table table-striped table-responsive-md">
 			<thead>
 				<tr>
 					<th>Name</th>
@@ -27,12 +25,12 @@
 				<tr th:each="institution : ${institutionList}">
 					<td th:text="${institution.name}"></td>
 					<td th:text="${institution.description}"></td>
-					<td> <a th:href="@{/showFormForInstitutionUpdate/{id}(id=${institution.id})}"
-							class="update-delete-button">Update</a></td>
-					<td>
-						<a th:href="@{/deleteInstitution/{id}(id=${institution.id})}"
-							class="update-delete-button">Delete</a>
-					</td>
+					<td><a
+						th:href="@{/showFormForInstitutionUpdate/{id}(id=${institution.id})}"
+						class="update-delete-button">Update</a></td>
+					<td><a
+						th:href="@{/deleteInstitution/{id}(id=${institution.id})}"
+						class="update-delete-button">Delete</a></td>
 				</tr>
 			</tbody>
 		</table>

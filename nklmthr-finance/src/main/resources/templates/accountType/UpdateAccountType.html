@@ -1,31 +1,27 @@
 <html>
 <head th:include="header.html ::header"></head>
 <body>
-	<div>
-		<div th:insert="TopNavigation.html ::topNavigation('AccountTypes')"></div>
-	</div>
-	<br>
-	<br>
-	<div class="container">
+	<div id="header"
+		th:insert="TopNavigation.html ::topNavigation('AccountTypes')"></div>
+	<div id="content">
 		<h2>Update AccountType</h2>
-		<br><br>
-		<form action="#" th:action="@{/saveAccountType}" th:object="${accountType}" method="POST">
+		<br>
+		<br>
+		<form action="#" th:action="@{/saveAccountType}"
+			th:object="${accountType}" method="POST">
 
 			<!-- Add hidden form field to handle update -->
-			<input type="hidden" th:field="*{id}" />
-			<label>Account Type Name
-				<input type="text" th:field="*{name}">
+			<input type="hidden" th:field="*{id}" /> <label>Account Type
+				Name <input type="text" th:field="*{name}">
+			</label> <label>Description <input type="text"
+				th:field="*{description}">
+			</label> <label>Classification <input type="text"
+				th:field="*{classification}">
 			</label>
-			<label>Description
-				<input type="text" th:field="*{description}">
-			</label>
-			<label>Classification
-				<input type="text" th:field="*{classification}">
-			</label>
-			<button type="submit" class="btn btn-info col-2">Update AccountType</button>
+			<button type="submit" class="btn btn-info">Update
+				AccountType</button>
 		</form>
-		<br>
-		<br>
+		<br> <br>
 		<hr>
 		<a th:href="@{/AccountTypes}">Back to AccountType List</a>
 	</div>

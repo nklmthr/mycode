@@ -1,41 +1,47 @@
 <html>
 <head th:include="header.html ::header"></head>
 <body>
-	<div>
-		<div th:insert="TopNavigation.html ::topNavigation('Categorys')"></div>
-	</div>
-	<div class="container">		
+	<div id="header"
+		th:insert="TopNavigation.html ::topNavigation('Categorys')"></div>
+	<div id="content">
 		<h2>Update Category</h2>
-		<table width="100%">
-			<tr>
-				<td width="50%">
-					<form action="#" class="container" th:action="@{/saveCategory}" th:object="${category}"
-						method="POST">
-
-						<!-- Add hidden form field to handle update -->
-						<input type="hidden" th:field="*{id}" />
-						<input type="text" width="80%" th:field="*{name}" >
-						<select th:field="*{parentCategory}">
+		<form action="#" th:action="@{/saveCategory}"
+			th:object="${category}" method="POST">
+			<table>
+				<tr>
+					<td><input type="hidden" th:field="*{id}" /></td>
+					<td><input type="text" width="80%" th:field="*{name}">
+					</td>
+					<td><select th:field="*{parentCategory}">
 							<option th:value="0" text="Please Select">Please Select</option>
-							<option th:each="category1 : ${categorys}" th:value="${category1.id}"
+							<option th:each="category1 : ${categorys}"
+								th:value="${category1.id}"
 								th:attr="showselected=(${category1.id} == *{parentCategory})"
 								th:text="${category1.name}"></option>
-						</select>
-						<button type="submit">Update Category</button>
-					</form>
-				</td>
-				<td  width="50%">
-					<form class="container" th:action="@{/deleteCategory/{id} (id=${category.id})}"
-						th:object="${category}" method="GET">
-						<button type="submit" class="btn btn-info col-2">Delete Category</button>
-					</form>
-				</td>
-				<td></td>
-			</tr>
-		</table>		
+					</select></td>
+					<td>
+						<button type="submit"  class="btn btn-info">Update Category</button>
+					</td>
+
+				</tr>
+			</table>
+		</form>
+		<br/>
+		<form
+			th:action="@{/deleteCategory/{id} (id=${category.id})}"
+			th:object="${category}" method="GET">
+			<table>
+				<tr>
+					<td>
+						<button type="submit" class="btn btn-info">Delete
+							Category</button>
+					</td>
+				</tr>
+			</table>
+		</form>
 	</div>
 	<hr>
-		<a th:href="@{/Categorys}">Back to Category List</a>
+	<a th:href="@{/Categorys}">Back to Category List</a>
 </body>
 
 </html>

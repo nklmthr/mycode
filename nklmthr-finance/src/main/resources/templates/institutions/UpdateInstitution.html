@@ -1,28 +1,30 @@
 <html>
 <head th:include="header.html ::header"></head>
 <body>
-	<div>
-		<div th:insert="TopNavigation.html ::topNavigation('Institutions')"></div>
-	</div>
-	<div class="container">
-		
-		<br><h2>Update Institution</h2>
-		<br /><br />
-		<form action="#" th:action="@{/saveInstitution}" th:object="${institution}" method="POST">
+	<div id="header"
+		th:insert="TopNavigation.html ::topNavigation('Institutions')"></div>
+	<div class="content">
+
+		<br>
+		<h2>Update Institution</h2>
+		<br />
+		<br />
+		<form action="#" th:action="@{/saveInstitution}"
+			th:object="${institution}" method="POST">
 
 			<!-- Add hidden form field to handle update -->
-			<input type="hidden" th:field="*{id}" />
-			<label>Name of Institution
-				<input type="text" th:field="*{name}" >
-			</label><label>Description
-				<input type="text" th:field="*{description}" >
+			<input type="hidden" th:field="*{id}" /> <label>Name of
+				Institution <input type="text" th:field="*{name}">
+			</label><label>Description <input type="text"
+				th:field="*{description}">
 			</label>
-			<button type="submit" class="addButtonClass">Update Institution</button>
+			<button type="submit" class="btn btn-info">Update
+				Institution</button>
 		</form>
-		<br><br>
-		<hr>
 		<br>
-		<a th:href="@{/Institutions}">Back to Institutions List</a>
+		<br>
+		<hr>
+		<br> <a th:href="@{/Institutions}">Back to Institutions List</a>
 	</div>
 </body>
 

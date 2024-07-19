@@ -3,49 +3,52 @@
 <head th:insert="~{header.html ::header}"></head>
 
 <body>
-	<div>
-		<div th:insert="~{TopNavigation.html ::topNavigation('BalanceSheet')}"></div>
+	<div id="header"
+		th:insert="~{TopNavigation.html ::topNavigation('BalanceSheet')}"></div>
+	<div id="content">
+		<br>
+		<h3>Balance Sheet</h3>
+		<form th:action="'/fetchReportForMonth'" method="GET">
+			<input type="date" th:name="dateStr" />
+			<button class="navButtonClass" type="submit">Fetch Report
+				for Month</button>
+		</form>
+
+
+		<br />
+		<table border="2">
+			<thead>
+				<tr class="headings">
+					<th th:if=" ${monthlyBalanceSummary.dates.size() > 0}">Classification</th>
+					<th th:each="date: ${monthlyBalanceSummary.dates.keySet()}"
+						class="column-title"
+						th:text="${#dates.format(date, 'dd-MMM-yyyy')}" />
+				</tr>
+			</thead>
+
+			<tbody>
+
+				<tr th:each="row: ${monthlyBalanceSummary.rows}" id="tablerow">
+					<td th:text="${row.get('Classification')}"></td>
+					<td align="right"
+						th:each="date: ${monthlyBalanceSummary.dates.keySet()}"
+						th:text="${row.get(date.toString())}"></td>
+				</tr>
+				<tr id="tablerow">
+					<td>Summary</td>
+					<td align="right"
+						th:each="date: ${monthlyBalanceSummary.dates.keySet()}"
+						th:text="${monthlyBalanceSummary.dates.get(date)}"></td>
+				</tr>
+
+			</tbody>
+		</table>
+		<br /> <br>
+		<form th:action="'/generateMonthEndReport'" method="GET">
+			<button class="navButtonClass" type="submit">Generate
+				Closing Report for Today</button>
+		</form>
+		<br />
 	</div>
-	<br>
-	
-	<form th:action="'/fetchReportForMonth'" method="GET">
-		<input type="date" th:name="dateStr" />
-		<button class="navButtonClass" type="submit">Fetch Report for
-			Month</button>
-	</form>
-
-
-	<br />
-	<table border="2">
-		<thead>
-			<tr class="headings">
-				<th th:if=" ${monthlyBalanceSummary.dates.size() > 0}">Classification</th>
-				<th th:each="date: ${monthlyBalanceSummary.dates.keySet()}"
-					class="column-title" th:text="${#dates.format(date, 'dd-MMM-yyyy')}" />
-			</tr>
-		</thead>
-
-		<tbody>
-
-			<tr th:each="row: ${monthlyBalanceSummary.rows}" id="tablerow">
-				<td th:text="${row.get('Classification')}"></td>
-				<td align="right" th:each="date: ${monthlyBalanceSummary.dates.keySet()}"
-					th:text="${#numbers.formatDecimal(row.get(date.toString()), 2, 'COMMA', 2, 'POINT')}"></td>
-			</tr>
-			<tr id="tablerow">
-				<td>Summary</td>
-				<td align="right" th:each="date: ${monthlyBalanceSummary.dates.keySet()}"
-					th:text="${#numbers.formatDecimal(monthlyBalanceSummary.dates.get(date), 2, 'COMMA', 2, 'POINT')}"></td>
-			</tr>
-			
-		</tbody>
-	</table>
-	<br />
-	<br>
-	<form th:action="'/generateMonthEndReport'" method="GET">
-		<button class="navButtonClass" type="submit">Generate Closing
-			Report for Today</button>
-	</form>
-	<br />
 </body>
 </html>

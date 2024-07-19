@@ -1,22 +1,19 @@
 <html>
 <head th:insert="~{header.html ::header}"></head>
 <body>
-	<div>
-		<div th:insert="~{TopNavigation.html ::topNavigation('AccountTypes')}"></div>
-	</div>
-	<br />
-
-
-
-	<div class="container my-2" align="left">
-
+	<div id="header"
+		th:insert="~{TopNavigation.html ::topNavigation('AccountTypes')}"></div>
+	<div id="content">
 		<h3>Account Type List</h3>
 		<br />
-		<button class="addButtonClass" type="button" th:onclick="|window.location.href='/addnewAccountType'|">Add AccountType</button>
-		<br /><br />
+		<button class="addButtonClass" type="button"
+			th:onclick="|window.location.href='/addnewAccountType'|">Add
+			AccountType</button>
+		<br /> <br />
 		<hr>
 		<br />
-		<table style="width:80%" border="1" class="table table-striped table-responsive-md">
+		<table style="width: 80%" border="1"
+			class="table table-striped table-responsive-md">
 			<thead>
 				<tr>
 					<th>Name</th>
@@ -31,12 +28,12 @@
 					<td th:text="${accountType.name}"></td>
 					<td th:text="${accountType.description}"></td>
 					<td th:text="${accountType.classification}"></td>
-					<td> <a th:href="@{/showFormForAccountTypeUpdate/{id}(id=${accountType.id})}"
-							class="update-delete-button">Update</a></td>
-					<td>
-						<a th:href="@{/deleteAccountType/{id}(id=${accountType.id})}"
-							class="update-delete-button">Delete</a>
-					</td>
+					<td><a
+						th:href="@{/showFormForAccountTypeUpdate/{id}(id=${accountType.id})}"
+						class="update-delete-button">Update</a></td>
+					<td><a
+						th:href="@{/deleteAccountType/{id}(id=${accountType.id})}"
+						class="update-delete-button">Delete</a></td>
 				</tr>
 			</tbody>
 		</table>

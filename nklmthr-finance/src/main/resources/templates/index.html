@@ -1,47 +1,51 @@
 <!DOCTYPE html>
 <html>
 
-<head th:insert="~{header.html ::header}"></head>
-
+<head id="content" th:insert="~{header.html ::header}"></head>
 <body>
-	<div th:insert="~{TopNavigation.html ::topNavigation('home')}"></div>
-	<br />
-	<h1>Category Spends</h1>
-	<br />
-	<div id="monthNav">
-		<table width="100%">
-			<tr>
-				<td>
-					<form th:action="'/home/'+${previousMonthYear}+'/'+${previousMonth}" method="GET">
-						<button class="navButtonClass" type="submit">Previous Month</button>
-					</form>
-				</td>
-				<td>
-					<form th:action="@{/home}" method="GET">
-						<button class="navButtonClass" type="submit">Current Month</button>
-					</form>
-				</td>
-				<td>
-					<form th:action="'/home/'+${nextMonthYear}+'/'+${nextMonth}" method="GET">
-						<button class="navButtonClass" type="submit">Next Month</button>
-					</form>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<br />
-	<hr>
-	<br />
-	<button class="addButtonClass" type="button"
-						th:onclick="|window.location.href='/addnewTransaction/'+${currentYear}+'/'+${currentMonth}|">Add
-						Transaction</button> <br />
-	<br />
-	<br />
+	<div id="header"
+		th:insert="~{TopNavigation.html ::topNavigation('home')}"></div>
+	<div id="content">
+		<h1>Category Spends</h1>
+		<br />
+		<div id="monthNav">
+			<table width="100%">
+				<tr>
+					<td>
+						<form
+							th:action="'/home/'+${previousMonthYear}+'/'+${previousMonth}"
+							method="GET">
+							<button class="navButtonClass" type="submit">Previous
+								Month</button>
+						</form>
+					</td>
+					<td>
+						<form th:action="@{/home}" method="GET">
+							<button class="navButtonClass" type="submit">Current
+								Month</button>
+						</form>
+					</td>
+					<td>
+						<form th:action="'/home/'+${nextMonthYear}+'/'+${nextMonth}"
+							method="GET">
+							<button class="navButtonClass" type="submit">Next Month</button>
+						</form>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<br />
+		<hr>
+		<br />
+		<button class="addButtonClass" type="button"
+			th:onclick="|window.location.href='/addnewTransaction/'+${currentYear}+'/'+${currentMonth}|">Add
+			Transaction</button>
+		<br /> <br /> <br />
 
-	<div id="catSpendsDiv">
-		<section th:insert="~{@{CategorySpendsFragment} :: fragment}" th:with="maincategories=${categorySpends}">
-		</section>
+		<div id="catSpendsDiv">
+			<section th:insert="~{@{CategorySpendsFragment} :: fragment}"
+				th:with="maincategories=${categorySpends}"></section>
+		</div>
 	</div>
 </body>
-
 </html>

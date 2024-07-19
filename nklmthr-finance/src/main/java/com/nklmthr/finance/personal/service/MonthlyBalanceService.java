@@ -1,14 +1,16 @@
 package com.nklmthr.finance.personal.service;
 
+import java.math.BigDecimal;
+import java.text.Format;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,8 @@ public class MonthlyBalanceService {
 	@Autowired
 	AccountService accountService;
 
+	private Format indianCurrencyFormat = com.ibm.icu.text.NumberFormat.getCurrencyInstance(new Locale("en", "in"));
+
 	public MonthlyBalanceSummary getMonthlyBalanceSheet(LocalDate date) {
 		Integer year = date.getYear();
 		Integer month = date.getMonth().getValue();
@@ -41,7 +45,7 @@ public class MonthlyBalanceService {
 	public MonthlyBalanceSummary getLastYearBalanceSheet() {
 
 		YearMonth current = YearMonth.now();
-		YearMonth yearBack = current.minusMonths(12);
+		YearMonth yearBack = current.minusMonths(6);
 		Integer year = yearBack.getYear();
 		Integer month = yearBack.getMonthValue();
 
@@ -93,6 +97,11 @@ public class MonthlyBalanceService {
 				}
 			}
 		}
+		summReport.getRows().stream()
+				.forEach(s -> s.entrySet().stream().filter(k -> !k.getKey().equals("Classification"))
+						.forEach(p -> p.setValue(indianCurrencyFormat.format(new BigDecimal(p.getValue())))));
+		summReport.getDates().entrySet().stream()
+				.forEach(s -> s.setValue(indianCurrencyFormat.format(new BigDecimal(s.getValue()))));
 		return summReport;
 	}
 

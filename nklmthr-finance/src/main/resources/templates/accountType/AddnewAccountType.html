@@ -4,48 +4,48 @@
 
 <body>
 	<div>
-		<div th:insert="TopNavigation.html ::topNavigation('AccountTypes')"></div>
+		<div id="content"
+			th:insert="TopNavigation.html ::topNavigation('AccountTypes')"></div>
 	</div>
-	<br>
-	<br>
-	<h2>Add AccountType</h2>
-	<br>
-	<form action="#" th:action="@{/saveAccountType}" th:object="${accountType}" method="POST">
-		<label>Name: <input type="text" th:field="*{name}" placeholder="Account Type Name"></label>
-		<label>Description<input type="text" th:field="*{description}" placeholder="Description"></label>
-		<label>Classification<input type="text" th:field="*{classification}" placeholder="Classification"></label>
-		<button type="submit" class="addButtonClass">Save AccountType</button>
-	</form>
-	<br>
-	<br>
-	<br>
-	<a th:href="@{/AccountTypes}">Back to AccountType List</a>
-	<br>
-	<br>
-	<hr>
-	<br>
-	<div class="container my-2" align="left">
-
-		<h3>Account Types</h3>
+	<div id="content">
+		<h2>Add AccountType</h2>
 		<br>
-		<table style="width:50%" border="1">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Name</th>
-					<th>Classification</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="accountType : ${accountTypeList}">
-					<td th:text="${accountType.name}"></td>
-					<td th:text="${accountType.description}"></td>
-					<td th:text="${accountType.classification}"></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+		<form action="#" th:action="@{/saveAccountType}"
+			th:object="${accountType}" method="POST">
+			<label>Name: <input type="text" th:field="*{name}"
+				placeholder="Account Type Name"></label> <label>Description<input
+				type="text" th:field="*{description}" placeholder="Description"></label>
+			<label>Classification<input type="text"
+				th:field="*{classification}" placeholder="Classification"></label>
+			<button type="submit" class="addButtonClass">Save
+				AccountType</button>
+		</form>
+		<br> <br> <br> <a th:href="@{/AccountTypes}">Back
+			to AccountType List</a> <br> <br>
+		<hr>
+		<br>
+		<div align="left">
 
+			<h3>Account Types</h3>
+			<br>
+			<table style="width: 50%" border="1">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Name</th>
+						<th>Classification</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="accountType : ${accountTypeList}">
+						<td th:text="${accountType.name}"></td>
+						<td th:text="${accountType.description}"></td>
+						<td th:text="${accountType.classification}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </body>
 
 </html>

@@ -1,47 +1,44 @@
 <html>
 <head th:include="header.html ::header"></head>
 <body>
-	<div>
-		<div th:insert="TopNavigation.html ::topNavigation('Institutions')"></div>
+	<div id="header"
+		th:insert="TopNavigation.html ::topNavigation('Institutions')"></div>
+	<div id="content">
+		<h2>Add Institution</h2>
+		<br> <br>
+		<form action="#" th:action="@{/saveInstitution}"
+			th:object="${institution}" method="POST">
+			<label>Name of Institution <input type="text"
+				th:field="*{name}" placeholder="Insitution Name">
+			</label><label>Description<input type="text"
+				th:field="*{description}" placeholder="Description">
+			</label>
+			<button type="submit" class="addButtonClass">Save
+				Institution</button>
+		</form>
+		<br> <br> <a th:href="@{/Institutions}">Back to
+			Institutions List</a> <br> <br>
+		<hr>
+		<div align="left">
+			<h3>Institutions List</h3>
+			<br>
+			<table style="width: 80%" border="1"
+				class="table table-striped table-responsive-md">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="institution : ${institutionList}">
+						<td th:text="${institution.name}"></td>
+						<td th:text="${institution.description}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
-	<br>
-	<h2>Add Institution</h2>
-	<br>
-	<br>
-	<form action="#" th:action="@{/saveInstitution}" th:object="${institution}" method="POST">
-		<label>Name of Institution
-			<input type="text" th:field="*{name}" placeholder="Insitution Name" >
-		</label><label>Description<input type="text" th:field="*{description}" placeholder="Description"
-				>
-		</label>
-		<button type="submit" class="addButtonClass">Save
-			Institution</button>
-	</form>
-	<br>
-	<br>
-	<a th:href="@{/Institutions}">Back to Institutions List</a>
-	<br>
-	<br>
-	<hr>
-	<div class="container my-2" align="left">
-		<h3>Insitutions List</h3>
-		<br>
-		<table style="width:80%" border="1" class="table table-striped table-responsive-md">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Description</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="institution : ${institutionList}">
-					<td th:text="${institution.name}"></td>
-					<td th:text="${institution.description}"></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-
 </body>
 
 </html>

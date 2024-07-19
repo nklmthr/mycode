@@ -2,23 +2,23 @@
 <head th:insert="~{header.html ::header}"></head>
 
 <body>
-	<div>
-		<div th:insert="~{TopNavigation.html ::topNavigation('Categorys')}"></div>
+	<div id="header"
+		th:insert="~{TopNavigation.html ::topNavigation('Categorys')}"></div>
+	<div id="content">
+		<h3>Category List</h3>
+		<br />
+		<button class="addButtonClass" type="button"
+			th:onclick="|window.location.href='/addnewCategory'|">Add
+			Category</button>
+		<br /> <br />
+		<div id="categoriesDiv">
+			<section
+				th:insert="~{@{category/categoryFragment} :: categoryFragment}"
+				th:with="headerCategories=${homeCategory}"></section>
+		</div>
+		<hr>
+		<a th:href="@{/Categorys}">Back to Category List</a>
 	</div>
-	<h3>Category List</h3>
-	<br />
-	<hr>
-	<br />
-	<button class="addButtonClass" type="button" th:onclick="|window.location.href='/addnewCategory'|">Add
-		Category</button>
-	<br />
-	<br />
-	<div id="categoriesDiv">
-		<section th:insert="~{@{category/categoryFragment} :: categoryFragment}"
-			th:with="headerCategories=${homeCategory}"></section>
-	</div>
-	<hr>
-	<a th:href="@{/Categorys}">Back to Category List</a>
 </body>
 
 </html>

@@ -1,10 +1,9 @@
 <html>
 <head th:insert="~{header.html ::header}"></head>
 <body>
-	<div>
-		<div th:insert="~{TopNavigation.html ::topNavigation('Transactions')}"></div>
-	</div>
-	<div class="container">
+	<div id="header"
+		th:insert="~{TopNavigation.html ::topNavigation('Transactions')}"></div>
+	<div class="content">
 		<h2>Update Transactions</h2>
 		<hr>
 		<br /> <br />
@@ -53,7 +52,7 @@
 				</tr>
 				<tr>
 					<td>
-						<button type="submit" class="update-delete-button">Save</button>
+						<button type="submit" class="btn btn-info">Save</button>
 					</td>
 				</tr>
 			</table>
@@ -62,7 +61,8 @@
 			<tr th:each="attachment : ${transactionAttachments}">
 				<div th:if="${attachment.getFileType() == 'pdf'}">
 					<td><a th:download="${attachment.getFileName()}"
-						th:href="@{/transaction/}+${attachment.getTransaction().getId()}+'/attachment/'+${attachment.getId()}+'/'+${year}+'/'+${month}+'?page='+${page}" type="application/pdf" /> <span
+						th:href="@{/transaction/}+${attachment.getTransaction().getId()}+'/attachment/'+${attachment.getId()}+'/'+${year}+'/'+${month}+'?page='+${page}"
+						type="application/pdf" /> <span
 						th:text="${attachment.getFileName()}" /></a></td>
 				</div>
 				<div th:if="${attachment.getFileType() != 'pdf'}">
@@ -87,7 +87,7 @@
 						</div>
 					</td>
 					<td align="left">
-						<button type="submit" class="btn btn-primary">Upload
+						<button type="submit" class="btn btn-info">Upload
 							image</button>
 
 					</td>

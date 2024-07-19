@@ -3,55 +3,56 @@
 <head th:include="header.html ::header"></head>
 
 <body>
-	<div>
-		<div th:insert="TopNavigation.html ::topNavigation('Accounts')"></div>
-	</div>
-	<br>
-	<h2>Add Account</h2>
-	<br><br>
-	<form action="#" th:action="@{/saveAccount}" th:object="${account}" method="POST">
-		<label>Name<input type="text" th:field="*{name}" placeholder="My Savings Bank Account"></label>
-		<label>Account type<select th:field="*{accountType}">
-				<option th:each="accountType : ${accountTypeList}" th:value="${accountType.id}"
-					th:text="${accountType.name}"></option>
-			</select></label>
-		<label>Institution
-			<select th:field="*{institution}">
-				<option th:each="institution : ${institutionList}" th:value="${institution.id}"
-					th:text="${institution.name}"></option>
-			</select></label>
-		<label>Balance
-			<input type="text" th:field="*{transactionBalance}" placeholder="transactionBalance">
-		</label>
-		<button type="submit" class="addButtonClass">Save Account</button>
+	<div id="header"
+		th:insert="TopNavigation.html ::topNavigation('Accounts')"></div>
+	<div id="content">
+		<h2>Add Account</h2>
+		<br> <br>
+		<form action="#" th:action="@{/saveAccount}" th:object="${account}"
+			method="POST">
+			<label>Name<input type="text" th:field="*{name}"
+				placeholder="My Savings Bank Account"></label> <label>Account
+				type<select th:field="*{accountType}">
+					<option th:each="accountType : ${accountTypeList}"
+						th:value="${accountType.id}" th:text="${accountType.name}"></option>
+			</select>
+			</label> <label>Institution <select th:field="*{institution}">
+					<option th:each="institution : ${institutionList}"
+						th:value="${institution.id}" th:text="${institution.name}"></option>
+			</select></label> <label>Balance <input type="text"
+				th:field="*{transactionBalance}" placeholder="transactionBalance">
+			</label>
+			<button type="submit" class="addButtonClass">Save Account</button>
 
-	</form>
-	<br><br>
-	<a th:href="@{/Accounts}">Back to Accounts List</a>
-	<br><br>
-	<hr><br><br>
-	<div class="container my-2" align="left">
-		<h3>Account List</h3>
-		<br>
-		<table style="width:80%" border="1" class="table table-striped table-responsive-md">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Account Type</th>
-					<th>Institution</th>
-					<th>Balance</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="account : ${accountList}">
-					<td th:text="${account.name}">gfdfd</td>
-					<td th:text="${account.accountType.name}"></td>
-					<td th:text="${account.institution.name}"></td>
-					<td th:text="${account.transactionBalance}"></td>
+		</form>
+		<br> <br> <a th:href="@{/Accounts}">Back to Accounts
+			List</a> <br> <br>
+		<hr>
+		<br> <br>
+		<div align="left">
+			<h3>Account List</h3>
+			<br>
+			<table style="width: 80%" border="1"
+				class="table table-striped table-responsive-md">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Account Type</th>
+						<th>Institution</th>
+						<th>Balance</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="account : ${accountList}">
+						<td th:text="${account.name}">gfdfd</td>
+						<td th:text="${account.accountType.name}"></td>
+						<td th:text="${account.institution.name}"></td>
+						<td th:text="${account.transactionBalance}"></td>
 
-				</tr>
-			</tbody>
-		</table>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </body>
 
