@@ -29,7 +29,7 @@
 			<tbody>
 				<tr th:each="account : ${accountList}">
 					<td><a th:href="@{account/statement/{id}(id=${account.id})}"
-						th:text="${account.name}"</a></td>
+						th:text="${account.name}"></a></td>
 					<td th:text="${account.accountType.description}"></td>
 					<td th:text="${account.institution.description}"></td>
 
