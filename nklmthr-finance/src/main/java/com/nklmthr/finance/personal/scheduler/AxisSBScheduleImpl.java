@@ -64,19 +64,18 @@ public class AxisSBScheduleImpl extends ScheduledTask {
 
 	@Override
 	protected boolean hasOverRidingContent(String email) {
-		return email.contains("Dear Nikhil Mathur,");
+		return email.startsWith("Dear Nikhil Mathur,");
 	}
 
 	@Override
 	protected Transaction getTransactionFromContent(String html) throws ParseException {
 		if (StringUtils.isNotBlank(html) && !html.contains("declined")) {
 			Transaction transaction = new Transaction();
-			String amountStr = html.substring(html.indexOf("Your Citibank A/c has been debited with ")
-					+ "Your Citibank A/c has been debited with ".length(), html.indexOf(" on ")).trim();
+			String amountStr = html.substring(0, html.indexOf("has been debited from A/c no. XX2804 on")).trim();
 			amountStr = amountStr.replaceAll(",", "");
 			logger.debug(amountStr);
-			String description = html.substring(html.indexOf("and account ") + "and account ".length(),
-					html.indexOf("has been credited.")).trim();
+			String description = html.substring(html.indexOf("Info-") + "Info-".length(),
+					html.length()).trim();
 			String currency = amountStr.substring(0, 3);
 			if (currency.equalsIgnoreCase("Rs.")) {
 				currency = "INR";
@@ -97,7 +96,7 @@ public class AxisSBScheduleImpl extends ScheduledTask {
 
 	@Override
 	protected String getJSOUPXPathQuery() {
-		return "/html/body/table/tbody/tr/td/table/tbody/tr[2]/td/table[1]/tbody/tr[1]/td/span[3]";
+		return "/html/body/table/tbody/tr/td/table/tbody/tr[3]/td/table[1]/tbody/tr[1]/td/span[3]";
 	}
 
 	@Override
