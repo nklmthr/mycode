@@ -79,7 +79,7 @@ public class AxisBankCCSchedulerImpl extends ScheduledTask {
         String emailEncoded = part.getParts().get(0).getBody().getData().toString();
         byte[] emaildecoded = BaseEncoding.base64Url().decode(emailEncoded);
         String email = new String(emaildecoded).trim();
-        logger.info(email);
+        logger.debug(email);
         return email;
     }
 
