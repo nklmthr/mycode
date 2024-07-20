@@ -126,7 +126,7 @@ public class TransactionService {
 			t.setParentTransaction(parent);
 			t.setCategory(categoryRepository.findById(t.getCategory().getId()).get());
 			t.setTransactionType(parent.getTransactionType());
-			t.setDescription(originalParentDescription);
+			t.setDescription(originalParentDescription+"|"+origParentAmount+"|"+originalParentCategory);
 			parent.setAmount(parent.getAmount().subtract(t.getAmount()));
 			transactionRepository.save(t);
 		}
