@@ -34,7 +34,7 @@
 					<td th:text="${account.institution.description}"></td>
 
 					<td align="right"
-						th:text="${#numbers.formatDecimal(account.transactionBalance,1,'COMMA', 2, 'POINT')}"></td>
+						th:text="${account.getFormattedBalance()}"></td>
 					<td><a
 						th:href="@{/showFormForAccountUpdate/{id}(id=${account.id})}"
 						class="update-delete-button">Update</a></td>

@@ -84,7 +84,7 @@ public class SBICCSchedulerImpl extends ScheduledTask {
         String emailEncoded;
         String subject = part.getHeaders().stream().filter(s -> s.getName().equals("Subject")).map(s -> s.getValue())
                 .collect(Collectors.joining(""));
-        logger.debug("Subject:" + subject);
+        logger.info("Subject:" + subject);
         if (subject.equalsIgnoreCase("Transaction Alert from SBI Card")) {
             emailEncoded = part.getParts().get(0).getBody().getData().toString();
             byte[] emaildecoded = BaseEncoding.base64Url().decode(emailEncoded);

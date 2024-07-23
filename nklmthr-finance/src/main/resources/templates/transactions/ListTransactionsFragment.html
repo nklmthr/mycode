@@ -33,7 +33,7 @@
 				<td th:text="${transaction.category.name}"></td>
 				<td th:text="${transaction.currency}"></td>
 				<td align="right"
-					th:text="${#numbers.formatDecimal(transaction.amount,1,'COMMA', 2, 'POINT')}">
+					th:text="${transaction.getFormattedBalance()}">
 				</td>
 				<td th:text="${transaction.transactionType}"></td>
 				<td th:if=${showUpdateDelete} align="center"><a

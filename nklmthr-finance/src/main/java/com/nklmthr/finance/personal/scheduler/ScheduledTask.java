@@ -156,7 +156,7 @@ public abstract class ScheduledTask {
 				oneMonthBeforeDate.getMonthValue(), oneMonthBeforeDate.getDayOfMonth());
 		String subject = getEmailSubject();
 		String query = "subject: " + subject + afterDate + beforeDate;
-		logger.info(query);
+		logger.debug(query);
 		return query;
 	}
 

@@ -1,7 +1,9 @@
 package com.nklmthr.finance.personal.dao;
 
 import java.math.BigDecimal;
+import java.text.Format;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 
 import org.hibernate.annotations.UuidGenerator;
@@ -32,7 +34,7 @@ public class Transaction {
 
 	@Column
 	private String explanation;
-	
+
 	public String getExplanation() {
 		return explanation;
 	}
@@ -62,7 +64,7 @@ public class Transaction {
 	private Long sourceTime;
 
 	@Column
-	private String currency="INR";
+	private String currency = "INR";
 
 	@Column
 	private TransactionType transactionType;
@@ -170,6 +172,12 @@ public class Transaction {
 
 	public void setSourceTime(Long sourceTime) {
 		this.sourceTime = sourceTime;
+	}
+
+	public String getFormattedBalance() {
+		Format indianCurrencyFormat = com.ibm.icu.text.NumberFormat.getCurrencyInstance(new Locale("en", "in"));
+		String balance = indianCurrencyFormat.format(amount);
+		return balance;
 	}
 
 	@Override

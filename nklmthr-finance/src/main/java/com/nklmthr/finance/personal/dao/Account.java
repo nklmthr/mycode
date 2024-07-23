@@ -1,6 +1,8 @@
 package com.nklmthr.finance.personal.dao;
 
 import java.math.BigDecimal;
+import java.text.Format;
+import java.util.Locale;
 
 import org.hibernate.annotations.UuidGenerator;
 
@@ -73,6 +75,11 @@ public class Account {
 		this.transactionBalance = transactionBalance;
 	}
 
+	public String getFormattedBalance() {
+		Format indianCurrencyFormat = com.ibm.icu.text.NumberFormat.getCurrencyInstance(new Locale("en", "in"));
+		String balance = indianCurrencyFormat.format(transactionBalance);
+		return balance;
+	}
 	@Override
 	public String toString() {
 		return "Account [id=" + id + ", name=" + name + ", institution=" + institution + ", accountType=" + accountType
