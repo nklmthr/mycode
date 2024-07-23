@@ -76,10 +76,24 @@ public class TransactionService {
 	}
 
 	public void saveTransaction(Transaction transaction) {
+		Optional<Transaction> oldTransaction = transactionRepository.findById(transaction.getId());
 		if (transaction.getTransactionType().equals(TransactionType.DEBIT)) {
-			transaction.getAccount().setTransactionBalance(
-					transaction.getAccount().getTransactionBalance().subtract(transaction.getAmount()));
+			if (oldTransaction.isPresent()) {
+				BigDecimal changeValue = oldTransaction.get().getAmount().subtract(transaction.getAmount());
+				logger.info("changeValue" + changeValue);
+				transaction.getAccount()
+						.setTransactionBalance(transaction.getAccount().getTransactionBalance().add(changeValue));
+			} else {
+				transaction.getAccount().setTransactionBalance(
+						transaction.getAccount().getTransactionBalance().subtract(transaction.getAmount()));
+			}
 		} else if (transaction.getTransactionType().equals(TransactionType.CREDIT)) {
+			if (oldTransaction.isPresent()) {
+				BigDecimal changeValue = oldTransaction.get().getAmount().subtract(transaction.getAmount());
+				logger.info("changeValue" + changeValue);
+				transaction.getAccount()
+						.setTransactionBalance(transaction.getAccount().getTransactionBalance().subtract(changeValue));
+			}
 			transaction.getAccount().setTransactionBalance(
 					transaction.getAccount().getTransactionBalance().add(transaction.getAmount()));
 		}
@@ -126,7 +140,7 @@ public class TransactionService {
 			t.setParentTransaction(parent);
 			t.setCategory(categoryRepository.findById(t.getCategory().getId()).get());
 			t.setTransactionType(parent.getTransactionType());
-			t.setDescription(originalParentDescription+"|"+origParentAmount+"|"+originalParentCategory);
+			t.setDescription(originalParentDescription + "|" + origParentAmount + "|" + originalParentCategory);
 			parent.setAmount(parent.getAmount().subtract(t.getAmount()));
 			transactionRepository.save(t);
 		}
@@ -204,8 +218,7 @@ public class TransactionService {
 		logger.info("Account Balance:" + transferToAccount.getTransactionBalance());
 		logger.info("Setting new Account Balance:"
 				+ transferToAccount.getTransactionBalance().add(transaction.getAmount()));
-		transferToAccount
-				.setTransactionBalance(transferToAccount.getTransactionBalance().add(transaction.getAmount()));
+		transferToAccount.setTransactionBalance(transferToAccount.getTransactionBalance().add(transaction.getAmount()));
 		Category category = categoryRepository.findByName("TRANSFERS");
 		transaction.setCategory(category);
 		Transaction newTransaction = new Transaction();

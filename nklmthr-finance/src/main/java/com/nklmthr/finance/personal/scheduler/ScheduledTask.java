@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -116,9 +117,10 @@ public abstract class ScheduledTask {
 					} catch (InvalidMessageException e) {
 						continue;
 					}
-					logger.debug(email);
+					logger.info("hasOverRidingContent(email) " + hasOverRidingContent(email));
 					if (hasOverRidingContent(email)) {
 						transaction = getTransactionFromOverRidingContent(email);
+						logger.info("Overriding transaction=" + transaction);
 					} else {
 						Document doc = Jsoup.parse(email);
 						logger.debug(doc.html());
@@ -133,6 +135,7 @@ public abstract class ScheduledTask {
 						transaction.setSource(message.getThreadId());
 						transaction.setSourceTime(getReceivedTime(message).getTime());
 						transaction.setDate(getReceivedTime(message));
+						transaction.setId(UUID.randomUUID().toString());
 						logger.info(transaction.toString());
 						transactionService.saveTransaction(transaction);
 					}

@@ -3,6 +3,7 @@ package com.nklmthr.finance.personal.scheduler;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePart;
 import com.google.common.io.BaseEncoding;
+import com.nklmthr.finance.personal.dao.Category;
 import com.nklmthr.finance.personal.dao.Transaction;
 import com.nklmthr.finance.personal.exception.InvalidMessageException;
 import com.nklmthr.finance.personal.service.TransactionType;
@@ -58,13 +59,14 @@ public class AxisSBScheduleImpl extends ScheduledTask {
 		transaction.setAmount(amount);
 		transaction.setAccount(accountService.findAccountByName("Axis Salary Acc"));
 		transaction.setDescription(description);
+		transaction.setCategory(categoryService.findCategoryByName(Category.UNCLASSIFIED));
 		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
 
 	@Override
 	protected boolean hasOverRidingContent(String email) {
-		return email.startsWith("Dear Nikhil Mathur,");
+		return !email.startsWith("<html>");
 	}
 
 	@Override

@@ -5,12 +5,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -36,11 +38,18 @@ public class MonthlySummaryImporter {
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("d-MMM-yyyy");
 	private static SimpleDateFormat edateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-	public static void main(String[] args) throws IOException, ParseException {
+	public static void main(String[] args) {
+		Format indianCurrencyFormat = com.ibm.icu.text.NumberFormat.getCurrencyInstance(new Locale("en", "in"));
+		String s = "-40000000000.00";
+		System.out.println(indianCurrencyFormat.format(new BigDecimal(s)));
+	}
+	
+	
+	public static void main1(String[] args) throws IOException, ParseException {
 		MonthlySummaryImporter inst = new MonthlySummaryImporter();
 
 		ICsvListReader accountIdMappingreader = new CsvListReader(new FileReader(
-				"C:\\Develop\\github.com\\nklmthr\\mycode\\nklmthr-finance\\src\\main\\resources\\AccountIdMapping.csv"),
+				"C:\\Develop\\github.com\\nklmthr\\mycode\\nklmthr-finance\\src\\main\\resources\\AccountIdMappingICICIDirect.csv"),
 				CsvPreference.STANDARD_PREFERENCE);
 
 		List<Object> accountsMappings;
@@ -61,7 +70,7 @@ public class MonthlySummaryImporter {
 		System.out.println("vaccountIdMap" + accountIdMap);
 
 		ICsvListReader accountSummparyMappingreader = new CsvListReader(new FileReader(
-				"C:\\Develop\\github.com\\nklmthr\\mycode\\nklmthr-finance\\src\\main\\resources\\Balance Sheet - niksrish.csv"),
+				"C:\\Develop\\github.com\\nklmthr\\mycode\\nklmthr-finance\\src\\main\\resources\\Balance Sheet - ICICIDirect.csv"),
 				CsvPreference.STANDARD_PREFERENCE);
 		List<Object> accountsBalances;
 
@@ -92,6 +101,7 @@ public class MonthlySummaryImporter {
 						System.out.println("accountsBalances.get(0)=" + accountsBalances.get(0)
 								+ ", accountIdMap.get(accountsBalances.get(0)):"
 								+ accountIdMap.get(accountsBalances.get(0)));
+						mb.setId(UUID.randomUUID().toString());
 						account.setId(accountIdMap.get(accountsBalances.get(0)));
 						mb.setAccount(account);
 						String valueFromcsv = accountsBalances.get(k).toString();
@@ -104,7 +114,23 @@ public class MonthlySummaryImporter {
 
 		}
 		System.out.println(summaryPerAccount);
-
+		/*
+		 * ICICI direct merge code
+		 */
+		
+		for (int i =0; i< summaryPerAccount.size();i++) {
+			MonthlyBalance mb = summaryPerAccount.get(i);
+			
+			for (int j= 0; j<summaryPerAccount.size();j++) {
+				MonthlyBalance mbother = summaryPerAccount.get(j);
+				if (!mb.getId().equals(mbother.getId()) && mb.getDate().equals(mbother.getDate())) {
+					mb.setAmount(mbother.getAmount().add(mb.getAmount()));
+					summaryPerAccount.remove(j);
+					j--;
+					i--;
+				}
+			}
+		}
 		if (accountSummparyMappingreader != null) {
 			accountSummparyMappingreader.close();
 		}
@@ -117,7 +143,7 @@ public class MonthlySummaryImporter {
 		CellProcessor[] processors = getWriterProcessors();
 		for (MonthlyBalance bal : summaryPerAccount) {
 			List<Object> objects = new ArrayList<Object>();
-			objects.add(UUID.randomUUID().toString());
+			objects.add(bal.getId());
 			objects.add(bal.getAmount());
 			objects.add(edateFormat.format(bal.getDate()));
 			objects.add(bal.getAccount().getId());
