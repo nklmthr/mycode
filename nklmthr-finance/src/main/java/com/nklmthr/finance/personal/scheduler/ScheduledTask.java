@@ -105,8 +105,11 @@ public abstract class ScheduledTask {
 			for (Message mess : messages) {
 				Message message = service.users().messages().get(user, mess.getId()).setFormat("full").execute();
 				message.getPayload().getHeaders().forEach(s -> logger.debug(s.getName() + ":" + s.getValue()));
+				Date recievedTime = new Date(getReceivedTime(message).getTime());
+				logger.info("message.getThreadId()=" + message.getThreadId() + ",getReceivedTime(message).getTime()="
+						+ recievedTime+",source_time="+recievedTime.getTime());
 				Transaction transaction = transactionService.findTransactionsBySource(message.getThreadId(),
-						getReceivedTime(message).getTime());
+						recievedTime.getTime());
 				if (transaction == null) {
 					logger.info("Transaction not found in database.. Adding Transaction:" + message.getThreadId()
 							+ ", sourceTime:" + getReceivedTime(message).getTime() + ", Time:"
@@ -131,7 +134,7 @@ public abstract class ScheduledTask {
 						transaction = getTransactionFromContent(content.html());
 					}
 					if (transaction != null) {
-						transaction.setCategory(categoryService.findCategoryByName(Category.UNCLASSIFIED));
+						transaction.setCategory(categoryService.findCategoryByName(Category.NOT_CLASSIFIED));
 						transaction.setSource(message.getThreadId());
 						transaction.setSourceTime(getReceivedTime(message).getTime());
 						transaction.setDate(getReceivedTime(message));

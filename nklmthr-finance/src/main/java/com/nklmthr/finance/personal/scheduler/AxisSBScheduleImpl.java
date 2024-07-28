@@ -59,7 +59,7 @@ public class AxisSBScheduleImpl extends ScheduledTask {
 		transaction.setAmount(amount);
 		transaction.setAccount(accountService.findAccountByName("Axis Salary Acc"));
 		transaction.setDescription(description);
-		transaction.setCategory(categoryService.findCategoryByName(Category.UNCLASSIFIED));
+		transaction.setCategory(categoryService.findCategoryByName(Category.NOT_CLASSIFIED));
 		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
