@@ -108,9 +108,8 @@ public abstract class ScheduledTask {
 				Date recievedTime = new Date(getReceivedTime(message).getTime());
 				logger.info("message.getThreadId()=" + message.getThreadId() + ",getReceivedTime(message).getTime()="
 						+ recievedTime + ",source_time=" + recievedTime.getTime());
-				Transaction transaction = null;
-				//transactionService.findTransactionsBySource(message.getThreadId(),
-					//	recievedTime.getTime());
+				Transaction transaction = transactionService.findTransactionsBySource(message.getThreadId(),
+						recievedTime.getTime());
 				if (transaction == null) {
 					logger.info("Transaction not found in database.. Adding Transaction:" + message.getThreadId()
 							+ ", sourceTime:" + getReceivedTime(message).getTime() + ", Time:"

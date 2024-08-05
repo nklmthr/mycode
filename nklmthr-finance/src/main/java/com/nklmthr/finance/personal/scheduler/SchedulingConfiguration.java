@@ -43,5 +43,6 @@ public class SchedulingConfiguration {
 		ScheduledTask task = (ScheduledTask) applicationContext.getBean(ICICIAmazonCCSchedulerImpl.class);
 		task.doScheduledTask();
 	}
+	
 
 }

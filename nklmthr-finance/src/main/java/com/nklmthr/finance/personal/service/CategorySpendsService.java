@@ -1,6 +1,7 @@
 package com.nklmthr.finance.personal.service;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class CategorySpendsService {
 
 	public CategorySpends getCategorySpendsTree(Integer year, Integer month) {
 		CategorySpends rootCatSpend = new CategorySpends();
-		Map<String, CategorySpends> map = new HashMap<>();
+		Map<String, CategorySpends> map = new LinkedHashMap<String, CategorySpends>();
 		Category rootCategory = categoryService.getParentCategoryByType(CategoryType.HOME);
 		Queue<Category> queue = new LinkedList<Category>();
 		queue.add(rootCategory);
@@ -46,17 +47,17 @@ public class CategorySpendsService {
 			
 			List<Transaction> catTransactions = transactionService.getTransactionsByCategoryInMonth(year, month,
 					cat.getId());
-			logger.info("Category:" + cat.getName() +",transactions="+catTransactions.size()+ ", year=" + year + ", month=" + month);
-			catTransactions.stream().forEach(s -> logger.info(s.getCategory().getName()));
+			logger.debug("Category:" + cat.getName() +",transactions="+catTransactions.size()+ ", year=" + year + ", month=" + month);
+			catTransactions.stream().forEach(s -> logger.debug(s.getDescription()+s.getAmount()+s.getCategory().getName()));
 			for (Transaction t : catTransactions) {
 				/*
 				 * if (!t.getCategory().getCategoryType().equals(CategoryType.EXPENSE)) {
 				 * continue; }
 				 */
 				if (t.getTransactionType().equals(TransactionType.DEBIT)) {
-					catSpend.setAmount(catSpend.getAmount().add(t.getAmount()));
-				} else {
 					catSpend.setAmount(catSpend.getAmount().subtract(t.getAmount()));
+				} else {
+					catSpend.setAmount(catSpend.getAmount().add(t.getAmount()));
 				}
 			}
 			map.put(catSpend.getId(), catSpend);
@@ -80,15 +81,14 @@ public class CategorySpendsService {
 		int highestLevel = findHighestCategoryLevel(categorys);
 		logger.info("highestLevel:" + highestLevel);
 		while (highestLevel >= 0) {
-			for (Category c : categorys) {
+			for (Category c : categorys) {				
 				if (c.getLevel() == highestLevel) {
+					logger.debug(c.getName()+c.getLevel());
 					CategorySpends currentCS = map.get(c.getId());
 					CategorySpends parentCS = null;
-					if (c.getParentCategory() != null) {
+					if (!c.getCategoryType().equals(CategoryType.HOME)) {
 						parentCS = map.get(c.getParentCategory().getId());
-					}
-					if (parentCS != null) {
-						logger.info(c.getName()+"currentCS="+(currentCS!=null?currentCS.getName():" null,")+",parentCS="+parentCS);
+						logger.debug(c.getName()+"currentCS="+currentCS.getName()+",parentCS="+parentCS);
 						parentCS.setAmount(parentCS.getAmount().add(currentCS.getAmount()));
 					}
 				}

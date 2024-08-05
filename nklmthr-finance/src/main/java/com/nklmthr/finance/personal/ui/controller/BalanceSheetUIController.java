@@ -19,6 +19,7 @@ import com.nklmthr.finance.personal.dao.MonthlyBalanceSummary;
 import com.nklmthr.finance.personal.scheduler.AxisBankCCSchedulerImpl;
 import com.nklmthr.finance.personal.scheduler.AxisSBScheduleImpl;
 import com.nklmthr.finance.personal.scheduler.ICICIAmazonCCSchedulerImpl;
+import com.nklmthr.finance.personal.scheduler.IDFCCCScheduleImpl;
 import com.nklmthr.finance.personal.scheduler.SBICCSchedulerImpl;
 import com.nklmthr.finance.personal.scheduler.ScheduledTask;
 import com.nklmthr.finance.personal.scheduler.YesBankCCSchedulerImpl;
@@ -70,17 +71,30 @@ public class BalanceSheetUIController {
 
 	@GetMapping("/triggerTransactionFetch")
 	public String triggerTransactionFetch(Model m) throws GeneralSecurityException, IOException, ParseException {
-		ScheduledTask task = null;
-		task = applicationContext.getBean(YesBankCCSchedulerImpl.class);
-		task.doScheduledTask();
-		task = applicationContext.getBean(SBICCSchedulerImpl.class);
-		task.doScheduledTask();
-		task = applicationContext.getBean(AxisBankCCSchedulerImpl.class);
-		task.doScheduledTask();
-		task = applicationContext.getBean(AxisSBScheduleImpl.class);
-		task.doScheduledTask();
-		task = (ScheduledTask) applicationContext.getBean(ICICIAmazonCCSchedulerImpl.class);
-		task.doScheduledTask();
+		Runnable myThread = () -> {
+			// Used to set custom name to the current thread
+			Thread.currentThread().setName("myThread");
+			System.out.println(Thread.currentThread().getName() + " is running");
+			try {
+				ScheduledTask task = null;
+				task = applicationContext.getBean(YesBankCCSchedulerImpl.class);
+				task.doScheduledTask();
+				task = applicationContext.getBean(SBICCSchedulerImpl.class);
+				task.doScheduledTask();
+				task = applicationContext.getBean(AxisBankCCSchedulerImpl.class);
+				task.doScheduledTask();
+				task = applicationContext.getBean(AxisSBScheduleImpl.class);
+				task.doScheduledTask();
+				task = (ScheduledTask) applicationContext.getBean(ICICIAmazonCCSchedulerImpl.class);
+				task.doScheduledTask();
+				task = (ScheduledTask) applicationContext.getBean(IDFCCCScheduleImpl.class);
+				task.doScheduledTask();
+			} catch (GeneralSecurityException | IOException | ParseException e) {
+				e.printStackTrace();
+			}
+		};
+		Thread run = new Thread(myThread);
+		run.start();
 		MonthlyBalanceSummary monthlyBalanceSummary = monthlyBalanceService.getLastYearBalanceSheet();
 		m.addAttribute("monthlyBalanceSummary", monthlyBalanceSummary);
 		return "balanceSheet/BalanceSheet";

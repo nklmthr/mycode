@@ -85,7 +85,7 @@ public class TransactionService {
 						.setTransactionBalance(transaction.getAccount().getTransactionBalance().add(changeValue));
 			} else {
 				transaction.getAccount().setTransactionBalance(
-						transaction.getAccount().getTransactionBalance().subtract(transaction.getAmount()));
+						transaction.getAccount().getTransactionBalance().add(transaction.getAmount()));
 			}
 		} else if (transaction.getTransactionType().equals(TransactionType.DEBIT)) {
 			if (oldTransaction.isPresent()) {
@@ -95,7 +95,7 @@ public class TransactionService {
 						.setTransactionBalance(transaction.getAccount().getTransactionBalance().subtract(changeValue));
 			}
 			transaction.getAccount().setTransactionBalance(
-					transaction.getAccount().getTransactionBalance().add(transaction.getAmount()));
+					transaction.getAccount().getTransactionBalance().subtract(transaction.getAmount()));
 		}
 		transactionRepository.save(transaction);
 	}
@@ -154,26 +154,33 @@ public class TransactionService {
 	}
 
 	public void deleteTransaction(String id) {
-		Transaction child = transactionRepository.findById(id).get();
-		logger.info("deleting Transaction..." + child.getDescription() + child.getAmount());
-		if (child.getChildTransactions() != null) {
-			logger.info("children..." + child.getChildTransactions().stream()
+		Transaction transaction = transactionRepository.findById(id).get();
+		logger.info("deleting Transaction..." + transaction.getDescription() + transaction.getAmount());
+		if (transaction.getChildTransactions() != null) {
+			logger.info("children..." + transaction.getChildTransactions().stream()
 					.map(s -> s.getDescription() + "|" + s.getAmount()).collect(Collectors.joining(";")));
 		}
-		if (child.getParentTransaction() != null) {
-			logger.info("| Parent =" + child.getParentTransaction().getDescription()
-					+ child.getParentTransaction().getAmount());
+		if (transaction.getParentTransaction() != null) {
+			logger.info("| Parent =" + transaction.getParentTransaction().getDescription()
+					+ transaction.getParentTransaction().getAmount());
 		}
-		Transaction parent = child.getParentTransaction();
+		Transaction parent = transaction.getParentTransaction();
 		if (parent != null) {
-			parent.setAmount(parent.getAmount().add(child.getAmount()));
+			parent.setAmount(parent.getAmount().add(transaction.getAmount()));
 			if (!parent.getChildTransactions().isEmpty()) {
-				parent.setCategory(child.getCategory());
+				parent.setCategory(transaction.getCategory());
 			}
-			parent.getChildTransactions().remove(child);
+			parent.getChildTransactions().remove(transaction);
 			transactionRepository.save(parent);
 		}
-		transactionRepository.delete(child);
+		if (transaction.getTransactionType().equals(TransactionType.DEBIT)) {
+			transaction.getAccount().setTransactionBalance(
+					transaction.getAccount().getTransactionBalance().subtract(transaction.getAmount()));
+		} else {
+			transaction.getAccount().setTransactionBalance(
+					transaction.getAccount().getTransactionBalance().add(transaction.getAmount()));
+		}
+		transactionRepository.delete(transaction);
 		logger.info("deleteTransaction " + id);
 
 	}
@@ -218,19 +225,21 @@ public class TransactionService {
 		logger.debug("transaction:" + transaction);
 		logger.info("transferToAccount id:" + transferToAccountId + " found Account:" + transferToAccount.getName()
 				+ "," + transferToAccount.getTransactionBalance());
-		
+
 		BigDecimal transferFromAccBal = transferFromAccount.getTransactionBalance();
 		BigDecimal transferToAccBal = transferToAccount.getTransactionBalance();
-		
+
 		BigDecimal newtransferFromAccBal = transferFromAccBal.subtract(transaction.getAmount());
 		BigDecimal newTransferToAccBal = transferToAccBal.add(transaction.getAmount());
-		
+
 		transferToAccount.setTransactionBalance(newTransferToAccBal);
 		transferFromAccount.setTransactionBalance(newtransferFromAccBal);
-		
-		logger.info("From Account,"+transferFromAccount.getName()+";old balance:"+transferFromAccBal+";New Balance:"+newtransferFromAccBal);
-		logger.info("To Account:"+transferToAccount.getName()+",old balance:"+transferToAccBal+",New Balance:"+newTransferToAccBal);
-		
+
+		logger.info("From Account," + transferFromAccount.getName() + ";old balance:" + transferFromAccBal
+				+ ";New Balance:" + newtransferFromAccBal);
+		logger.info("To Account:" + transferToAccount.getName() + ",old balance:" + transferToAccBal + ",New Balance:"
+				+ newTransferToAccBal);
+
 		Category category = categoryService.getParentCategoryByType(CategoryType.TRANSFERS);
 		transaction.setCategory(category);
 		Transaction newTransaction = new Transaction();

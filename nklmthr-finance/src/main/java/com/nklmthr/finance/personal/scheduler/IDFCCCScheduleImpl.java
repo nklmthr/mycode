@@ -54,7 +54,7 @@ public class IDFCCCScheduleImpl extends ScheduledTask {
 						+ "<html>Dear Customer,<br/><br/>Transaction Successful! ".length(),
 				email.indexOf(" spent on your IDFC FIRST Bank Credit Card ending XX5661"));
 		String description = email.substring(
-				email.indexOf("DFC FIRST Bank Credit Card ending XX5661 at ")
+				email.indexOf("IDFC FIRST Bank Credit Card ending XX5661 at ")
 						+ "IDFC FIRST Bank Credit Card ending XX5661 at ".length(),
 				email.indexOf(" on ", email.indexOf("DFC FIRST Bank Credit Card ending XX5661 at ")));
 		String currency = amountStr.substring(0, 3);
@@ -63,7 +63,7 @@ public class IDFCCCScheduleImpl extends ScheduledTask {
 		Transaction transaction = new Transaction();
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
-		transaction.setAccount(accountService.findAccountByName("Axis Salary Acc"));
+		transaction.setAccount(accountService.findAccountByName("IDFC First Wealth Card"));
 		transaction.setDescription(description);
 		transaction.setCategory(categoryService.getParentCategoryByType(CategoryType.NOT_CLASSIFIED));
 		transaction.setTransactionType(TransactionType.DEBIT);
@@ -93,7 +93,7 @@ public class IDFCCCScheduleImpl extends ScheduledTask {
 			logger.debug(description);
 			transaction.setCurrency(currency);
 			transaction.setAmount(amount);
-			transaction.setAccount(accountService.findAccountByName("Axis Salary Acc"));
+			transaction.setAccount(accountService.findAccountByName("IDFC First Wealth Card"));
 			transaction.setDescription(description);
 			transaction.setTransactionType(TransactionType.DEBIT);
 			return transaction;
