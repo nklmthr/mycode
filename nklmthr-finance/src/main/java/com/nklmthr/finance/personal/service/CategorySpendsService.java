@@ -28,7 +28,7 @@ public class CategorySpendsService {
 	public CategorySpends getCategorySpendsTree(Integer year, Integer month) {
 		CategorySpends rootCatSpend = new CategorySpends();
 		Map<String, CategorySpends> map = new HashMap<>();
-		Category rootCategory = categoryService.getRootCategory();
+		Category rootCategory = categoryService.getParentCategoryByType(CategoryType.HOME);
 		Queue<Category> queue = new LinkedList<Category>();
 		queue.add(rootCategory);
 		while (!queue.isEmpty()) {
@@ -43,13 +43,16 @@ public class CategorySpendsService {
 			catSpend.setId(cat.getId());
 			catSpend.setName(cat.getName());
 			catSpend.setLevel(cat.getLevel());
-			logger.debug("Category:" + cat.getName() + ", year=" + year + ", month=" + month);
+			
 			List<Transaction> catTransactions = transactionService.getTransactionsByCategoryInMonth(year, month,
 					cat.getId());
+			logger.info("Category:" + cat.getName() +",transactions="+catTransactions.size()+ ", year=" + year + ", month=" + month);
+			catTransactions.stream().forEach(s -> logger.info(s.getCategory().getName()));
 			for (Transaction t : catTransactions) {
-				if(t.getCategory().isHidden()) {
-					continue;
-				}
+				/*
+				 * if (!t.getCategory().getCategoryType().equals(CategoryType.EXPENSE)) {
+				 * continue; }
+				 */
 				if (t.getTransactionType().equals(TransactionType.DEBIT)) {
 					catSpend.setAmount(catSpend.getAmount().add(t.getAmount()));
 				} else {
@@ -59,22 +62,21 @@ public class CategorySpendsService {
 			map.put(catSpend.getId(), catSpend);
 			logger.debug("Current CatSpend:" + catSpend + " transactions size:" + catTransactions + " amount ="
 					+ catSpend.getAmount() + " map.size:" + map.size());
-			queue.addAll(cat.getChildCategorys().stream().filter((s -> !s.isHidden())).collect(Collectors.toSet()));
+			queue.addAll(cat.getChildCategorys());
 		}
 
 		queue.add(rootCategory);
 		while (!queue.isEmpty()) {
 			Category cat = queue.poll();
 			CategorySpends catSpend = map.get(cat.getId());
-			for (Category childCats : cat.getChildCategorys().stream().filter(s -> !s.isHidden())
-					.collect(Collectors.toSet())) {
+			for (Category childCats : cat.getChildCategorys()) {
 				CategorySpends childCategorySpend = map.get(childCats.getId());
 				logger.debug("Adding child category Spend:" + childCategorySpend);
 				catSpend.getChildCategorySpends().add(childCategorySpend);
 			}
-			queue.addAll(cat.getChildCategorys().stream().filter((s -> !s.isHidden())).collect(Collectors.toSet()));
+			queue.addAll(cat.getChildCategorys());
 		}
-		List<Category> categorys = categoryService.getAllCategoryExcludingHidden();
+		List<Category> categorys = categoryService.getAllCategory();
 		int highestLevel = findHighestCategoryLevel(categorys);
 		logger.info("highestLevel:" + highestLevel);
 		while (highestLevel >= 0) {
@@ -86,6 +88,7 @@ public class CategorySpendsService {
 						parentCS = map.get(c.getParentCategory().getId());
 					}
 					if (parentCS != null) {
+						logger.info(c.getName()+"currentCS="+(currentCS!=null?currentCS.getName():" null,")+",parentCS="+parentCS);
 						parentCS.setAmount(parentCS.getAmount().add(currentCS.getAmount()));
 					}
 				}
@@ -104,14 +107,4 @@ public class CategorySpendsService {
 		}
 		return level;
 	}
-
-	private CategorySpends getCategorySpendsForCategory(List<CategorySpends> results, Category temp) {
-		for (CategorySpends cs : results) {
-			if (temp != null && cs.getName().equals(temp.getName())) {
-				return cs;
-			}
-		}
-		return null;
-	}
-
 }

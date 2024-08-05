@@ -1,9 +1,10 @@
 package com.nklmthr.finance.personal.service;
 
 public enum CategoryType {
-	EARNING(true, false, false, false, false, false), EXPENSE(false, true, false, false, false, false),
-	NOT_CLASSIFIED(false, false, true, false, false, false), TRANSFERS(false, false, false, true, false, false),
-	SPLIT(false, false, false, false, true, false), CASH(false, false, false, false, false, true);
+	HOME(false, false, false, false, false, false), EARNING(true, false, false, false, false, false),
+	EXPENSE(false, true, false, false, false, false), NOT_CLASSIFIED(false, false, true, false, false, false),
+	TRANSFERS(false, false, false, true, false, false), SPLIT(false, false, false, false, true, false),
+	CASH(false, false, false, false, false, true);
 
 	private boolean expense;
 	private boolean earning;

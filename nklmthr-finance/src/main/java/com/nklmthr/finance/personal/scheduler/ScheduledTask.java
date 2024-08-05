@@ -40,11 +40,11 @@ import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import com.google.common.base.Stopwatch;
-import com.nklmthr.finance.personal.dao.Category;
 import com.nklmthr.finance.personal.dao.Transaction;
 import com.nklmthr.finance.personal.exception.InvalidMessageException;
 import com.nklmthr.finance.personal.service.AccountService;
 import com.nklmthr.finance.personal.service.CategoryService;
+import com.nklmthr.finance.personal.service.CategoryType;
 import com.nklmthr.finance.personal.service.TransactionService;
 
 @Controller
@@ -98,7 +98,7 @@ public abstract class ScheduledTask {
 		logger.info("query=" + query);
 		ListMessagesResponse listMessagesResponse = service.users().messages().list("me").setQ(query).execute();
 		List<Message> messages = listMessagesResponse.getMessages();
-		if (messages.isEmpty()) {
+		if (messages==null || messages.isEmpty()) {
 			logger.info("No Messages Found");
 		} else {
 			logger.info("response size: " + messages.size());
@@ -107,9 +107,10 @@ public abstract class ScheduledTask {
 				message.getPayload().getHeaders().forEach(s -> logger.debug(s.getName() + ":" + s.getValue()));
 				Date recievedTime = new Date(getReceivedTime(message).getTime());
 				logger.info("message.getThreadId()=" + message.getThreadId() + ",getReceivedTime(message).getTime()="
-						+ recievedTime+",source_time="+recievedTime.getTime());
-				Transaction transaction = transactionService.findTransactionsBySource(message.getThreadId(),
-						recievedTime.getTime());
+						+ recievedTime + ",source_time=" + recievedTime.getTime());
+				Transaction transaction = null;
+				//transactionService.findTransactionsBySource(message.getThreadId(),
+					//	recievedTime.getTime());
 				if (transaction == null) {
 					logger.info("Transaction not found in database.. Adding Transaction:" + message.getThreadId()
 							+ ", sourceTime:" + getReceivedTime(message).getTime() + ", Time:"
@@ -134,7 +135,7 @@ public abstract class ScheduledTask {
 						transaction = getTransactionFromContent(content.html());
 					}
 					if (transaction != null) {
-						transaction.setCategory(categoryService.findCategoryByName(Category.NOT_CLASSIFIED));
+						transaction.setCategory(categoryService.getParentCategoryByType(CategoryType.NOT_CLASSIFIED));
 						transaction.setSource(message.getThreadId());
 						transaction.setSourceTime(getReceivedTime(message).getTime());
 						transaction.setDate(getReceivedTime(message));

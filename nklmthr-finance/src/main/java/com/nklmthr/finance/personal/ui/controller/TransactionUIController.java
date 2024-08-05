@@ -31,6 +31,7 @@ import com.nklmthr.finance.personal.dao.Transaction;
 import com.nklmthr.finance.personal.dao.TransactionAttachment;
 import com.nklmthr.finance.personal.service.AccountService;
 import com.nklmthr.finance.personal.service.CategoryService;
+import com.nklmthr.finance.personal.service.CategoryType;
 import com.nklmthr.finance.personal.service.TransactionService;
 
 import io.micrometer.common.util.StringUtils;
@@ -120,7 +121,7 @@ public class TransactionUIController {
 		}
 		Page<Transaction> pageTansactions = transactionService.findAllTransactionsByMonth(pageable, year, month);
 		m.addAttribute("transactions", pageTansactions.getContent());
-		List<Category> categorys = categoryService.getAllCategoryExcludingHidden();
+		List<Category> categorys = categoryService.getAllCategory();
 		m.addAttribute("categoryList", categorys);
 		List<Account> accounts = accountService.getAllAccounts();
 		m.addAttribute("accountList", accounts);
@@ -253,7 +254,7 @@ public class TransactionUIController {
 			@RequestParam(value = "page", defaultValue = "1") Integer page, Model m) {
 		Transaction parentTransaction = transactionService.findTransactionById(id);
 		m.addAttribute("parentTransaction", parentTransaction);
-		List<Category> categorys = categoryService.getAllCategoryExcludingHidden();
+		List<Category> categorys = categoryService.getAllCategory();
 		m.addAttribute("categoryList", categorys);
 		List<Account> accounts = accountService.getAllAccounts();
 		m.addAttribute("accountList", accounts);

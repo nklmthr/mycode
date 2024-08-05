@@ -40,7 +40,7 @@ public class TransactionService {
 	private TransactionAttachmentRepository transactionAttachmentRepository;
 
 	@Autowired
-	CategoryRepository categoryRepository;
+	CategoryService categoryService;
 
 	@Autowired
 	AccountService accountService;
@@ -49,7 +49,7 @@ public class TransactionService {
 			String categoryId, Integer year, Integer month) {
 		Page<Transaction> pageTransactions;
 		if (categoryId != null) {
-			Category category = categoryRepository.findById(categoryId).get();
+			Category category = categoryService.findCategoryById(categoryId);
 			List<Category> categories = new ArrayList<>();
 			Queue<Category> queue = new LinkedList<>();
 			queue.add(category);
@@ -77,7 +77,7 @@ public class TransactionService {
 
 	public void saveTransaction(Transaction transaction) {
 		Optional<Transaction> oldTransaction = transactionRepository.findById(transaction.getId());
-		if (transaction.getTransactionType().equals(TransactionType.DEBIT)) {
+		if (transaction.getTransactionType().equals(TransactionType.CREDIT)) {
 			if (oldTransaction.isPresent()) {
 				BigDecimal changeValue = oldTransaction.get().getAmount().subtract(transaction.getAmount());
 				logger.info("changeValue" + changeValue);
@@ -87,7 +87,7 @@ public class TransactionService {
 				transaction.getAccount().setTransactionBalance(
 						transaction.getAccount().getTransactionBalance().subtract(transaction.getAmount()));
 			}
-		} else if (transaction.getTransactionType().equals(TransactionType.CREDIT)) {
+		} else if (transaction.getTransactionType().equals(TransactionType.DEBIT)) {
 			if (oldTransaction.isPresent()) {
 				BigDecimal changeValue = oldTransaction.get().getAmount().subtract(transaction.getAmount());
 				logger.info("changeValue" + changeValue);
@@ -132,13 +132,13 @@ public class TransactionService {
 		parent.setDescription(
 				parent.getCategory().getName() + "|" + parent.getDescription() + "|" + parent.getAmount());
 		String originalParentCategory = parent.getCategory().getName();
-		Category splitCat = categoryRepository.findSplitCategory();
+		Category splitCat = categoryService.getParentCategoryByType(CategoryType.SPLIT);
 		parent.setCategory(splitCat);
 		for (Transaction t : transactions) {
 			t.setDate(parent.getDate());
 			t.setAccount(parent.getAccount());
 			t.setParentTransaction(parent);
-			t.setCategory(categoryRepository.findById(t.getCategory().getId()).get());
+			t.setCategory(categoryService.findCategoryById(t.getCategory().getId()));
 			t.setTransactionType(parent.getTransactionType());
 			t.setDescription(originalParentDescription + "|" + origParentAmount + "|" + originalParentCategory);
 			parent.setAmount(parent.getAmount().subtract(t.getAmount()));
@@ -213,13 +213,25 @@ public class TransactionService {
 
 	public void performTransferOperation(Transaction transaction, String transferToAccountId) {
 		Account transferToAccount = accountService.getAccountById(transferToAccountId);
-		logger.info("transaction:" + transaction);
-		logger.info("transferToAccount id:" + transferToAccountId + " found Account:" + transferToAccount.toString());
-		logger.info("Account Balance:" + transferToAccount.getTransactionBalance());
-		logger.info("Setting new Account Balance:"
-				+ transferToAccount.getTransactionBalance().add(transaction.getAmount()));
-		transferToAccount.setTransactionBalance(transferToAccount.getTransactionBalance().add(transaction.getAmount()));
-		Category category = categoryRepository.findByName("TRANSFERS");
+		Account transferFromAccount = accountService.getAccountById(transaction.getAccount().getId());
+
+		logger.debug("transaction:" + transaction);
+		logger.info("transferToAccount id:" + transferToAccountId + " found Account:" + transferToAccount.getName()
+				+ "," + transferToAccount.getTransactionBalance());
+		
+		BigDecimal transferFromAccBal = transferFromAccount.getTransactionBalance();
+		BigDecimal transferToAccBal = transferToAccount.getTransactionBalance();
+		
+		BigDecimal newtransferFromAccBal = transferFromAccBal.subtract(transaction.getAmount());
+		BigDecimal newTransferToAccBal = transferToAccBal.add(transaction.getAmount());
+		
+		transferToAccount.setTransactionBalance(newTransferToAccBal);
+		transferFromAccount.setTransactionBalance(newtransferFromAccBal);
+		
+		logger.info("From Account,"+transferFromAccount.getName()+";old balance:"+transferFromAccBal+";New Balance:"+newtransferFromAccBal);
+		logger.info("To Account:"+transferToAccount.getName()+",old balance:"+transferToAccBal+",New Balance:"+newTransferToAccBal);
+		
+		Category category = categoryService.getParentCategoryByType(CategoryType.TRANSFERS);
 		transaction.setCategory(category);
 		Transaction newTransaction = new Transaction();
 		newTransaction.setDate(transaction.getDate());
@@ -228,14 +240,13 @@ public class TransactionService {
 		newTransaction.setAccount(transferToAccount);
 		newTransaction.setAmount(transaction.getAmount());
 		newTransaction.setCurrency(transaction.getCurrency());
-		if (transaction.getTransactionType().equals(TransactionType.CREDIT)) {
-			newTransaction.setTransactionType(TransactionType.DEBIT);
-		} else {
+		if (transaction.getTransactionType().equals(TransactionType.DEBIT)) {
 			newTransaction.setTransactionType(TransactionType.CREDIT);
+		} else {
+			newTransaction.setTransactionType(TransactionType.DEBIT);
 		}
 		newTransaction.setCategory(category);
 		transactionRepository.save(transaction);
-		logger.info(newTransaction);
 		transactionRepository.save(newTransaction);
 	}
 }

@@ -5,8 +5,8 @@
 		th:insert="TopNavigation.html ::topNavigation('Categorys')"></div>
 	<div id="content">
 		<h2>Update Category</h2>
-		<form action="#" th:action="@{/saveCategory}"
-			th:object="${category}" method="POST">
+		<form action="#" th:action="@{/saveCategory}" th:object="${category}"
+			method="POST">
 			<table>
 				<tr>
 					<td><input type="hidden" th:field="*{id}" /></td>
@@ -19,16 +19,23 @@
 								th:attr="showselected=(${category1.id} == *{parentCategory})"
 								th:text="${category1.name}"></option>
 					</select></td>
+					<td><select th:field="*{categoryType}">
+							<option th:value="0" text="Please Select">Please Select</option>
+							<option th:each="cType: ${categoryTypes}"
+								th:value="${cType.name()}"
+								th:attr="showselected=(${cType.name()} == *{categoryType})"
+								th:text="${cType.name()}"></option>
+					</select>
 					<td>
-						<button type="submit"  class="btn btn-info">Update Category</button>
+						<button type="submit" class="btn btn-info">Update
+							Category</button>
 					</td>
 
 				</tr>
 			</table>
 		</form>
-		<br/>
-		<form
-			th:action="@{/deleteCategory/{id} (id=${category.id})}"
+		<br />
+		<form th:action="@{/deleteCategory/{id} (id=${category.id})}"
 			th:object="${category}" method="GET">
 			<table>
 				<tr>

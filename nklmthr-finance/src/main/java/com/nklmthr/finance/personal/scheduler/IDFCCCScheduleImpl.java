@@ -1,34 +1,35 @@
 package com.nklmthr.finance.personal.scheduler;
 
-import com.google.api.services.gmail.model.Message;
-import com.google.api.services.gmail.model.MessagePart;
-import com.google.common.io.BaseEncoding;
-import com.nklmthr.finance.personal.dao.Category;
-import com.nklmthr.finance.personal.dao.Transaction;
-import com.nklmthr.finance.personal.exception.InvalidMessageException;
-import com.nklmthr.finance.personal.service.CategoryType;
-import com.nklmthr.finance.personal.service.TransactionType;
-import io.micrometer.common.util.StringUtils;
-import org.json.JSONException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.stream.Collectors;
 
+import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+import com.google.api.services.gmail.model.Message;
+import com.google.api.services.gmail.model.MessagePart;
+import com.google.common.io.BaseEncoding;
+import com.nklmthr.finance.personal.dao.Transaction;
+import com.nklmthr.finance.personal.exception.InvalidMessageException;
+import com.nklmthr.finance.personal.service.CategoryType;
+import com.nklmthr.finance.personal.service.TransactionType;
+
+import io.micrometer.common.util.StringUtils;
+
 @Configuration
 @EnableScheduling
-public class AxisSBScheduleImpl extends ScheduledTask {
+public class IDFCCCScheduleImpl extends ScheduledTask {
 
-	private static final Logger logger = LoggerFactory.getLogger(AxisSBScheduleImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(IDFCCCScheduleImpl.class);
 
 	public static void main(String[] args) throws GeneralSecurityException, IOException, ParseException {
-		AxisSBScheduleImpl a = new AxisSBScheduleImpl();
+		IDFCCCScheduleImpl a = new IDFCCCScheduleImpl();
 		a.getEmailContent();
 	}
 
@@ -39,7 +40,7 @@ public class AxisSBScheduleImpl extends ScheduledTask {
 		String subject = part.getHeaders().stream().filter(s -> s.getName().equals("Subject")).map(s -> s.getValue())
 				.collect(Collectors.joining(""));
 		logger.debug("Subject:" + subject);
-		String emailEncoded = part.getParts().get(0).getBody().getData();
+		String emailEncoded = part.getBody().getData();
 		byte[] emaildecoded = BaseEncoding.base64Url().decode(emailEncoded);
 		String email = new String(emaildecoded).trim();
 		logger.debug(email);
@@ -48,12 +49,16 @@ public class AxisSBScheduleImpl extends ScheduledTask {
 
 	@Override
 	protected Transaction getTransactionFromOverRidingContent(String email) throws ParseException {
-		String amountStr = email.substring(email.indexOf("Dear Nikhil Mathur, ") + "Dear Nikhil Mathur, ".length(),
-				email.indexOf(" has been debited from A/c no. XX2804 on"));
-		String description = email.substring(email.indexOf(". Info-") + ". Info-".length(),
-				email.indexOf(". For any concerns regarding this transaction"));
+		String amountStr = email.substring(
+				email.indexOf("<html>Dear Customer,<br/><br/>Transaction Successful! ")
+						+ "<html>Dear Customer,<br/><br/>Transaction Successful! ".length(),
+				email.indexOf(" spent on your IDFC FIRST Bank Credit Card ending XX5661"));
+		String description = email.substring(
+				email.indexOf("DFC FIRST Bank Credit Card ending XX5661 at ")
+						+ "IDFC FIRST Bank Credit Card ending XX5661 at ".length(),
+				email.indexOf(" on ", email.indexOf("DFC FIRST Bank Credit Card ending XX5661 at ")));
 		String currency = amountStr.substring(0, 3);
-		String amountValue = amountStr.substring(currency.length()+1, amountStr.length());
+		String amountValue = amountStr.substring(currency.length() + 1, amountStr.length());
 		BigDecimal amount = new BigDecimal(amountValue);
 		Transaction transaction = new Transaction();
 		transaction.setCurrency(currency);
@@ -67,7 +72,7 @@ public class AxisSBScheduleImpl extends ScheduledTask {
 
 	@Override
 	protected boolean hasOverRidingContent(String email) {
-		return !email.startsWith("<html>");
+		return email.startsWith("<html>Dear Customer,<br/><br/>");
 	}
 
 	@Override
@@ -77,8 +82,7 @@ public class AxisSBScheduleImpl extends ScheduledTask {
 			String amountStr = html.substring(0, html.indexOf("has been debited from A/c no. XX2804 on")).trim();
 			amountStr = amountStr.replaceAll(",", "");
 			logger.debug(amountStr);
-			String description = html.substring(html.indexOf("Info-") + "Info-".length(),
-					html.length()).trim();
+			String description = html.substring(html.indexOf("Info-") + "Info-".length(), html.length()).trim();
 			String currency = amountStr.substring(0, 3);
 			if (currency.equalsIgnoreCase("Rs.")) {
 				currency = "INR";
@@ -104,7 +108,7 @@ public class AxisSBScheduleImpl extends ScheduledTask {
 
 	@Override
 	protected String getEmailSubject() {
-		String subject = "Debit notification from Axis Bank";
+		String subject = "Debit Alert: Your IDFC FIRST Bank Credit Card";
 		return subject;
 	}
 

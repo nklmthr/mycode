@@ -1,6 +1,7 @@
 package com.nklmthr.finance.personal.ui.controller;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.nklmthr.finance.personal.dao.Category;
 import com.nklmthr.finance.personal.service.CategoryService;
+import com.nklmthr.finance.personal.service.CategoryType;
 
 @Controller
 @RequestMapping("/")
@@ -30,7 +32,7 @@ public class CategoryUIController {
 
 	@GetMapping("/Categorys")
 	public String getHomeCategory(Model m) {
-		Category homeCategory = categoryService.getHomeCategory();		
+		Category homeCategory = categoryService.getParentCategoryByType(CategoryType.HOME);
 		m.addAttribute("homeCategory", homeCategory);
 		logger.info("getCategorys homeCategory" + homeCategory.getChildCategorys());
 		return "category/Categorys";
@@ -47,9 +49,9 @@ public class CategoryUIController {
 	}
 
 	@PostMapping("/saveCategory")
-	public String saveCategory(@ModelAttribute("category") Category category) {		
+	public String saveCategory(@ModelAttribute("category") Category category) {
 		categoryService.saveCategory(category);
-		logger.info("saveCategory " + category.getName());
+		logger.info("saveCategory " + category.getCategoryType());
 		return "redirect:/Categorys";
 	}
 
@@ -59,6 +61,8 @@ public class CategoryUIController {
 		m.addAttribute("categorys", Categorys);
 		Category c = categoryService.findCategoryById(id);
 		m.addAttribute("category", c);
+		m.addAttribute("categoryTypes", CategoryType.values());
+		Stream.of(CategoryType.values()).forEach(s -> logger.info(s.name()));
 		logger.info("showFormForCategoryUpdate ");
 		return "category/UpdateCategory";
 	}
@@ -69,5 +73,5 @@ public class CategoryUIController {
 		logger.info("deleteCategory " + id);
 		return "redirect:/Categorys";
 	}
-	
+
 }
