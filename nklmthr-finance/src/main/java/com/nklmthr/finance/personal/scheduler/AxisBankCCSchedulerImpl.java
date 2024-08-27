@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,10 @@ import java.util.stream.Collectors;
 public class AxisBankCCSchedulerImpl extends ScheduledTask {
     private static final Logger logger = LoggerFactory.getLogger(AxisBankCCSchedulerImpl.class);
 
+    public static void main(String[] args) throws GeneralSecurityException, IOException, ParseException {
+    	AxisBankCCSchedulerImpl impl = new AxisBankCCSchedulerImpl();
+    	impl.doScheduledTask();
+	}
     @Override
     protected String getEmailSubject() {
         String subject = "Transaction alert on Axis Bank Credit Card no. XX2107";
@@ -63,12 +68,28 @@ public class AxisBankCCSchedulerImpl extends ScheduledTask {
 
     @Override
     protected Transaction getTransactionFromOverRidingContent(String html) throws ParseException {
-        return null;
+    	Transaction transaction = new Transaction();
+        String amountStr = html.substring(html.indexOf("Thank you for using your credit card no. XX2107 for")
+                + "Thank you for using your credit card no. XX2107 for".length(), html.indexOf(" at ")).trim();
+        amountStr = amountStr.replaceAll(",", "");
+        logger.debug(amountStr);
+        String description = html.substring(html.indexOf(" at ") + 4, html.indexOf("on ")).trim();
+        String currency = amountStr.substring(0, 3);
+        String amountValue = amountStr.substring(4, amountStr.length());
+        logger.info("currency" + currency + ", value=" + amountValue);
+        BigDecimal amount = new BigDecimal(amountValue);
+        logger.info(description);
+        transaction.setCurrency(currency);
+        transaction.setAmount(amount);
+        transaction.setAccount(accountService.findAccountByName("AXIS-CCA-Airtel"));
+        transaction.setDescription(description);
+        transaction.setTransactionType(TransactionType.DEBIT);
+        return transaction;
     }
 
     @Override
     protected boolean hasOverRidingContent(String email) {
-        return false;
+        return !email.startsWith("<html>");
     }
 
     protected String getEmailContentFromMessage(Message message) throws IOException {
