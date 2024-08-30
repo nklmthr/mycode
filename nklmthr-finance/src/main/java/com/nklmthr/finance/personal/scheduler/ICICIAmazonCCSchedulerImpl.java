@@ -77,9 +77,7 @@ public class ICICIAmazonCCSchedulerImpl extends ScheduledTask {
 		logger.info(description);
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
-		transaction.setAccount(accountService.findAccountByName("ICICI-CCA-Amazon"));
 		transaction.setDescription(description);
-		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
 
@@ -97,6 +95,11 @@ public class ICICIAmazonCCSchedulerImpl extends ScheduledTask {
 	@Override
 	protected void doScheduledSubTask() {
 		logger.info("Current Time" + System.currentTimeMillis());
+	}
+
+	@Override
+	protected String getAccountName() {
+		return "ICICI-CCA-Amazon";
 	}
 
 }

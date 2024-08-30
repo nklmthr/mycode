@@ -56,10 +56,7 @@ public class AxisBankCCSchedulerImpl extends ScheduledTask {
 		logger.info(description);
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
-		transaction.setAccount(accountService.findAccountByName("AXIS-CCA-Airtel"));
 		transaction.setDescription(description);
-		transaction.setTransactionType(TransactionType.DEBIT);
-		transaction.setCategory(categoryService.getParentCategoryByType(CategoryType.NOT_CLASSIFIED));
 		return transaction;
 	}
 
@@ -85,9 +82,7 @@ public class AxisBankCCSchedulerImpl extends ScheduledTask {
 		logger.info(description);
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
-		transaction.setAccount(accountService.findAccountByName("AXIS-CCA-Airtel"));
 		transaction.setDescription(description);
-		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
 
@@ -103,6 +98,12 @@ public class AxisBankCCSchedulerImpl extends ScheduledTask {
 		String email = new String(emaildecoded).trim();
 		logger.debug(email);
 		return email;
+	}
+
+	@Override
+	protected String getAccountName() {
+		return "AXIS-CCA-Airtel";
+		
 	}
 
 }

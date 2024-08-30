@@ -49,21 +49,9 @@ public class YesBankCCSchedulerImpl extends ScheduledTask {
 		logger.debug("currency" + currency + ", value=" + amountValue);
 		BigDecimal amount = new BigDecimal(amountValue);
 		logger.debug(description);
-		String date = html.substring(html.indexOf(" on ", html.indexOf(description)) + 3,
-				html.indexOf(" at ", html.indexOf(description))).trim();
-		logger.debug(date);
-		String time = html.substring(html.indexOf(" at ", html.indexOf(date)) + 4, html.indexOf(". Avl Bal INR"))
-				.trim();
-		logger.debug(time);
-		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
-		Date tranDate = format.parse(date + " " + time);
-		logger.debug(tranDate.toString());
-		transaction.setDate(tranDate);
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
-		transaction.setAccount(accountService.findAccountByName("YESB-CCA-Exclusive"));
 		transaction.setDescription(description);
-		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
 
@@ -93,9 +81,7 @@ public class YesBankCCSchedulerImpl extends ScheduledTask {
 		logger.debug(description);
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
-		transaction.setAccount(accountService.findAccountByName("YESB-CCA-Exclusive"));
 		transaction.setDescription(description);
-		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
 
@@ -105,14 +91,15 @@ public class YesBankCCSchedulerImpl extends ScheduledTask {
 	}
 
 	protected String getEmailContentFromMessage(Message message) throws IOException {
-		MessagePart part = message.getPayload();
-		String subject = part.getHeaders().stream().filter(s -> s.getName().equals("Subject")).map(s -> s.getValue())
-				.collect(Collectors.joining(""));
-		logger.debug("Subject:" + subject);
-		String emailEncoded = part.getParts().get(0).getBody().getData().toString();
+		String emailEncoded = message.getPayload().getParts().get(0).getBody().getData().toString();
 		byte[] emailDecoded = BaseEncoding.base64Url().decode(emailEncoded);
 		String email = new String(emailDecoded).trim();
 		return email;
+	}
+
+	@Override
+	protected String getAccountName() {
+		return "YESB-CCA-Exclusive";
 	}
 
 }

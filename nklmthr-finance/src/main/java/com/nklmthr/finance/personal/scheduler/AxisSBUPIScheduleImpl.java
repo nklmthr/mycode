@@ -55,10 +55,7 @@ public class AxisSBUPIScheduleImpl extends ScheduledTask {
 		Transaction transaction = new Transaction();
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
-		transaction.setAccount(accountService.findAccountByName("Axis Salary Acc"));
 		transaction.setDescription(description);
-		transaction.setCategory(categoryService.getParentCategoryByType(CategoryType.NOT_CLASSIFIED));
-		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
 
@@ -86,9 +83,7 @@ public class AxisSBUPIScheduleImpl extends ScheduledTask {
 			logger.debug(description);
 			transaction.setCurrency(currency);
 			transaction.setAmount(amount);
-			transaction.setAccount(accountService.findAccountByName("Axis Salary Acc"));
 			transaction.setDescription(description);
-			transaction.setTransactionType(TransactionType.DEBIT);
 			return transaction;
 		}
 		return null;
@@ -108,6 +103,11 @@ public class AxisSBUPIScheduleImpl extends ScheduledTask {
 	@Override
 	protected void doScheduledSubTask() {
 		logger.info("Current Time" + System.currentTimeMillis());
+	}
+
+	@Override
+	protected String getAccountName() {
+		return "Axis Salary Acc";
 	}
 
 }

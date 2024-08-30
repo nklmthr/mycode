@@ -47,6 +47,7 @@ import com.nklmthr.finance.personal.service.AccountService;
 import com.nklmthr.finance.personal.service.CategoryService;
 import com.nklmthr.finance.personal.service.CategoryType;
 import com.nklmthr.finance.personal.service.TransactionService;
+import com.nklmthr.finance.personal.service.TransactionType;
 
 import io.micrometer.common.util.StringUtils;
 
@@ -117,8 +118,11 @@ public abstract class ScheduledTask {
 				logger.info("message.getThreadId()=" + message.getThreadId() + ",getReceivedTime(message).getTime()="
 						+ recievedTime + ",source_time=" + recievedTime.getTime());
 				if (subject.equals(getEmailSubject())) {
-					Transaction transaction = transactionService.findTransactionsBySource(message.getThreadId(),
-							recievedTime.getTime());
+					Transaction transaction = null;
+					if (transactionService != null) {
+						transaction = transactionService.findTransactionsBySource(message.getThreadId(),
+								recievedTime.getTime());
+					}
 					if (transaction == null) {
 						logger.info("Transaction not found in database.. Adding Transaction:" + message.getThreadId()
 								+ ", sourceTime:" + getReceivedTime(message).getTime() + ", Time:"
@@ -155,17 +159,18 @@ public abstract class ScheduledTask {
 							}
 
 						}
-						if (transaction != null) {
-							transaction
-									.setCategory(categoryService.getParentCategoryByType(CategoryType.NOT_CLASSIFIED));
-							transaction.setSource(message.getThreadId());
-							transaction.setSourceTime(getReceivedTime(message).getTime());
-							transaction.setDate(getReceivedTime(message));
-							transaction.setId(UUID.randomUUID().toString());
-							logger.info(transaction.toString());
+						transaction.setTransactionType(TransactionType.DEBIT);
+						transaction.setSource(message.getThreadId());
+						transaction.setSourceTime(getReceivedTime(message).getTime());
+						transaction.setDate(getReceivedTime(message));
+						transaction.setId(UUID.randomUUID().toString());
+						logger.info(transaction.toString());
+						if (transactionService != null) {
+							transaction.setCategory(categoryService.getParentCategoryByType(CategoryType.NOT_CLASSIFIED));
+							transaction.setAccount(accountService.findAccountByName(getAccountName()));							
 							transactionService.saveTransaction(transaction);
 						} else {
-							logger.error("Email Found matched but no transaction extracted...");
+							logger.info("Transaction:"+transaction);
 						}
 					} else {
 						logger.info("Transaction already found in database.." + transaction);
@@ -222,4 +227,5 @@ public abstract class ScheduledTask {
 
 	protected abstract void doScheduledSubTask();
 
+	protected abstract String getAccountName();
 }

@@ -57,9 +57,7 @@ public class AxisSBATMScheduleImpl extends ScheduledTask {
 		Transaction transaction = new Transaction();
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
-		//transaction.setAccount(accountService.findAccountByName("Axis Salary Acc"));
 		transaction.setDescription(description);
-		//transaction.setCategory(categoryService.getParentCategoryByType(CategoryType.CASH));
 		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
@@ -82,11 +80,8 @@ public class AxisSBATMScheduleImpl extends ScheduledTask {
 			BigDecimal amount = new BigDecimal(amountValue);
 			Transaction transaction = new Transaction();
 			transaction.setCurrency(currency);
-			transaction.setAmount(amount);
-			transaction.setAccount(accountService.findAccountByName("Axis Salary Acc"));
-			transaction.setDescription(description);
-			transaction.setCategory(categoryService.getParentCategoryByType(CategoryType.CASH));
-			transaction.setTransactionType(TransactionType.DEBIT);
+			transaction.setAmount(amount);			
+			transaction.setDescription(description);			
 			return transaction;
 		} catch (Exception e) {
 			logger.error(html);
@@ -109,6 +104,11 @@ public class AxisSBATMScheduleImpl extends ScheduledTask {
 	@Override
 	protected void doScheduledSubTask() {
 		logger.info("Current Time" + System.currentTimeMillis());
+	}
+
+	@Override
+	protected String getAccountName() {
+		return "Axis Salary Acc";
 	}
 
 }

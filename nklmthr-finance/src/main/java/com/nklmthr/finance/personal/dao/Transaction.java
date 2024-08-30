@@ -182,7 +182,7 @@ public class Transaction {
 
 	@Override
 	public String toString() {
-		return "Transaction [date=" + date + ", description=" + description + ", account=" + account.getName() + ", amount="
+		return "Transaction [date=" + date + ", description=" + description + ", amount="
 				+ amount + ", source=" + source + ", sourceTime=" + sourceTime + "]";
 	}
 

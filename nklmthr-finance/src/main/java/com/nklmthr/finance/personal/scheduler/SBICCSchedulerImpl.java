@@ -53,9 +53,7 @@ public class SBICCSchedulerImpl extends ScheduledTask {
 		logger.debug(description);
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
-		transaction.setAccount(accountService.findAccountByName("SBIB-CCA-Signature"));
 		transaction.setDescription(description);
-		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
 
@@ -81,7 +79,7 @@ public class SBICCSchedulerImpl extends ScheduledTask {
 		String subject = part.getHeaders().stream().filter(s -> s.getName().equals("Subject")).map(s -> s.getValue())
 				.collect(Collectors.joining(""));
 		logger.info("Subject:" + subject);
-		if (subject.equalsIgnoreCase("Transaction Alert from SBI Card")) {
+		if (subject.equalsIgnoreCase(getEmailSubject())) {
 			emailEncoded = part.getParts().get(0).getBody().getData().toString();
 			byte[] emaildecoded = BaseEncoding.base64Url().decode(emailEncoded);
 			String email = new String(emaildecoded).trim();
@@ -89,5 +87,10 @@ public class SBICCSchedulerImpl extends ScheduledTask {
 		} else {
 			throw new InvalidMessageException("OTP message");
 		}
+	}
+
+	@Override
+	protected String getAccountName() {
+		return "SBIB-CCA-Signature";
 	}
 }
