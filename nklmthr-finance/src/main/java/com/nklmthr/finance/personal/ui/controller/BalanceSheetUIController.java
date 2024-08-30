@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nklmthr.finance.personal.dao.MonthlyBalanceSummary;
+import com.nklmthr.finance.personal.exception.InvalidMessageException;
 import com.nklmthr.finance.personal.scheduler.AxisBankCCSchedulerImpl;
-import com.nklmthr.finance.personal.scheduler.AxisSBScheduleImpl;
+import com.nklmthr.finance.personal.scheduler.AxisSBATMScheduleImpl;
 import com.nklmthr.finance.personal.scheduler.ICICIAmazonCCSchedulerImpl;
 import com.nklmthr.finance.personal.scheduler.IDFCCCScheduleImpl;
 import com.nklmthr.finance.personal.scheduler.SBICCSchedulerImpl;
@@ -70,7 +71,7 @@ public class BalanceSheetUIController {
 	}
 
 	@GetMapping("/triggerTransactionFetch")
-	public String triggerTransactionFetch(Model m) throws GeneralSecurityException, IOException, ParseException {
+	public String triggerTransactionFetch(Model m) throws GeneralSecurityException, IOException, ParseException, InvalidMessageException {
 		Runnable myThread = () -> {
 			// Used to set custom name to the current thread
 			Thread.currentThread().setName("myThread");
@@ -83,13 +84,13 @@ public class BalanceSheetUIController {
 				task.doScheduledTask();
 				task = applicationContext.getBean(AxisBankCCSchedulerImpl.class);
 				task.doScheduledTask();
-				task = applicationContext.getBean(AxisSBScheduleImpl.class);
+				task = applicationContext.getBean(AxisSBATMScheduleImpl.class);
 				task.doScheduledTask();
 				task = (ScheduledTask) applicationContext.getBean(ICICIAmazonCCSchedulerImpl.class);
 				task.doScheduledTask();
 				task = (ScheduledTask) applicationContext.getBean(IDFCCCScheduleImpl.class);
 				task.doScheduledTask();
-			} catch (GeneralSecurityException | IOException | ParseException e) {
+			} catch (GeneralSecurityException | IOException | ParseException | InvalidMessageException e) {
 				e.printStackTrace();
 			}
 		};

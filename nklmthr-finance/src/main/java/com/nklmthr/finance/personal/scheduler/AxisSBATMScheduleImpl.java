@@ -23,12 +23,13 @@ import java.util.stream.Collectors;
 
 @Configuration
 @EnableScheduling
-public class AxisSBScheduleImpl extends ScheduledTask {
+public class AxisSBATMScheduleImpl extends ScheduledTask {
 
-	private static final Logger logger = LoggerFactory.getLogger(AxisSBScheduleImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(AxisSBATMScheduleImpl.class);
 
-	public static void main(String[] args) throws GeneralSecurityException, IOException, ParseException {
-		AxisSBScheduleImpl a = new AxisSBScheduleImpl();
+	public static void main(String[] args)
+			throws GeneralSecurityException, IOException, ParseException, InvalidMessageException {
+		AxisSBATMScheduleImpl a = new AxisSBATMScheduleImpl();
 		a.getEmailContent();
 	}
 
@@ -36,9 +37,6 @@ public class AxisSBScheduleImpl extends ScheduledTask {
 	protected String getEmailContentFromMessage(Message message)
 			throws JSONException, IOException, InvalidMessageException {
 		MessagePart part = message.getPayload();
-		String subject = part.getHeaders().stream().filter(s -> s.getName().equals("Subject")).map(s -> s.getValue())
-				.collect(Collectors.joining(""));
-		logger.debug("Subject:" + subject);
 		String emailEncoded = part.getParts().get(0).getBody().getData();
 		byte[] emaildecoded = BaseEncoding.base64Url().decode(emailEncoded);
 		String email = new String(emaildecoded).trim();
@@ -48,19 +46,20 @@ public class AxisSBScheduleImpl extends ScheduledTask {
 
 	@Override
 	protected Transaction getTransactionFromOverRidingContent(String email) throws ParseException {
-		String amountStr = email.substring(email.indexOf("Dear Nikhil Mathur, ") + "Dear Nikhil Mathur, ".length(),
-				email.indexOf(" has been debited from A/c no. XX2804 on"));
-		String description = email.substring(email.indexOf(". Info-") + ". Info-".length(),
-				email.indexOf(". For any concerns regarding this transaction"));
+		String amountStr = email.substring(
+				email.indexOf("We wish to inform you that ") + "We wish to inform you that ".length(),
+				email.indexOf(" has been debited from your A/c no. XX592804 on"));
+		String description = email.substring(email.indexOf(" at ") + " at ".length(),
+				email.indexOf(". Available balance:"));
 		String currency = amountStr.substring(0, 3);
-		String amountValue = amountStr.substring(currency.length()+1, amountStr.length());
+		String amountValue = amountStr.substring(currency.length() + 1, amountStr.length());
 		BigDecimal amount = new BigDecimal(amountValue);
 		Transaction transaction = new Transaction();
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
-		transaction.setAccount(accountService.findAccountByName("Axis Salary Acc"));
+		//transaction.setAccount(accountService.findAccountByName("Axis Salary Acc"));
 		transaction.setDescription(description);
-		transaction.setCategory(categoryService.getParentCategoryByType(CategoryType.NOT_CLASSIFIED));
+		//transaction.setCategory(categoryService.getParentCategoryByType(CategoryType.CASH));
 		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
@@ -72,39 +71,38 @@ public class AxisSBScheduleImpl extends ScheduledTask {
 
 	@Override
 	protected Transaction getTransactionFromContent(String html) throws ParseException {
-		if (StringUtils.isNotBlank(html) && !html.contains("declined")) {
-			Transaction transaction = new Transaction();
-			String amountStr = html.substring(0, html.indexOf("has been debited from A/c no. XX2804 on")).trim();
-			amountStr = amountStr.replaceAll(",", "");
-			logger.debug(amountStr);
-			String description = html.substring(html.indexOf("Info-") + "Info-".length(),
-					html.length()).trim();
+		try {
+			String amountStr = html.substring(
+					html.indexOf("We wish to inform you that ") + "We wish to inform you that ".length(),
+					html.indexOf(" has been debited from your A/c no. XX592804 on"));
+			String description = html.substring(html.indexOf(" at ") + " at ".length(),
+					html.indexOf(". Available balance:"));
 			String currency = amountStr.substring(0, 3);
-			if (currency.equalsIgnoreCase("Rs.")) {
-				currency = "INR";
-			}
-			String amountValue = amountStr.substring(4, amountStr.length());
-			logger.debug("currency" + currency + ", value=" + amountValue);
+			String amountValue = amountStr.substring(currency.length() + 1, amountStr.length());
 			BigDecimal amount = new BigDecimal(amountValue);
-			logger.debug(description);
+			Transaction transaction = new Transaction();
 			transaction.setCurrency(currency);
 			transaction.setAmount(amount);
 			transaction.setAccount(accountService.findAccountByName("Axis Salary Acc"));
 			transaction.setDescription(description);
+			transaction.setCategory(categoryService.getParentCategoryByType(CategoryType.CASH));
 			transaction.setTransactionType(TransactionType.DEBIT);
 			return transaction;
+		} catch (Exception e) {
+			logger.error(html);
+			logger.error(e.getMessage(), e);
 		}
 		return null;
 	}
 
 	@Override
 	protected String getJSOUPXPathQuery() {
-		return "/html/body/table/tbody/tr/td/table/tbody/tr[3]/td/table[1]/tbody/tr[1]/td/span[3]";
+		return "/html/body/table[1]/tbody/tr/td/table/tbody/tr[3]/td/table[1]/tbody/tr[1]/td/span[4]";
 	}
 
 	@Override
 	protected String getEmailSubject() {
-		String subject = "Debit notification from Axis Bank";
+		String subject = "Notification from Axis Bank";
 		return subject;
 	}
 

@@ -2,6 +2,11 @@ package com.nklmthr.finance.personal.exception;
 
 public class InvalidMessageException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public InvalidMessageException() {
 		// TODO Auto-generated constructor stub
 	}

@@ -39,6 +39,7 @@ import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
+import com.google.api.services.gmail.model.MessagePart;
 import com.google.common.base.Stopwatch;
 import com.nklmthr.finance.personal.dao.Transaction;
 import com.nklmthr.finance.personal.exception.InvalidMessageException;
@@ -46,6 +47,8 @@ import com.nklmthr.finance.personal.service.AccountService;
 import com.nklmthr.finance.personal.service.CategoryService;
 import com.nklmthr.finance.personal.service.CategoryType;
 import com.nklmthr.finance.personal.service.TransactionService;
+
+import io.micrometer.common.util.StringUtils;
 
 @Controller
 public abstract class ScheduledTask {
@@ -84,7 +87,8 @@ public abstract class ScheduledTask {
 		return credential;
 	}
 
-	protected void getEmailContent() throws GeneralSecurityException, IOException, ParseException {
+	protected void getEmailContent()
+			throws GeneralSecurityException, IOException, ParseException, InvalidMessageException {
 		Stopwatch watch = Stopwatch.createStarted();
 		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 		Gmail service = new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -98,52 +102,74 @@ public abstract class ScheduledTask {
 		logger.info("query=" + query);
 		ListMessagesResponse listMessagesResponse = service.users().messages().list("me").setQ(query).execute();
 		List<Message> messages = listMessagesResponse.getMessages();
-		if (messages==null || messages.isEmpty()) {
+		if (messages == null || messages.isEmpty()) {
 			logger.info("No Messages Found");
 		} else {
 			logger.info("response size: " + messages.size());
 			for (Message mess : messages) {
 				Message message = service.users().messages().get(user, mess.getId()).setFormat("full").execute();
 				message.getPayload().getHeaders().forEach(s -> logger.debug(s.getName() + ":" + s.getValue()));
+				MessagePart part = message.getPayload();
+				String subject = part.getHeaders().stream().filter(s -> s.getName().equals("Subject"))
+						.map(s -> s.getValue()).collect(Collectors.joining(""));
+				logger.debug("Subject:" + subject);
 				Date recievedTime = new Date(getReceivedTime(message).getTime());
 				logger.info("message.getThreadId()=" + message.getThreadId() + ",getReceivedTime(message).getTime()="
 						+ recievedTime + ",source_time=" + recievedTime.getTime());
-				Transaction transaction = transactionService.findTransactionsBySource(message.getThreadId(),
-						recievedTime.getTime());
-				if (transaction == null) {
-					logger.info("Transaction not found in database.. Adding Transaction:" + message.getThreadId()
-							+ ", sourceTime:" + getReceivedTime(message).getTime() + ", Time:"
-							+ new Date(getReceivedTime(message).getTime()));
-					String email;
-					try {
-						email = getEmailContentFromMessage(message);
-					} catch (InvalidMessageException e) {
-						continue;
-					}
-					logger.info("hasOverRidingContent(email) " + hasOverRidingContent(email));
-					if (hasOverRidingContent(email)) {
-						transaction = getTransactionFromOverRidingContent(email);
-						logger.info("Overriding transaction=" + transaction);
+				if (subject.equals(getEmailSubject())) {
+					Transaction transaction = transactionService.findTransactionsBySource(message.getThreadId(),
+							recievedTime.getTime());
+					if (transaction == null) {
+						logger.info("Transaction not found in database.. Adding Transaction:" + message.getThreadId()
+								+ ", sourceTime:" + getReceivedTime(message).getTime() + ", Time:"
+								+ new Date(getReceivedTime(message).getTime()));
+						String email;
+						try {
+							email = getEmailContentFromMessage(message);
+						} catch (InvalidMessageException e) {
+							continue;
+						}
+						logger.info("hasOverRidingContent(email) " + hasOverRidingContent(email));
+						if (hasOverRidingContent(email)) {
+							if (StringUtils.isNotBlank(email) && !email.contains("declined")
+									&& !email.contains("reversed")) {
+								transaction = getTransactionFromOverRidingContent(email);
+								logger.info("Overriding transaction=" + transaction);
+							} else {
+								logger.info(email);
+								logger.warn("Not transaction email");
+							}
+						} else {
+							Document doc = Jsoup.parse(email);
+							logger.debug(doc.html());
+							String xPathQuery = getJSOUPXPathQuery();
+							logger.debug("xPathQuery=" + xPathQuery);
+							Elements content = doc.selectXpath(xPathQuery);
+							logger.debug(content.html());
+							if (StringUtils.isNotBlank(content.html()) && !content.html().contains("declined")
+									&& !content.html().contains("reversed")) {
+								transaction = getTransactionFromContent(content.html());
+							} else {
+								logger.info(content.html());
+								logger.warn("Not transaction email");
+							}
+
+						}
+						if (transaction != null) {
+							transaction
+									.setCategory(categoryService.getParentCategoryByType(CategoryType.NOT_CLASSIFIED));
+							transaction.setSource(message.getThreadId());
+							transaction.setSourceTime(getReceivedTime(message).getTime());
+							transaction.setDate(getReceivedTime(message));
+							transaction.setId(UUID.randomUUID().toString());
+							logger.info(transaction.toString());
+							transactionService.saveTransaction(transaction);
+						} else {
+							logger.error("Email Found matched but no transaction extracted...");
+						}
 					} else {
-						Document doc = Jsoup.parse(email);
-						logger.debug(doc.html());
-						String xPathQuery = getJSOUPXPathQuery();
-						logger.debug("xPathQuery=" + xPathQuery);
-						Elements content = doc.selectXpath(xPathQuery);
-						logger.debug(content.html());
-						transaction = getTransactionFromContent(content.html());
+						logger.info("Transaction already found in database.." + transaction);
 					}
-					if (transaction != null) {
-						transaction.setCategory(categoryService.getParentCategoryByType(CategoryType.NOT_CLASSIFIED));
-						transaction.setSource(message.getThreadId());
-						transaction.setSourceTime(getReceivedTime(message).getTime());
-						transaction.setDate(getReceivedTime(message));
-						transaction.setId(UUID.randomUUID().toString());
-						logger.info(transaction.toString());
-						transactionService.saveTransaction(transaction);
-					}
-				} else {
-					logger.info("Transaction already found in database.." + transaction);
 				}
 			}
 		}
@@ -178,7 +204,8 @@ public abstract class ScheduledTask {
 	protected abstract String getEmailContentFromMessage(Message message)
 			throws JSONException, IOException, InvalidMessageException;
 
-	protected abstract Transaction getTransactionFromOverRidingContent(String email) throws ParseException;
+	protected abstract Transaction getTransactionFromOverRidingContent(String email)
+			throws ParseException, InvalidMessageException;
 
 	protected abstract boolean hasOverRidingContent(String email);
 
@@ -187,7 +214,8 @@ public abstract class ScheduledTask {
 	protected abstract String getJSOUPXPathQuery();
 
 	@Scheduled(cron = "${sbi.cc.cron.expression}")
-	public void doScheduledTask() throws GeneralSecurityException, IOException, ParseException {
+	public void doScheduledTask()
+			throws GeneralSecurityException, IOException, ParseException, InvalidMessageException {
 		getEmailContent();
 		doScheduledSubTask();
 	}

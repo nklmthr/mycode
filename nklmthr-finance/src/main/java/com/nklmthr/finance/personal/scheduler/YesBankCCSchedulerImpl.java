@@ -21,105 +21,98 @@ import java.util.stream.Collectors;
 @Configuration
 @EnableScheduling
 public class YesBankCCSchedulerImpl extends ScheduledTask {
-    private static final Logger logger = LoggerFactory.getLogger(YesBankCCSchedulerImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(YesBankCCSchedulerImpl.class);
 
-    @Override
-    protected String getEmailSubject() {
-        String subject = "YES BANK - Transaction Alert";
-        return subject;
-    }
+	@Override
+	protected String getEmailSubject() {
+		String subject = "YES BANK - Transaction Alert";
+		return subject;
+	}
 
-    @Override
-    protected String getJSOUPXPathQuery() {
-        return "/html/body/table/tbody/tr[2]/td/span";
-    }
+	@Override
+	protected String getJSOUPXPathQuery() {
+		return "/html/body/table/tbody/tr[2]/td/span";
+	}
 
-    @Override
-    protected Transaction getTransactionFromContent(String html) throws ParseException {
-        if (StringUtils.isNotBlank(html) && !html.contains("declined")) {
-            Transaction transaction = new Transaction();
-            String amountStr = html.substring(html.indexOf("<br><br>") + 9,
-                    html.indexOf(" has been spent on your YES BANK Credit Card ending with ")).trim();
-            amountStr = amountStr.replaceAll(",", "");
-            logger.debug(amountStr);
-            String description = html
-                    .substring(html.indexOf("at ") + 3,
-                            html.indexOf("on ",
-                                    html.indexOf(" has been spent on your YES BANK Credit Card ending with") + 56))
-                    .trim();
-            String currency = amountStr.substring(0, 3);
-            String amountValue = amountStr.substring(4, amountStr.length() - 1);
-            logger.debug("currency" + currency + ", value=" + amountValue);
-            BigDecimal amount = new BigDecimal(amountValue);
-            logger.debug(description);
-            String date = html.substring(html.indexOf(" on ", html.indexOf(description)) + 3,
-                    html.indexOf(" at ", html.indexOf(description))).trim();
-            logger.debug(date);
-            String time = html.substring(html.indexOf(" at ", html.indexOf(date)) + 4, html.indexOf(". Avl Bal INR"))
-                    .trim();
-            logger.debug(time);
-            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
-            Date tranDate = format.parse(date + " " + time);
-            logger.debug(tranDate.toString());
-            transaction.setDate(tranDate);
-            transaction.setCurrency(currency);
-            transaction.setAmount(amount);
-            transaction.setAccount(accountService.findAccountByName("YESB-CCA-Exclusive"));
-            transaction.setDescription(description);
-            transaction.setTransactionType(TransactionType.DEBIT);
-            return transaction;
-        }
-        return null;
-    }
+	@Override
+	protected Transaction getTransactionFromContent(String html) throws ParseException {
+		Transaction transaction = new Transaction();
+		String amountStr = html.substring(html.indexOf("<br><br>") + 9,
+				html.indexOf(" has been spent on your YES BANK Credit Card ending with ")).trim();
+		amountStr = amountStr.replaceAll(",", "");
+		logger.debug(amountStr);
+		String description = html.substring(html.indexOf("at ") + 3,
+				html.indexOf("on ", html.indexOf(" has been spent on your YES BANK Credit Card ending with") + 56))
+				.trim();
+		String currency = amountStr.substring(0, 3);
+		String amountValue = amountStr.substring(4, amountStr.length() - 1);
+		logger.debug("currency" + currency + ", value=" + amountValue);
+		BigDecimal amount = new BigDecimal(amountValue);
+		logger.debug(description);
+		String date = html.substring(html.indexOf(" on ", html.indexOf(description)) + 3,
+				html.indexOf(" at ", html.indexOf(description))).trim();
+		logger.debug(date);
+		String time = html.substring(html.indexOf(" at ", html.indexOf(date)) + 4, html.indexOf(". Avl Bal INR"))
+				.trim();
+		logger.debug(time);
+		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
+		Date tranDate = format.parse(date + " " + time);
+		logger.debug(tranDate.toString());
+		transaction.setDate(tranDate);
+		transaction.setCurrency(currency);
+		transaction.setAmount(amount);
+		transaction.setAccount(accountService.findAccountByName("YESB-CCA-Exclusive"));
+		transaction.setDescription(description);
+		transaction.setTransactionType(TransactionType.DEBIT);
+		return transaction;
+	}
 
-    protected void doScheduledSubTask() {
-        System.out.println("Current Time" + System.currentTimeMillis());
+	protected void doScheduledSubTask() {
+		System.out.println("Current Time" + System.currentTimeMillis());
 
-    }
+	}
 
-    @Override
-    protected Transaction getTransactionFromOverRidingContent(String html) throws ParseException {
-        if (StringUtils.isNotBlank(html) && !html.contains("declined")) {
-            Transaction transaction = new Transaction();
-            String amountStr = html.substring(html.indexOf("Dear Cardmember,") + "Dear Cardmember,".length(),
-                    html.indexOf(" has been spent on your YES BANK Credit Card ending")).trim();
-            amountStr = amountStr.replaceAll(",", "");
-            logger.debug(amountStr);
-            String description = html
-                    .substring(html.indexOf("at ") + "at ".length(),
-                            html.indexOf("on ",
-                                    html.indexOf(" has been spent on your YES BANK Credit Card ending with")
-                                            + " has been spent on your YES BANK Credit Card ending with".length()))
-                    .trim();
-            String currency = amountStr.substring(0, 3);
-            String amountValue = amountStr.substring(4, amountStr.length() - 1);
-            logger.debug("currency" + currency + ", value=" + amountValue);
-            BigDecimal amount = new BigDecimal(amountValue);
-            logger.debug(description);
-            transaction.setCurrency(currency);
-            transaction.setAmount(amount);
-            transaction.setAccount(accountService.findAccountByName("YESB-CCA-Exclusive"));
-            transaction.setDescription(description);
-            transaction.setTransactionType(TransactionType.DEBIT);
-            return transaction;
-        }
-        return null;
-    }
+	@Override
+	protected Transaction getTransactionFromOverRidingContent(String html) throws ParseException {
+		Transaction transaction = new Transaction();
+		String amountStr = html.substring(html.indexOf("Dear Cardmember,") + "Dear Cardmember,".length(),
+				html.indexOf(" has been spent on your YES BANK Credit Card ending")).trim();
+		amountStr = amountStr.replaceAll(",", "");
+		logger.debug(amountStr);
+		String description = html
+				.substring(
+						html.indexOf("at ") + "at ".length(), html
+								.indexOf("on ",
+										html.indexOf(" has been spent on your YES BANK Credit Card ending with")
+												+ " has been spent on your YES BANK Credit Card ending with".length()))
+				.trim();
+		String currency = amountStr.substring(0, 3);
+		String amountValue = amountStr.substring(4, amountStr.length() - 1);
+		logger.debug("currency" + currency + ", value=" + amountValue);
+		BigDecimal amount = new BigDecimal(amountValue);
+		logger.debug(description);
+		transaction.setCurrency(currency);
+		transaction.setAmount(amount);
+		transaction.setAccount(accountService.findAccountByName("YESB-CCA-Exclusive"));
+		transaction.setDescription(description);
+		transaction.setTransactionType(TransactionType.DEBIT);
+		return transaction;
+	}
 
-    @Override
-    protected boolean hasOverRidingContent(String email) {
-        return email.trim().startsWith("Dear Cardmember,");
-    }
+	@Override
+	protected boolean hasOverRidingContent(String email) {
+		return email.trim().startsWith("Dear Cardmember,");
+	}
 
-    protected String getEmailContentFromMessage(Message message) throws IOException {
-        MessagePart part = message.getPayload();
-        String subject = part.getHeaders().stream().filter(s -> s.getName().equals("Subject")).map(s -> s.getValue())
-                .collect(Collectors.joining(""));
-        logger.debug("Subject:" + subject);
-        String emailEncoded = part.getParts().get(0).getBody().getData().toString();
-        byte[] emailDecoded = BaseEncoding.base64Url().decode(emailEncoded);
-        String email = new String(emailDecoded).trim();
-        return email;
-    }
+	protected String getEmailContentFromMessage(Message message) throws IOException {
+		MessagePart part = message.getPayload();
+		String subject = part.getHeaders().stream().filter(s -> s.getName().equals("Subject")).map(s -> s.getValue())
+				.collect(Collectors.joining(""));
+		logger.debug("Subject:" + subject);
+		String emailEncoded = part.getParts().get(0).getBody().getData().toString();
+		byte[] emailDecoded = BaseEncoding.base64Url().decode(emailEncoded);
+		String email = new String(emailDecoded).trim();
+		return email;
+	}
 
 }

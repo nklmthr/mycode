@@ -182,10 +182,9 @@ public class Transaction {
 
 	@Override
 	public String toString() {
-		return "Transaction [id=" + id + ", date=" + date + ", description=" + description + ", account="
-				+ account.getName() + ", category=" + category.getName() + ", amount=" + amount + ", source=" + source
-				+ ", sourceTime=" + sourceTime + ", currency=" + currency + ", transactionType=" + transactionType
-				+ "]";
+		return "Transaction [date=" + date + ", description=" + description + ", account=" + account.getName() + ", amount="
+				+ amount + ", source=" + source + ", sourceTime=" + sourceTime + "]";
 	}
 
+	
 }

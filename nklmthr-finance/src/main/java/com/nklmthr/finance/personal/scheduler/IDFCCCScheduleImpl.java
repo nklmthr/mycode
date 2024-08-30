@@ -28,7 +28,8 @@ public class IDFCCCScheduleImpl extends ScheduledTask {
 
 	private static final Logger logger = LoggerFactory.getLogger(IDFCCCScheduleImpl.class);
 
-	public static void main(String[] args) throws GeneralSecurityException, IOException, ParseException {
+	public static void main(String[] args)
+			throws GeneralSecurityException, IOException, ParseException, InvalidMessageException {
 		IDFCCCScheduleImpl a = new IDFCCCScheduleImpl();
 		a.getEmailContent();
 	}
@@ -37,9 +38,6 @@ public class IDFCCCScheduleImpl extends ScheduledTask {
 	protected String getEmailContentFromMessage(Message message)
 			throws JSONException, IOException, InvalidMessageException {
 		MessagePart part = message.getPayload();
-		String subject = part.getHeaders().stream().filter(s -> s.getName().equals("Subject")).map(s -> s.getValue())
-				.collect(Collectors.joining(""));
-		logger.debug("Subject:" + subject);
 		String emailEncoded = part.getBody().getData();
 		byte[] emaildecoded = BaseEncoding.base64Url().decode(emailEncoded);
 		String email = new String(emaildecoded).trim();
@@ -77,28 +75,25 @@ public class IDFCCCScheduleImpl extends ScheduledTask {
 
 	@Override
 	protected Transaction getTransactionFromContent(String html) throws ParseException {
-		if (StringUtils.isNotBlank(html) && !html.contains("declined")) {
-			Transaction transaction = new Transaction();
-			String amountStr = html.substring(0, html.indexOf("has been debited from A/c no. XX2804 on")).trim();
-			amountStr = amountStr.replaceAll(",", "");
-			logger.debug(amountStr);
-			String description = html.substring(html.indexOf("Info-") + "Info-".length(), html.length()).trim();
-			String currency = amountStr.substring(0, 3);
-			if (currency.equalsIgnoreCase("Rs.")) {
-				currency = "INR";
-			}
-			String amountValue = amountStr.substring(4, amountStr.length());
-			logger.debug("currency" + currency + ", value=" + amountValue);
-			BigDecimal amount = new BigDecimal(amountValue);
-			logger.debug(description);
-			transaction.setCurrency(currency);
-			transaction.setAmount(amount);
-			transaction.setAccount(accountService.findAccountByName("IDFC First Wealth Card"));
-			transaction.setDescription(description);
-			transaction.setTransactionType(TransactionType.DEBIT);
-			return transaction;
+		Transaction transaction = new Transaction();
+		String amountStr = html.substring(0, html.indexOf("has been debited from A/c no. XX2804 on")).trim();
+		amountStr = amountStr.replaceAll(",", "");
+		logger.debug(amountStr);
+		String description = html.substring(html.indexOf("Info-") + "Info-".length(), html.length()).trim();
+		String currency = amountStr.substring(0, 3);
+		if (currency.equalsIgnoreCase("Rs.")) {
+			currency = "INR";
 		}
-		return null;
+		String amountValue = amountStr.substring(4, amountStr.length());
+		logger.debug("currency" + currency + ", value=" + amountValue);
+		BigDecimal amount = new BigDecimal(amountValue);
+		logger.debug(description);
+		transaction.setCurrency(currency);
+		transaction.setAmount(amount);
+		transaction.setAccount(accountService.findAccountByName("IDFC First Wealth Card"));
+		transaction.setDescription(description);
+		transaction.setTransactionType(TransactionType.DEBIT);
+		return transaction;
 	}
 
 	@Override
