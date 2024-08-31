@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.security.GeneralSecurityException;
 import java.text.ParseException;
-import java.util.stream.Collectors;
 
 import org.json.JSONException;
 import org.slf4j.Logger;
@@ -17,10 +16,6 @@ import com.google.api.services.gmail.model.MessagePart;
 import com.google.common.io.BaseEncoding;
 import com.nklmthr.finance.personal.dao.Transaction;
 import com.nklmthr.finance.personal.exception.InvalidMessageException;
-import com.nklmthr.finance.personal.service.CategoryType;
-import com.nklmthr.finance.personal.service.TransactionType;
-
-import io.micrometer.common.util.StringUtils;
 
 @Configuration
 @EnableScheduling

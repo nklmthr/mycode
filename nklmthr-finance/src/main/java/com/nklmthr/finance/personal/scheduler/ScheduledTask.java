@@ -115,9 +115,9 @@ public abstract class ScheduledTask {
 						.map(s -> s.getValue()).collect(Collectors.joining(""));
 				logger.debug("Subject:" + subject);
 				Date recievedTime = new Date(getReceivedTime(message).getTime());
-				logger.info("message.getThreadId()=" + message.getThreadId() + ",getReceivedTime(message).getTime()="
-						+ recievedTime + ",source_time=" + recievedTime.getTime());
-				if (subject.equals(getEmailSubject())) {
+				logger.info("ThreadId:" + message.getThreadId() + ",Time="
+						+ recievedTime + ",fTime=" + recievedTime.getTime());
+				if (subject.equalsIgnoreCase(getEmailSubject())) {
 					Transaction transaction = null;
 					if (transactionService != null) {
 						transaction = transactionService.findTransactionsBySource(message.getThreadId(),
@@ -159,18 +159,21 @@ public abstract class ScheduledTask {
 							}
 
 						}
-						transaction.setTransactionType(TransactionType.DEBIT);
-						transaction.setSource(message.getThreadId());
-						transaction.setSourceTime(getReceivedTime(message).getTime());
-						transaction.setDate(getReceivedTime(message));
-						transaction.setId(UUID.randomUUID().toString());
-						logger.info(transaction.toString());
-						if (transactionService != null) {
-							transaction.setCategory(categoryService.getParentCategoryByType(CategoryType.NOT_CLASSIFIED));
-							transaction.setAccount(accountService.findAccountByName(getAccountName()));							
-							transactionService.saveTransaction(transaction);
-						} else {
-							logger.info("Transaction:"+transaction);
+						if (transaction != null) {
+							transaction.setTransactionType(TransactionType.DEBIT);
+							transaction.setSource(message.getThreadId());
+							transaction.setSourceTime(getReceivedTime(message).getTime());
+							transaction.setDate(getReceivedTime(message));
+							transaction.setId(UUID.randomUUID().toString());
+							logger.info(transaction.toString());
+							if (transactionService != null) {
+								transaction.setCategory(
+										categoryService.getParentCategoryByType(CategoryType.NOT_CLASSIFIED));
+								transaction.setAccount(accountService.findAccountByName(getAccountName()));
+								transactionService.saveTransaction(transaction);
+							} else {
+								logger.info("Transaction:" + transaction);
+							}
 						}
 					} else {
 						logger.info("Transaction already found in database.." + transaction);

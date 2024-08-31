@@ -19,6 +19,7 @@ import com.nklmthr.finance.personal.dao.MonthlyBalanceSummary;
 import com.nklmthr.finance.personal.exception.InvalidMessageException;
 import com.nklmthr.finance.personal.scheduler.AxisBankCCSchedulerImpl;
 import com.nklmthr.finance.personal.scheduler.AxisSBATMScheduleImpl;
+import com.nklmthr.finance.personal.scheduler.AxisSBUPIScheduleImpl;
 import com.nklmthr.finance.personal.scheduler.ICICIAmazonCCSchedulerImpl;
 import com.nklmthr.finance.personal.scheduler.IDFCCCScheduleImpl;
 import com.nklmthr.finance.personal.scheduler.SBICCSchedulerImpl;
@@ -83,6 +84,8 @@ public class BalanceSheetUIController {
 				task = applicationContext.getBean(SBICCSchedulerImpl.class);
 				task.doScheduledTask();
 				task = applicationContext.getBean(AxisBankCCSchedulerImpl.class);
+				task.doScheduledTask();
+				task = applicationContext.getBean(AxisSBUPIScheduleImpl.class);
 				task.doScheduledTask();
 				task = applicationContext.getBean(AxisSBATMScheduleImpl.class);
 				task.doScheduledTask();
