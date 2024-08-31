@@ -28,13 +28,13 @@
 
 			<tbody>
 
-				<tr th:each="row: ${monthlyBalanceSummary.rows}" id="tablerow">
+				<tr style="background-color:#91b7c9; color:#f0e9e1" th:each="row: ${monthlyBalanceSummary.rows}" id="tablerow">
 					<td th:text="${row.get('Classification')}"></td>
 					<td align="right"
 						th:each="date: ${monthlyBalanceSummary.dates.keySet()}"
 						th:text="${row.get(date.toString())}"></td>
 				</tr>
-				<tr id="tablerow">
+				<tr id="tablerow" style="background-color:#4287f5; color:#f0e9e1">
 					<td>Summary</td>
 					<td align="right"
 						th:each="date: ${monthlyBalanceSummary.dates.keySet()}"

@@ -104,7 +104,7 @@ public class IDFCCCScheduleImpl extends ScheduledTask {
 
 	@Override
 	protected String getAccountName() {
-		return "IDFC First Wealth Card";
+		return "IDFC First Credit Card";
 	}
 
 }
