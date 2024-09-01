@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -203,7 +204,8 @@ public abstract class ScheduledTask {
 
 		String receivedTime = message.getPayload().getHeaders().stream().filter(s -> s.getName().equals("Date"))
 				.map(s -> s.getValue()).collect(Collectors.joining());
-		SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z");
+		logger.info(receivedTime);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss Z", Locale.US);
 		Date recievedDate = dateFormat.parse(receivedTime);
 		logger.debug("receivedTime:" + receivedTime + ", " + recievedDate.getTime());
 		return recievedDate;
