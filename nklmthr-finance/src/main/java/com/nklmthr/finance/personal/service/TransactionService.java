@@ -76,27 +76,55 @@ public class TransactionService {
 	}
 
 	public void saveTransaction(Transaction transaction) {
-		Optional<Transaction> oldTransaction = transactionRepository.findById(transaction.getId());
-		if (transaction.getTransactionType().equals(TransactionType.CREDIT)) {
-			if (oldTransaction.isPresent()) {
-				BigDecimal changeValue = oldTransaction.get().getAmount().subtract(transaction.getAmount());
-				logger.info("changeValue" + changeValue);
-				transaction.getAccount()
-						.setTransactionBalance(transaction.getAccount().getTransactionBalance().add(changeValue));
+		Optional<Transaction> oldTransactionOptional = transactionRepository.findById(transaction.getId());
+		if (oldTransactionOptional.isPresent()) {
+			Transaction oldTransaction = oldTransactionOptional.get();
+			BigDecimal changeValue = transaction.getAmount().subtract(oldTransaction.getAmount());
+			logger.info("changeValue" + changeValue);
+			if (!transaction.getAccount().getId().equals(oldTransaction.getAccount().getId())) {
+				Account oldAccount = accountService.getAccountById(oldTransaction.getAccount().getId());
+				if (oldTransaction.getTransactionType().equals(TransactionType.CREDIT)) {
+					oldAccount.setTransactionBalance(
+							oldAccount.getTransactionBalance().subtract(transaction.getAmount()));
+				} else if (oldTransaction.getTransactionType().equals(TransactionType.DEBIT)) {
+					oldAccount.setTransactionBalance(oldAccount.getTransactionBalance().add(transaction.getAmount()));
+				}
+				logger.info("oldAccount" + oldAccount);
+				if (transaction.getTransactionType().equals(TransactionType.CREDIT)) {
+					transaction.getAccount().setTransactionBalance(
+							transaction.getAccount().getTransactionBalance().add(transaction.getAmount()));
+				} else if (transaction.getTransactionType().equals(TransactionType.DEBIT)) {
+					transaction.getAccount().setTransactionBalance(
+							transaction.getAccount().getTransactionBalance().subtract(transaction.getAmount()));
+				}
+			} else if (transaction.getTransactionType().equals(oldTransaction.getTransactionType())) {
+				if (transaction.getTransactionType().equals(TransactionType.CREDIT)) {
+					transaction.getAccount()
+							.setTransactionBalance(transaction.getAccount().getTransactionBalance().add(changeValue));
+				} else if (transaction.getTransactionType().equals(TransactionType.DEBIT)) {
+					transaction.getAccount().setTransactionBalance(
+							transaction.getAccount().getTransactionBalance().subtract(changeValue));
+				}
 			} else {
+				if (transaction.getTransactionType().equals(TransactionType.CREDIT)) {
+					transaction.getAccount().setTransactionBalance(transaction.getAccount().getTransactionBalance()
+							.add(oldTransaction.getAmount().add(changeValue)));
+
+				} else if (transaction.getTransactionType().equals(TransactionType.DEBIT)) {
+					transaction.getAccount().setTransactionBalance(transaction.getAccount().getTransactionBalance()
+							.subtract(oldTransaction.getAmount().add(changeValue)));
+				}
+			}
+		} else {
+			if (transaction.getTransactionType().equals(TransactionType.CREDIT)) {
 				transaction.getAccount().setTransactionBalance(
 						transaction.getAccount().getTransactionBalance().add(transaction.getAmount()));
+			} else if (transaction.getTransactionType().equals(TransactionType.DEBIT)) {
+				transaction.getAccount().setTransactionBalance(
+						transaction.getAccount().getTransactionBalance().subtract(transaction.getAmount()));
 			}
-		} else if (transaction.getTransactionType().equals(TransactionType.DEBIT)) {
-			if (oldTransaction.isPresent()) {
-				BigDecimal changeValue = oldTransaction.get().getAmount().subtract(transaction.getAmount());
-				logger.info("changeValue" + changeValue);
-				transaction.getAccount()
-						.setTransactionBalance(transaction.getAccount().getTransactionBalance().subtract(changeValue));
-			}
-			transaction.getAccount().setTransactionBalance(
-					transaction.getAccount().getTransactionBalance().subtract(transaction.getAmount()));
 		}
+
 		transactionRepository.save(transaction);
 	}
 
