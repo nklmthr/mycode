@@ -45,6 +45,11 @@ public class SchedulingConfiguration {
 		ScheduledTask task = (ScheduledTask) applicationContext.getBean(AxisSBUPIScheduleImpl.class);
 		task.doScheduledTask();
 	}
+	@Scheduled(cron = "${axis.sb.cron.expression}")
+	public void runAxisSvgTransactionJob() throws GeneralSecurityException, IOException, ParseException, InvalidMessageException {
+		ScheduledTask task = (ScheduledTask) applicationContext.getBean(AxisSBTransactionScheduleImpl.class);
+		task.doScheduledTask();
+	}
 	
 	@Scheduled(cron = "${icici.amazon.cc.cron.expression}")
 	public void runICICIAmazonCCJob() throws GeneralSecurityException, IOException, ParseException, InvalidMessageException {
