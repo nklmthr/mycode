@@ -203,10 +203,10 @@ public class TransactionService {
 		}
 		if (transaction.getTransactionType().equals(TransactionType.DEBIT)) {
 			transaction.getAccount().setTransactionBalance(
-					transaction.getAccount().getTransactionBalance().subtract(transaction.getAmount()));
+					transaction.getAccount().getTransactionBalance().add(transaction.getAmount()));
 		} else {
 			transaction.getAccount().setTransactionBalance(
-					transaction.getAccount().getTransactionBalance().add(transaction.getAmount()));
+					transaction.getAccount().getTransactionBalance().subtract(transaction.getAmount()));
 		}
 		transactionRepository.delete(transaction);
 		logger.info("deleteTransaction " + id);
@@ -253,18 +253,9 @@ public class TransactionService {
 		logger.debug("transaction:" + transaction);
 		logger.info("transferToAccount id:" + transferToAccountId + " found Account:" + transferToAccount.getName()
 				+ "," + transferToAccount.getTransactionBalance());
-
-		BigDecimal transferFromAccBal = transferFromAccount.getTransactionBalance();
 		BigDecimal transferToAccBal = transferToAccount.getTransactionBalance();
-
-		BigDecimal newtransferFromAccBal = transferFromAccBal.subtract(transaction.getAmount());
 		BigDecimal newTransferToAccBal = transferToAccBal.add(transaction.getAmount());
-
 		transferToAccount.setTransactionBalance(newTransferToAccBal);
-		transferFromAccount.setTransactionBalance(newtransferFromAccBal);
-
-		logger.info("From Account," + transferFromAccount.getName() + ";old balance:" + transferFromAccBal
-				+ ";New Balance:" + newtransferFromAccBal);
 		logger.info("To Account:" + transferToAccount.getName() + ",old balance:" + transferToAccBal + ",New Balance:"
 				+ newTransferToAccBal);
 
