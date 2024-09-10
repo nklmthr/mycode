@@ -29,3 +29,4 @@ build
 .idea/misc.xml
 .idea/workspace.xml
 nklmthr-finance/tokens/StoredCredential
+/nklmthr-finance/app/logs
