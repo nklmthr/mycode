@@ -57,6 +57,7 @@ public class AxisBankCCSchedulerImpl extends ScheduledTask {
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
 		transaction.setDescription(description);
+		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
 
@@ -83,6 +84,7 @@ public class AxisBankCCSchedulerImpl extends ScheduledTask {
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
 		transaction.setDescription(description);
+		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
 

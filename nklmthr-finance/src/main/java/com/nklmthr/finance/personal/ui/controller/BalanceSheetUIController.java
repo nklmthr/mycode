@@ -19,6 +19,7 @@ import com.nklmthr.finance.personal.dao.MonthlyBalanceSummary;
 import com.nklmthr.finance.personal.exception.InvalidMessageException;
 import com.nklmthr.finance.personal.scheduler.AxisBankCCSchedulerImpl;
 import com.nklmthr.finance.personal.scheduler.AxisSBATMScheduleImpl;
+import com.nklmthr.finance.personal.scheduler.AxisSBCreditScheduleImpl;
 import com.nklmthr.finance.personal.scheduler.AxisSBTransactionScheduleImpl;
 import com.nklmthr.finance.personal.scheduler.AxisSBUPIScheduleImpl;
 import com.nklmthr.finance.personal.scheduler.ICICIAmazonCCSchedulerImpl;
@@ -95,6 +96,8 @@ public class BalanceSheetUIController {
 				task = (ScheduledTask) applicationContext.getBean(IDFCCCScheduleImpl.class);
 				task.doScheduledTask();
 				task = (ScheduledTask) applicationContext.getBean(AxisSBTransactionScheduleImpl.class);
+				task.doScheduledTask();
+				task = (ScheduledTask) applicationContext.getBean(AxisSBCreditScheduleImpl.class);
 				task.doScheduledTask();
 				
 			} catch (GeneralSecurityException | IOException | ParseException | InvalidMessageException e) {

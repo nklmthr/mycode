@@ -1,35 +1,32 @@
 package com.nklmthr.finance.personal.scheduler;
 
-import com.google.api.services.gmail.model.Message;
-import com.google.api.services.gmail.model.MessagePart;
-import com.google.common.io.BaseEncoding;
-import com.nklmthr.finance.personal.dao.Category;
-import com.nklmthr.finance.personal.dao.Transaction;
-import com.nklmthr.finance.personal.exception.InvalidMessageException;
-import com.nklmthr.finance.personal.service.CategoryType;
-import com.nklmthr.finance.personal.service.TransactionType;
-import io.micrometer.common.util.StringUtils;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.security.GeneralSecurityException;
+import java.text.ParseException;
+
 import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.security.GeneralSecurityException;
-import java.text.ParseException;
-import java.util.stream.Collectors;
+import com.google.api.services.gmail.model.Message;
+import com.google.api.services.gmail.model.MessagePart;
+import com.google.common.io.BaseEncoding;
+import com.nklmthr.finance.personal.dao.Transaction;
+import com.nklmthr.finance.personal.exception.InvalidMessageException;
+import com.nklmthr.finance.personal.service.TransactionType;
 
 @Configuration
 @EnableScheduling
-public class AxisSBATMScheduleImpl extends ScheduledTask {
+public class AxisSBCreditScheduleImpl extends ScheduledTask {
 
-	private static final Logger logger = LoggerFactory.getLogger(AxisSBATMScheduleImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(AxisSBCreditScheduleImpl.class);
 
 	public static void main(String[] args)
 			throws GeneralSecurityException, IOException, ParseException, InvalidMessageException {
-		AxisSBATMScheduleImpl a = new AxisSBATMScheduleImpl();
+		AxisSBCreditScheduleImpl a = new AxisSBCreditScheduleImpl();
 		a.getEmailContent();
 	}
 
@@ -47,10 +44,10 @@ public class AxisSBATMScheduleImpl extends ScheduledTask {
 	@Override
 	protected Transaction getTransactionFromOverRidingContent(String email) throws ParseException {
 		String amountStr = email.substring(
-				email.indexOf("We wish to inform you that ") + "We wish to inform you that ".length(),
-				email.indexOf(" has been debited from your A/c no. XX592804 on"));
-		String description = email.substring(email.indexOf(" at ") + " at ".length(),
-				email.indexOf(". Available balance:"));
+				email.indexOf("We wish to inform you that your A/c no. XX2804 has been credited with ") + "We wish to inform you that your A/c no. XX2804 has been credited with ".length(),
+				email.indexOf(" on"));
+		String description = email.substring(email.indexOf(" by ") + " by ".length(),
+				email.indexOf(". To check your available balance"));
 		String currency = amountStr.substring(0, 3);
 		String amountValue = amountStr.substring(currency.length() + 1, amountStr.length());
 		BigDecimal amount = new BigDecimal(amountValue);
@@ -58,7 +55,7 @@ public class AxisSBATMScheduleImpl extends ScheduledTask {
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
 		transaction.setDescription(description);
-		transaction.setTransactionType(TransactionType.DEBIT);
+		transaction.setTransactionType(TransactionType.CREDIT);
 		return transaction;
 	}
 
@@ -81,8 +78,7 @@ public class AxisSBATMScheduleImpl extends ScheduledTask {
 			Transaction transaction = new Transaction();
 			transaction.setCurrency(currency);
 			transaction.setAmount(amount);			
-			transaction.setDescription(description);
-			transaction.setTransactionType(TransactionType.DEBIT);
+			transaction.setDescription(description);			
 			return transaction;
 		} catch (Exception e) {
 			logger.error(html);
@@ -98,7 +94,7 @@ public class AxisSBATMScheduleImpl extends ScheduledTask {
 
 	@Override
 	protected String getEmailSubject() {
-		String subject = "Notification from Axis Bank";
+		String subject = "Credit transaction alert for Axis Bank A/c";
 		return subject;
 	}
 

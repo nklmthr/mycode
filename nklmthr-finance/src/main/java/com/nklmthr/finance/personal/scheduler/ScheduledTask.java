@@ -161,7 +161,6 @@ public abstract class ScheduledTask {
 
 						}
 						if (transaction != null) {
-							transaction.setTransactionType(TransactionType.DEBIT);
 							transaction.setSource(message.getThreadId());
 							transaction.setSourceTime(getReceivedTime(message).getTime());
 							transaction.setDate(getReceivedTime(message));

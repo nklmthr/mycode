@@ -57,5 +57,12 @@ public class SchedulingConfiguration {
 		task.doScheduledTask();
 	}
 	
+	
+	@Scheduled(cron = "${icici.amazon.cc.cron.expression}")
+	public void runAxisSBCreditJob() throws GeneralSecurityException, IOException, ParseException, InvalidMessageException {
+		ScheduledTask task = (ScheduledTask) applicationContext.getBean(AxisSBCreditScheduleImpl.class);
+		task.doScheduledTask();
+	}
+	
 
 }

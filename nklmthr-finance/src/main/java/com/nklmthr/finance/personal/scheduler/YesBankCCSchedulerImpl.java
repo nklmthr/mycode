@@ -52,6 +52,7 @@ public class YesBankCCSchedulerImpl extends ScheduledTask {
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
 		transaction.setDescription(description);
+		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
 
@@ -82,6 +83,7 @@ public class YesBankCCSchedulerImpl extends ScheduledTask {
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
 		transaction.setDescription(description);
+		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
 

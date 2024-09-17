@@ -16,6 +16,7 @@ import com.google.api.services.gmail.model.MessagePart;
 import com.google.common.io.BaseEncoding;
 import com.nklmthr.finance.personal.dao.Transaction;
 import com.nklmthr.finance.personal.exception.InvalidMessageException;
+import com.nklmthr.finance.personal.service.TransactionType;
 
 @Configuration
 @EnableScheduling
@@ -57,6 +58,7 @@ public class IDFCCCScheduleImpl extends ScheduledTask {
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
 		transaction.setDescription(description);
+		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
 
@@ -83,6 +85,7 @@ public class IDFCCCScheduleImpl extends ScheduledTask {
 		transaction.setCurrency(currency);
 		transaction.setAmount(amount);
 		transaction.setDescription(description);
+		transaction.setTransactionType(TransactionType.DEBIT);
 		return transaction;
 	}
 
