@@ -1,23 +1,21 @@
 package com.nklmthr.finance.personal.scheduler;
 
-import com.google.api.services.gmail.model.Message;
-import com.google.api.services.gmail.model.MessagePart;
-import com.google.common.io.BaseEncoding;
-import com.nklmthr.finance.personal.dao.Transaction;
-import com.nklmthr.finance.personal.exception.InvalidMessageException;
-import com.nklmthr.finance.personal.service.CategoryType;
-import com.nklmthr.finance.personal.service.TransactionType;
-import io.micrometer.common.util.StringUtils;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.security.GeneralSecurityException;
+import java.text.ParseException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.security.GeneralSecurityException;
-import java.text.ParseException;
-import java.util.stream.Collectors;
+import com.google.api.services.gmail.model.Message;
+import com.google.api.services.gmail.model.MessagePart;
+import com.google.common.io.BaseEncoding;
+import com.nklmthr.finance.personal.dao.Transaction;
+import com.nklmthr.finance.personal.exception.InvalidMessageException;
+import com.nklmthr.finance.personal.service.TransactionType;
 
 @Configuration
 @EnableScheduling
